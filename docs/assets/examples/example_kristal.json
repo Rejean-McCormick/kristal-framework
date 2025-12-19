@@ -1,0 +1,164 @@
+{
+  "kristal_id": "kristal://sha256:REPLACE_WITH_REAL_HASH",
+  "format_version": "1.0.0",
+  "manifest": {
+    "title": "Plants (Core) — Example",
+    "description": "Example Kristal showing Q/P/R/S usage, claims, references, and trace refs.",
+    "domains": [
+      { "scheme": "unesco", "code": "TBD" },
+      { "scheme": "wikidata", "qid": "Q42231" }
+    ],
+    "created_at": "2025-12-19T00:00:00Z",
+    "created_by": "repo:rejean-mccormick/kristal-framework",
+    "license": "proprietary",
+    "validation": {
+      "status": "partial",
+      "policy_id": "policy://sha256:REPLACE_WITH_POLICY_HASH",
+      "checked_at": "2025-12-19T00:00:00Z"
+    },
+    "trace_root": "trace://sha256:REPLACE_WITH_TRACE_ROOT_HASH",
+    "signature": null
+  },
+  "charters": {
+    "embedded": [
+      {
+        "name": "general",
+        "content": {
+          "P": [
+            { "id": "P31", "label_en": "instance of" },
+            { "id": "P279", "label_en": "subclass of" },
+            { "id": "P361", "label_en": "part of" }
+          ],
+          "R": [
+            { "id": "R710002", "based_on": "P710", "label_en": "assigned to" }
+          ],
+          "S": [
+            { "id": "S000001", "based_on": null, "label_en": "workflow state" },
+            { "id": "S279001", "based_on": "P279", "label_en": "taxonomy variant" }
+          ]
+        }
+      }
+    ],
+    "refs": []
+  },
+  "qitems": [
+    {
+      "id": "Q42231",
+      "labels": { "en": "botany" },
+      "descriptions": { "en": "Branch of biology dealing with plants" },
+      "aliases": { "en": ["plant science"] }
+    },
+    {
+      "id": "Q756",
+      "labels": { "en": "plant" },
+      "descriptions": { "en": "Multicellular organism of the kingdom Plantae" },
+      "aliases": { "en": ["plants"] }
+    },
+    {
+      "id": "Q1000",
+      "labels": { "en": "oak" },
+      "descriptions": { "en": "Tree in the genus Quercus" },
+      "aliases": { "en": ["Quercus (common name)"] }
+    },
+    {
+      "id": "Q1001",
+      "labels": { "en": "tree" },
+      "descriptions": { "en": "Perennial plant with an elongated stem" },
+      "aliases": { "en": [] }
+    },
+    {
+      "id": "Q2000",
+      "labels": { "en": "Quercus" },
+      "descriptions": { "en": "Genus of trees and shrubs known as oaks" },
+      "aliases": { "en": ["oak genus"] }
+    },
+    {
+      "id": "Q_tmp_a1b2c3",
+      "labels": { "en": "Local specimen X" },
+      "descriptions": { "en": "Offline placeholder entity; to be resolved later." },
+      "aliases": {}
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "claim://sha256:REPLACE_WITH_REAL_HASH_1",
+      "subject": "Q1000",
+      "property": "P31",
+      "value": { "type": "wikibase-entityid", "content": "Q756" },
+      "qualifiers": [],
+      "references": [
+        {
+          "source_ref": "source://sha256:REPLACE_WITH_SOURCE_HASH_1",
+          "locator": { "url": "https://example.org/plant_taxonomy", "offset": [120, 220] }
+        }
+      ],
+      "confidence": 0.93,
+      "status": "asserted",
+      "trace_refs": ["trace://sha256:REPLACE_WITH_TRACE_HASH_A"]
+    },
+    {
+      "claim_id": "claim://sha256:REPLACE_WITH_REAL_HASH_2",
+      "subject": "Q1000",
+      "property": "P279",
+      "value": { "type": "wikibase-entityid", "content": "Q1001" },
+      "qualifiers": [
+        {
+          "property": "S279001",
+          "value": { "type": "string", "content": "APG-IV compatible taxonomy mapping" }
+        }
+      ],
+      "references": [],
+      "confidence": 0.82,
+      "status": "inferred",
+      "trace_refs": ["trace://sha256:REPLACE_WITH_TRACE_HASH_B"]
+    },
+    {
+      "claim_id": "claim://sha256:REPLACE_WITH_REAL_HASH_3",
+      "subject": "Q1000",
+      "property": "P361",
+      "value": { "type": "wikibase-entityid", "content": "Q2000" },
+      "qualifiers": [],
+      "references": [],
+      "confidence": 0.80,
+      "status": "inferred",
+      "trace_refs": []
+    },
+    {
+      "claim_id": "claim://sha256:REPLACE_WITH_REAL_HASH_4",
+      "subject": "Q_tmp_a1b2c3",
+      "property": "S000001",
+      "value": { "type": "string", "content": "needs_review" },
+      "qualifiers": [],
+      "references": [],
+      "confidence": 0.50,
+      "status": "needs_review",
+      "trace_refs": ["trace://sha256:REPLACE_WITH_TRACE_HASH_C"]
+    },
+    {
+      "claim_id": "claim://sha256:REPLACE_WITH_REAL_HASH_5",
+      "subject": "Q1000",
+      "property": "R710002",
+      "value": { "type": "wikibase-entityid", "content": "Q42231" },
+      "qualifiers": [],
+      "references": [],
+      "confidence": 0.70,
+      "status": "inferred",
+      "trace_refs": []
+    }
+  ],
+  "index": {
+    "labels": {
+      "botany": ["Q42231"],
+      "plant": ["Q756"],
+      "oak": ["Q1000"],
+      "tree": ["Q1001"],
+      "quercus": ["Q2000"],
+      "local specimen x": ["Q_tmp_a1b2c3"]
+    },
+    "aliases": {
+      "plant science": ["Q42231"],
+      "plants": ["Q756"],
+      "oak genus": ["Q2000"]
+    }
+  }
+}

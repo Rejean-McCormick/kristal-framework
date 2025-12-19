@@ -1,0 +1,64 @@
+site_name: Kristals Documentation
+site_description: Technical documentation for Kristals (enhanced Wikidata/Orgo-aligned knowledge artifacts)
+site_author: Réjean McCormick
+repo_name: kristal-framework
+repo_url: https://example.com/kristal-framework
+edit_uri: ""
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - toc.integrate
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - footnotes
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.details
+
+plugins:
+  - search
+
+nav:
+  - Home: README.md
+
+  - Introduction:
+      - docs/en/introduction.md
+
+  - Specification:
+      - Format (Kristal): docs/en/specification/format_kristal.md
+      - SPARQL & Queries: docs/en/specification/sparql_queries.md
+      - Ontology & Contexts: docs/en/specification/ontology_contexts.md
+
+  - Architecture:
+      - Components: docs/en/architecture/components.md
+      - Sentient Pipeline: docs/en/architecture/sentient_pipeline.md
+
+  - Tutorials:
+      - Download a Kristal: docs/en/tutorials/download_kristal.md
+      - Edit a Kristal: docs/en/tutorials/edit_kristal.md
+      - Reload a Kristal: docs/en/tutorials/reload_kristal.md
+
+  - Contributors:
+      - Propose a Change: docs/en/contributors/propose_change.md
+      - Test a Kristal: docs/en/contributors/test_kristal.md
+      - Validate a Version: docs/en/contributors/validate_version.md
+
+  - Use Cases:
+      - Botanist: docs/en/use_cases/botanist.md
+      - Historian: docs/en/use_cases/historian.md
+      - Offline Researcher: docs/en/use_cases/offline_researcher.md

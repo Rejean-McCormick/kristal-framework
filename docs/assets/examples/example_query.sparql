@@ -1,0 +1,40 @@
+# Example Kristal SPARQL-like queries (portable subset)
+
+# 1) Outgoing edges for a subject (neighborhood)
+SELECT ?p ?o WHERE {
+  wd:Q1000 ?p ?o .
+}
+
+# 2) Incoming edges to a target (reverse lookup)
+SELECT ?s ?p WHERE {
+  ?s ?p wd:Q756 .
+}
+
+# 3) All entities that are instance of "plant"
+SELECT ?s WHERE {
+  ?s wdt:P31 wd:Q756 .
+}
+
+# 4) Two-hop traversal: oak -> (subclass of) -> ?
+SELECT ?x WHERE {
+  wd:Q1000 wdt:P279 ?x .
+}
+
+# 5) Filter by confidence and status (engine-specific extensions)
+# NOTE: confidence/status are claim metadata in Kristals; engines may expose them
+# as variables or FILTER extensions.
+SELECT ?s ?p ?o WHERE {
+  ?s ?p ?o .
+  FILTER(?confidence >= 0.85)
+  FILTER(?status = "asserted")
+}
+
+# 6) Find all claims using an Orgo refinement property (R namespace)
+SELECT ?s ?o WHERE {
+  ?s orgoR:R710002 ?o .
+}
+
+# 7) Find all claims using an Orgo S property (S namespace)
+SELECT ?s ?o WHERE {
+  ?s orgoS:S000001 ?o .
+}
