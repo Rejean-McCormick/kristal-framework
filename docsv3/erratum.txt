@@ -1,0 +1,45 @@
+Largely yes at the *architecture / intent* level (pipeline boundaries, determinism goal, and the “core vs profiles” framing are mutually reinforcing), but there are a few concrete cross-document mismatches that will cause implementer confusion unless tightened.
+
+## Coherent through-lines
+
+* The pipeline boundary story is consistent: Claim-IR → Resolution → deterministic Validation gate (“no compile on fail”) → Exchange → Runtime Pack, with offline execution as a first-class constraint. 
+* Canonicalization / identity / verification ordering is consistent across core + ids + signatures (“remove signatures → canonicalize (JCS) → hash/verify → sign”) and the “fail-closed on declared integrity” rule repeats consistently.  
+
+## Not internally tight (fixable inconsistencies)
+
+1. **`canonicalization_profile` identifiers don’t match across docs.**
+
+   * IDs doc recommends `canonicalization_profile = "kristal.v3:jcs-rfc8785"` and version `"1"`. 
+   * Core spec examples use `"jcs-rfc8785"` and version like `"1.0"`. 
+     This is minor, but it’s a guaranteed interop footgun because profiles are part of the comparison surface.
+
+2. **“Minimal reproducibility manifest” fields in prose vs schema don’t line up.**
+
+   * Core spec prose says manifests MUST include `build_timestamp`, a `compiler` object (`name`, `version`), and an `input_snapshots` list, etc. 
+   * Exchange manifest schema instead requires a `build` object with `compiler_name` / `compiler_version` and an `inputs` object (not `input_snapshots`), plus uses `created_at` rather than `build_timestamp`.  
+     Either the prose is describing an abstract manifest while the schema is the real one, or they drifted; right now it reads like two different manifests.
+
+3. **Hash object field name inconsistency across schemas (`alg` vs `algo`).**
+
+   * Claim-IR uses `content_hash: { alg, value }`. 
+   * Exchange manifest uses `content_hash: { algo, value }`. 
+     This is a straightforward schema-level incoherence (clients will write adapters or get it wrong).
+
+4. **Determinism requirement vs required timestamps needs an explicit rule about what is hashed.**
+
+   * Core spec requires `build_timestamp` in the manifest. 
+   * Core spec also requires: with identical inputs/config/compiler/policies, an Exchange rebuild MUST produce identical `kristal_id`. 
+   * IDs doc warns that volatile metadata inside the hashed region will change IDs, and suggests separating it (and only excluding it via a declared profile). 
+     This becomes coherent if (a) the manifest is a sidecar and not part of the Exchange hash target, or (b) the spec normatively excludes volatile manifest telemetry from the Exchange hash target. Right now that relationship is implied, not stated.
+
+5. **Signature placement is mostly consistent, but wording invites ambiguity.**
+
+   * Signatures doc says artifacts MUST include signatures in a top-level `signatures` array. 
+   * IDs doc says remove “signatures/attestations fields (wherever they appear)” when forming the hash target. 
+     “Wherever they appear” is fine, but since the signatures spec simultaneously mandates a single top-level location, it would be cleaner to say “top-level only; verifiers remove that field” (and reserve “wherever” for forward compatibility).
+
+## Minimal edits that would make it “tight”
+
+* Pick one canonical `canonicalization_profile` string and versioning convention and reuse it everywhere (examples included).  
+* Harmonize schema naming (`alg` vs `algo`) and align prose manifest requirements to the actual manifest schemas (or explicitly label prose as conceptual).   
+* Add one normative sentence: whether the manifest is a sidecar vs embedded, and therefore whether timestamps are in/out of the Exchange hash target.  
