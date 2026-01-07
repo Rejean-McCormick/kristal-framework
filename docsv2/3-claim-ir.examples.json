@@ -1,0 +1,152 @@
+{
+  "examples": [
+    {
+      "name": "grounded_person_basic",
+      "description": "Claim-IR grounded example for a person with resolved QID and evidence",
+      "claim_ir": {
+        "schema_version": "0.1",
+        "document": {
+          "doc_id": "doc:bio-ada-001",
+          "title": "Biography of Ada Lovelace",
+          "lang": "en",
+          "source_url": "https://example.org/ada-lovelace",
+          "retrieved_at": "2026-01-05T10:00:00Z"
+        },
+        "subject": {
+          "qid": "Q7259"
+        },
+        "claims": [
+          {
+            "predicate": { "pid": "P569" },
+            "object": {
+              "kind": "time",
+              "value": { "iso8601": "1815-12-10", "precision": "day" }
+            },
+            "evidence": [
+              {
+                "source": { "source_url": "https://example.org/ada-lovelace" },
+                "quote": "Ada Lovelace was born on 10 December 1815."
+              }
+            ],
+            "confidence": 0.95
+          }
+        ]
+      }
+    },
+    {
+      "name": "unresolved_pid_degraded",
+      "description": "Claim-IR with unresolved predicate, preserved as surface form",
+      "claim_ir": {
+        "schema_version": "0.1",
+        "subject": {
+          "qid": "Q42"
+        },
+        "claims": [
+          {
+            "predicate": {
+              "surface": "date de naissance",
+              "lang": "fr"
+            },
+            "object": {
+              "kind": "time",
+              "value": { "iso8601": "1952-03-11", "precision": "day" }
+            },
+            "evidence": [
+              {
+                "source": { "source_url": "https://example.org/douglas-adams" },
+                "quote": "Douglas Adams was born on 11 March 1952."
+              }
+            ],
+            "confidence": 0.7
+          }
+        ],
+        "warnings": [
+          {
+            "code": "UNRESOLVED_PID",
+            "message": "Predicate PID not resolved; requires mapping to Wikidata P569."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ambiguous_subject_with_candidates",
+      "description": "Ambiguous subject resolved via candidates list",
+      "claim_ir": {
+        "schema_version": "0.1",
+        "subject": {
+          "surface": "Paris",
+          "lang": "en",
+          "candidates": [
+            { "id": "Q90", "score": 0.88, "label": "Paris" },
+            { "id": "Q753110", "score": 0.42, "label": "Paris, Texas" }
+          ]
+        },
+        "claims": [
+          {
+            "predicate": { "pid": "P17" },
+            "object": {
+              "kind": "item",
+              "value": { "qid": "Q142" }
+            },
+            "evidence": [
+              {
+                "source": { "source_url": "https://example.org/paris" },
+                "quote": "Paris is the capital of France."
+              }
+            ],
+            "confidence": 0.85
+          }
+        ]
+      }
+    },
+    {
+      "name": "quantity_with_unit",
+      "description": "Claim-IR quantity value with unit QID",
+      "claim_ir": {
+        "schema_version": "0.1",
+        "subject": {
+          "qid": "Q408"
+        },
+        "claims": [
+          {
+            "predicate": { "pid": "P2044" },
+            "object": {
+              "kind": "quantity",
+              "value": {
+                "amount": 8848.86,
+                "unit_qid": "Q11573"
+              }
+            },
+            "evidence": [
+              {
+                "source": { "source_url": "https://example.org/mount-everest" },
+                "quote": "Mount Everest is 8,848.86 metres high."
+              }
+            ],
+            "confidence": 0.9
+          }
+        ]
+      }
+    },
+    {
+      "name": "monolingual_text_label",
+      "description": "Monolingual text value example",
+      "claim_ir": {
+        "schema_version": "0.1",
+        "subject": {
+          "qid": "Q8495"
+        },
+        "claims": [
+          {
+            "predicate": { "pid": "P1476" },
+            "object": {
+              "kind": "monolingual_text",
+              "value": { "text": "Milk", "lang": "en" }
+            },
+            "confidence": 0.6
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/kristal-runtime-pack-0.1.schema.json",
+  "title": "Kristal Runtime Pack Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "runtime_version",
+    "source_kristals",
+    "created_at",
+    "layout",
+    "dictionaries",
+    "triples",
+    "indexes",
+    "statistics"
+  ],
+  "properties": {
+    "runtime_version": {
+      "type": "string",
+      "const": "0.1"
+    },
+
+    "source_kristals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^sha256:[a-f0-9]{64}$"
+      }
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "compiler": { "type": "string" },
+        "compiler_version": { "type": "string" },
+        "parameters": { "type": "object" }
+      }
+    },
+
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_path"],
+      "properties": {
+        "base_path": { "type": "string" },
+        "endianness": { "type": "string", "enum": ["little", "big"] },
+        "encoding": {
+          "type": "string",
+          "enum": ["parquet", "binary-columnar", "mixed"]
+        }
+      }
+    },
+
+    "dictionaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qid", "pid", "value"],
+      "properties": {
+        "qid": { "$ref": "#/$defs/dictionary" },
+        "pid": { "$ref": "#/$defs/dictionary" },
+        "value": { "$ref": "#/$defs/dictionary" },
+        "rid": { "$ref": "#/$defs/dictionary" },
+        "sid": { "$ref": "#/$defs/dictionary" }
+      }
+    },
+
+    "triples": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "row_count"],
+      "properties": {
+        "path": { "type": "string" },
+        "format": {
+          "type": "string",
+          "enum": ["parquet", "binary"]
+        },
+        "row_count": { "type": "integer", "minimum": 0 },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["s", "p", "o"]
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+
+    "indexes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/index" }
+    },
+
+    "membership_filters": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/filter" }
+    },
+
+    "statistics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["triple_count"],
+      "properties": {
+        "triple_count": { "type": "integer", "minimum": 0 },
+        "predicate_cardinality": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pid", "count"],
+            "properties": {
+              "pid": { "type": "string", "pattern": "^P[1-9][0-9]*$" },
+              "count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        },
+        "po_cardinality": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["pid", "oid", "count"],
+            "properties": {
+              "pid": { "type": "integer", "minimum": 0 },
+              "oid": { "type": "integer", "minimum": 0 },
+              "count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "dictionary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "entry_count"],
+      "properties": {
+        "path": { "type": "string" },
+        "entry_count": { "type": "integer", "minimum": 0 },
+        "encoding": {
+          "type": "string",
+          "enum": ["fixed32", "varint", "delta", "mixed"]
+        }
+      }
+    },
+
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "pattern", "path", "encoding"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["bitmap", "sorted-list", "array"]
+        },
+        "pattern": {
+          "type": "string",
+          "enum": ["(p,o)->s", "(p)->s", "(p,s)->o"]
+        },
+        "path": { "type": "string" },
+        "encoding": {
+          "type": "string",
+          "enum": ["roaring", "delta", "raw"]
+        },
+        "cardinality_hint": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+
+    "filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "path"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["xor", "binary-fuse", "bloom"]
+        },
+        "path": { "type": "string" },
+        "false_positive_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "applies_to": {
+          "type": "string",
+          "enum": ["claim_id", "spo_hash"]
+        }
+      }
+    }
+  }
+}

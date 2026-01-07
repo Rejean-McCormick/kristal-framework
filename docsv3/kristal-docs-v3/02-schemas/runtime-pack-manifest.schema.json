@@ -1,0 +1,365 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/kristal/v3/schemas/runtime-pack-manifest.schema.json",
+  "title": "Kristal v3 Runtime Pack Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "runtime_pack_id",
+    "created_at",
+    "exchange_ref",
+    "compiler",
+    "build",
+    "policies",
+    "files"
+  ],
+  "properties": {
+    "manifest_version": {
+      "type": "string",
+      "description": "Runtime Pack manifest schema version.",
+      "pattern": "^3\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[0-9A-Za-z.-]+)?$"
+    },
+
+    "runtime_pack_id": {
+      "type": "string",
+      "description": "Content-addressed ID for this runtime pack (sha256 hex).",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp when the runtime pack was produced."
+    },
+
+    "profiles": {
+      "type": "array",
+      "description": "Optional standardized profiles this pack claims conformance to.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+
+    "exchange_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exchange_id"],
+      "properties": {
+        "exchange_id": {
+          "type": "string",
+          "description": "Content-addressed ID of the Kristal Exchange this pack was compiled from (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "exchange_manifest_hash": {
+          "type": "string",
+          "description": "Optional hash of the Exchange manifest referenced by this pack (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "exchange_version": {
+          "type": "string",
+          "description": "Optional human version label for Exchange (if used).",
+          "minLength": 1
+        }
+      }
+    },
+
+    "compiler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "git_commit": {
+          "type": "string",
+          "description": "Optional compiler source revision.",
+          "minLength": 7
+        },
+        "build_platform": {
+          "type": "string",
+          "description": "Optional platform identifier (e.g., linux-x86_64).",
+          "minLength": 1
+        }
+      }
+    },
+
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_id",
+        "deterministic",
+        "canonicalization_profile",
+        "config_hash"
+      ],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "description": "Opaque build correlation ID (UUID or other stable identifier).",
+          "minLength": 8
+        },
+        "deterministic": {
+          "type": "boolean",
+          "description": "True if this pack claims deterministic/reproducible build behavior under recorded policies.",
+          "const": true
+        },
+        "canonicalization_profile": {
+          "type": "string",
+          "description": "Canonicalization profile identifier used for any hashed JSON objects.",
+          "enum": ["jcs-rfc8785@1"]
+        },
+        "config_hash": {
+          "type": "string",
+          "description": "Content hash of the compiler configuration that affects outputs (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "policies": {
+      "type": "object",
+      "description": "Enumerated, v3-portable policies and their parameters. These fields MUST be sufficient to reproduce the pack.",
+      "additionalProperties": false,
+      "required": ["data_ordering", "row_grouping", "membership_filter", "bitmap"],
+      "properties": {
+        "data_ordering": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policy"],
+          "properties": {
+            "policy": {
+              "type": "string",
+              "description": "Portable ordering policy for deterministic Parquet output.",
+              "enum": [
+                "qid_pid_statement_id_asc",
+                "lexicographic_sop_asc",
+                "none"
+              ]
+            },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "row_grouping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policy"],
+          "properties": {
+            "policy": {
+              "type": "string",
+              "description": "Portable row-group sizing policy for deterministic Parquet layout.",
+              "enum": [
+                "fixed_rows_100k",
+                "fixed_rows_1m",
+                "fixed_bytes_128mb"
+              ]
+            },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "membership_filter": {
+          "description": "Membership filter policy used by the pack (if any) and the parameters required to reproduce it.",
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": { "type": "string", "const": "none" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "seed", "bits_per_key"],
+              "properties": {
+                "kind": { "type": "string", "const": "bloom" },
+                "seed": { "type": "integer", "minimum": 0 },
+                "bits_per_key": { "type": "integer", "minimum": 1 },
+                "hash_functions": { "type": "integer", "minimum": 1 },
+                "notes": { "type": "string" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "seed", "fingerprint_bits", "load_factor"],
+              "properties": {
+                "kind": { "type": "string", "const": "cuckoo" },
+                "seed": { "type": "integer", "minimum": 0 },
+                "fingerprint_bits": { "type": "integer", "minimum": 4 },
+                "load_factor": { "type": "number", "minimum": 0.01, "maximum": 0.99 },
+                "notes": { "type": "string" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "seed", "bits"],
+              "properties": {
+                "kind": { "type": "string", "enum": ["xor8", "xor16"] },
+                "seed": { "type": "integer", "minimum": 0 },
+                "bits": { "type": "integer", "enum": [8, 16] },
+                "notes": { "type": "string" }
+              }
+            }
+          ]
+        },
+
+        "bitmap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format"],
+          "properties": {
+            "format": {
+              "type": "string",
+              "description": "Portable bitmap/index encoding convention for deterministic runtime behavior.",
+              "enum": [
+                "roaring",
+                "roaring_run_optimized"
+              ]
+            },
+            "run_optimize": {
+              "type": "boolean",
+              "description": "Whether run optimization was applied (must be recorded for reproducibility)."
+            },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "parquet": {
+          "type": "object",
+          "description": "Parquet-level policies that affect deterministic output. Keep to portable, enumerated values.",
+          "additionalProperties": false,
+          "properties": {
+            "compression": {
+              "type": "string",
+              "enum": ["zstd", "snappy", "gzip", "none"]
+            },
+            "dictionary_encoding": { "type": "boolean" },
+            "statistics": {
+              "type": "string",
+              "enum": ["none", "page", "rowgroup"]
+            },
+            "bloom_filters": {
+              "type": "object",
+              "description": "Optional Parquet Bloom filter configuration (profile-bound).",
+              "additionalProperties": false,
+              "required": ["enabled"],
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "fpp": {
+                  "type": "number",
+                  "minimum": 0.0000001,
+                  "maximum": 0.5,
+                  "description": "False positive probability target."
+                },
+                "columns": {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1 },
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "query_contract": {
+      "type": "object",
+      "description": "Optional declaration of the offline query contract supported by this pack.",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": { "type": "string", "minLength": 1 },
+        "supports_pagination": { "type": "boolean" },
+        "supports_cardinality_estimates": { "type": "boolean" }
+      }
+    },
+
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "description": "All physical files included in the runtime pack, with integrity metadata.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "sha256", "size_bytes"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative path within the runtime pack container."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "parquet_data",
+              "bitmap_index",
+              "membership_filter",
+              "dictionary",
+              "metadata",
+              "other"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "mime_type": { "type": "string" }
+        }
+      }
+    },
+
+    "integrity": {
+      "type": "object",
+      "description": "Optional higher-level integrity metadata for the pack as a whole.",
+      "additionalProperties": false,
+      "properties": {
+        "hash_alg": { "type": "string", "const": "sha256" },
+        "pack_sha256": {
+          "type": "string",
+          "description": "Optional hash of the full pack container (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "manifest_sha256": {
+          "type": "string",
+          "description": "Optional hash of this manifest content (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "signatures": {
+      "type": "array",
+      "description": "Optional signatures over declared hashed material (verification is fail-closed when signatures are declared).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key_id", "alg", "signature"],
+        "properties": {
+          "key_id": { "type": "string", "minLength": 1 },
+          "alg": {
+            "type": "string",
+            "description": "Signature algorithm identifier.",
+            "enum": ["ed25519", "rsa-pss-sha256", "ecdsa-p256-sha256"]
+          },
+          "signature": {
+            "type": "string",
+            "description": "Base64-encoded signature bytes.",
+            "minLength": 16
+          },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

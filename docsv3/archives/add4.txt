@@ -1,0 +1,126 @@
+## What Kristal already has (v0.1)
+
+* **Content-addressable IDs**: `kristal_id = sha256(canonical_json(exchange_without_signatures))`, with deterministic canonicalization rules and the expectation that implementations reproduce the same hash. 
+* **Optional signatures/attestations** over the exchange (and runtime pack manifests). 
+* **Export intent to RDF / JSON-LD** and explicit mention of **ShEx concepts for validation** (but not a fully standardized ShEx binding yet). 
+* **Semantic validation pipeline** already allows “optional ShEx-like rules” as a source of constraints. 
+
+So the “integrity core” is already aligned with the direction of the standards you uploaded; the gaps are mostly about *standardizing the canonicalization* and *making RDF/JSON-LD exports hash/signable in a standard way*.
+
+---
+
+## RFC 8785 (JCS) — JSON canonicalization
+
+### What the literature adds
+
+JCS defines a canonical JSON representation using (a) strict serialization of primitives, (b) the I-JSON subset, and (c) deterministic property sorting, explicitly to produce a **“hashable”** JSON form usable by cryptographic methods. 
+
+It also gives a practical signing/verification workflow where canonicalization can be implemented as a **post-processor** around existing JSON tooling (remove signature field → canonicalize → verify). 
+
+### Do we already apply it?
+
+**Partially**:
+
+* Kristal already mandates lexicographic key sorting + normalized formats + “canonical_json” as the basis of hashes. 
+* But Kristal’s current rules are **not as fully specified** as JCS on JSON primitive serialization, I-JSON constraints, and edge cases that tend to cause cross-language mismatches.
+
+### Concrete evolution recommendation
+
+* Make `canonical_json(...)` **normatively equal to JCS** (RFC 8785), or state “MUST be JCS-compatible” and enumerate any deliberate deviations.
+* Reuse JCS’s signing/verification pattern as the canonical way to compute `kristal_id` and verify signatures (remove signatures → canonicalize → hash/verify), which matches Kristal’s “hash exchange without signatures” rule.  
+
+Net effect: you keep Kristal’s architecture, but outsource the sharp edges of canonical JSON to a widely implemented standard. 
+
+---
+
+## RDF Dataset Canonicalization (RDFC-1.0) — canonical RDF + hashing
+
+### What the literature adds
+
+RDFC-1.0 is a standard algorithm to **canonically label RDF datasets** by assigning deterministic identifiers to blank nodes, producing a canonical form suitable for hashing/signing even when blank node labels differ. 
+
+Key mechanics (relevant to “stable hashes”):
+
+* Blank-node-local hashing uses canonical N-Quads serialization with placeholders for blank nodes, then codepoint-order + concat + SHA-256 hash. 
+* When local structure isn’t unique, it expands to “N-degree” structure using deterministic “gossip paths” to break ties. 
+
+It also highlights **operational/security issues**:
+
+* Attackers can craft datasets that are expensive to canonicalize (“dataset poisoning”), and implementers should use mitigations like timeouts, iteration limits, aborting, and even schema validation to reject “poison” datasets. 
+* It warns that canonicalized outputs may remain correlated with inputs, and selective-disclosure/redaction needs care (post-processing, etc.). 
+
+Finally, there’s a published conformance landscape with multiple implementations hitting full test-suite compliance. 
+
+### Do we already apply it?
+
+**Not explicitly**.
+
+* Kristal’s hash/signatures are currently defined over **canonical JSON**. 
+* Yet Kristal also promises exportability to RDF/JSON-LD. 
+  Without RDFC (or an equivalent), two semantically identical RDF exports can hash differently due to blank node identifiers.
+
+### Concrete evolution recommendation
+
+Add an **optional, standardized RDF integrity layer** for exports:
+
+* Define a deterministic mapping `Kristal Exchange → RDF dataset` (N-Quads).
+* Define `rdf_canon = RDFC-1.0(exchange_as_rdf_dataset)` and `rdf_hash = sha256(canonical_nquads(rdf_canon))`. (RDFC already uses SHA-256 by default for its hashing steps. )
+* Add **resource limits** for canonicalization in the Kristal threat model (timeouts/iteration caps) to explicitly cover dataset-poisoning risk. 
+* If you ever need “redacted Kristals” (selective disclosure), specify a redaction pipeline that happens *before* RDF canonicalization/hashing (RDFC calls out correlation risks). 
+
+This keeps JSON as the primary exchange format while enabling standards-based signatures/hashes for RDF/JSON-LD projections.
+
+---
+
+## ShEx 2.1 — validation as a standard constraint language
+
+### What the literature adds
+
+ShEx defines validation as checking whether a graph conforms to a schema via a formal “isValid” style relation between **schema**, **graph**, and a **shape map** (which nodes should satisfy which shapes). 
+
+It provides expressive features that map well to offline KG hygiene:
+
+* **CLOSED / EXTRA** controls on allowed properties (useful for “no unexpected arcs” constraints in deterministic compilation). 
+* Negative constraints and other shape features. 
+  But it also notes validation can be computationally costly in some cases (partitioning), and recommends avoiding duplicated constraints. 
+
+### Do we already apply it?
+
+**Partially (conceptually)**:
+
+* Kristal already stages semantic validation and explicitly allows “optional ShEx-like rules” as a constraint source. 
+* What’s missing is a **normative ShEx binding**: which subset/profile of ShEx is allowed, what the target graph is (Kristal-as-RDF? internal statement graph?), and how violations map to Kristal ERROR/WARNING codes.
+
+### Concrete evolution recommendation
+
+* Define a **Kristal ShEx Profile** (subset) aimed at predictability:
+
+  * allow CLOSED shapes and cardinalities, but restrict constructs known to explode runtime;
+  * forbid/limit features that imply expensive search unless bounded.
+* Decide what graph ShEx validates:
+
+  * either the **RDF export** (then ShEx becomes an externalized semantic validator for the exported form), or
+  * an internal “statement graph” projection.
+* Treat ShEx as a **semantic validation stage** that emits Kristal-style codes (hard vs soft violations), consistent with Kristal’s existing pipeline. 
+
+This also complements RDFC’s dataset-poisoning mitigations: schema validation is explicitly suggested as a mitigation. 
+
+---
+
+## JSON-LD 1.1 — context/IRIs for interoperability (mostly already “positioned”)
+
+JSON-LD’s key interoperability contribution is the **context mapping of short terms to IRIs** (and marking IRI-valued fields with `@id`) to avoid term collisions and enable linked-data interpretation while staying 100% JSON-compatible.  
+
+Kristal already positions itself as JSON exchange that can be expressed as RDF/JSON-LD without introducing a competing identifier space. 
+The main missing piece is: if you want **hash/signature equivalence across JSON and JSON-LD/RDF representations**, you need the JCS + RDFC story above.
+
+---
+
+## Minimal “v0.2 evolution” checklist (actionable)
+
+1. **Canonical JSON**: normatively adopt **RFC 8785 (JCS)** as `canonical_json`. 
+2. **RDF integrity (optional but strong)**: add `rdf_hash` using **RDFC-1.0 canonical N-Quads** for exported RDF/JSON-LD. 
+3. **Resource limits**: explicitly standardize canonicalization time/step limits to address dataset-poisoning risks noted by RDFC. 
+4. **ShEx binding**: define a constrained ShEx profile + mapping to Kristal validation errors/warnings.  
+
+If you want, I can draft the exact normative spec deltas for Kristal sections **8.3–8.6** (hashing/canonicalization/signatures) to incorporate JCS + optional RDFC + ShEx-profile hooks.

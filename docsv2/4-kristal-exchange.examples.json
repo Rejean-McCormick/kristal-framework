@@ -1,0 +1,244 @@
+{
+  "examples": [
+    {
+      "name": "minimal_single_entity",
+      "description": "Minimal Kristal Exchange with one entity and one statement",
+      "kristal": {
+        "schema_version": "0.1",
+        "kristal_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "manifest": {
+          "title": "Ada Lovelace — birth date",
+          "created_at": "2026-01-06T12:00:00Z",
+          "validation_status": "passed"
+        },
+        "entities": [
+          {
+            "id": "Q7259",
+            "labels": { "en": "Ada Lovelace" },
+            "claims": {
+              "P569": [
+                {
+                  "mainsnak": {
+                    "property": "P569",
+                    "snaktype": "value",
+                    "datatype": "time",
+                    "datavalue": {
+                      "type": "time",
+                      "value": {
+                        "time": "+1815-12-10T00:00:00Z",
+                        "precision": 11
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "name": "with_reference_inline",
+      "description": "Statement with inline Wikibase-style reference",
+      "kristal": {
+        "schema_version": "0.1",
+        "kristal_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "manifest": {
+          "title": "Douglas Adams — birth date",
+          "created_at": "2026-01-06T12:10:00Z",
+          "validation_status": "passed",
+          "source_summary": [
+            {
+              "source_url": "https://example.org/douglas-adams",
+              "retrieved_at": "2026-01-05T09:00:00Z"
+            }
+          ]
+        },
+        "entities": [
+          {
+            "id": "Q42",
+            "labels": { "en": "Douglas Adams" },
+            "claims": {
+              "P569": [
+                {
+                  "statement_id": "stmt-1",
+                  "mainsnak": {
+                    "property": "P569",
+                    "snaktype": "value",
+                    "datatype": "time",
+                    "datavalue": {
+                      "type": "time",
+                      "value": {
+                        "time": "+1952-03-11T00:00:00Z",
+                        "precision": 11
+                      }
+                    }
+                  },
+                  "references": [
+                    {
+                      "snaks": {
+                        "P854": [
+                          {
+                            "property": "P854",
+                            "snaktype": "value",
+                            "datatype": "url",
+                            "datavalue": {
+                              "type": "url",
+                              "value": "https://example.org/douglas-adams"
+                            }
+                          }
+                        ],
+                        "P813": [
+                          {
+                            "property": "P813",
+                            "snaktype": "value",
+                            "datatype": "time",
+                            "datavalue": {
+                              "type": "time",
+                              "value": {
+                                "time": "+2026-01-05T00:00:00Z",
+                                "precision": 11
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "name": "external_evidence_pack",
+      "description": "Reference via external evidence pack pointer",
+      "kristal": {
+        "schema_version": "0.1",
+        "kristal_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "manifest": {
+          "title": "Paris — country",
+          "created_at": "2026-01-06T12:20:00Z",
+          "validation_status": "passed"
+        },
+        "evidence_pack_ref": {
+          "pack_id": "evidence-pack-001",
+          "uri": "file://evidence/paris-pack.json"
+        },
+        "entities": [
+          {
+            "id": "Q90",
+            "labels": { "en": "Paris" },
+            "claims": {
+              "P17": [
+                {
+                  "mainsnak": {
+                    "property": "P17",
+                    "snaktype": "value",
+                    "datatype": "wikibase-entityid",
+                    "datavalue": {
+                      "type": "wikibase-entityid",
+                      "value": {
+                        "id": "Q142"
+                      }
+                    }
+                  },
+                  "references": [
+                    {
+                      "evidence_id": "ev-001"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "name": "with_qualifier",
+      "description": "Statement with a qualifier (point in time)",
+      "kristal": {
+        "schema_version": "0.1",
+        "kristal_id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "manifest": {
+          "title": "Capital of France — temporal qualifier",
+          "created_at": "2026-01-06T12:30:00Z",
+          "validation_status": "passed"
+        },
+        "entities": [
+          {
+            "id": "Q90",
+            "claims": {
+              "P1376": [
+                {
+                  "mainsnak": {
+                    "property": "P1376",
+                    "snaktype": "value",
+                    "datatype": "wikibase-entityid",
+                    "datavalue": {
+                      "type": "wikibase-entityid",
+                      "value": { "id": "Q142" }
+                    }
+                  },
+                  "qualifiers": {
+                    "P585": [
+                      {
+                        "property": "P585",
+                        "snaktype": "value",
+                        "datatype": "time",
+                        "datavalue": {
+                          "type": "time",
+                          "value": {
+                            "time": "+2026-01-01T00:00:00Z",
+                            "precision": 11
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+
+    {
+      "name": "partial_with_unresolved",
+      "description": "Kristal containing unresolved predicate preserved explicitly",
+      "kristal": {
+        "schema_version": "0.1",
+        "kristal_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "manifest": {
+          "title": "Unresolved predicate example",
+          "created_at": "2026-01-06T12:40:00Z",
+          "validation_status": "partial"
+        },
+        "entities": [
+          {
+            "id": "Q42",
+            "claims": {}
+          }
+        ],
+        "unresolved": [
+          {
+            "kind": "predicate",
+            "surface": "date de naissance",
+            "lang": "fr",
+            "candidates": [
+              { "id": "P569", "score": 0.91, "label": "date of birth" }
+            ],
+            "notes": "Requires manual or automated PID resolution"
+          }
+        ]
+      }
+    }
+  ]
+}

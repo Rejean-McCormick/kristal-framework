@@ -1,0 +1,98 @@
+## 1) Wikibase/Wikidata data model: do we match it already?
+
+### Statements, qualifiers, references, ranks
+
+Wikibase defines a **Statement** as “subject + mainSnak + optional qualifierSnaks + referenceRecords + rank”.  Kristal Exchange already mirrors this shape:
+
+* `statement.rank` with `preferred|normal|deprecated` 
+* `mainsnak` + `qualifiers` keyed by `P…` 
+* `references[]` as sets of snaks 
+
+Wikibase’s “no value / some value” snaks are explicitly part of the model  and Wikidata explains their semantics (“no value” vs “unknown value”).  Kristal Exchange already encodes this with `snaktype: value|somevalue|novalue`. 
+
+### What to tighten / add
+
+* **“Best rank / truthy view” as a first-class derived artifact.** Wikibase defines “best rank” selection logic.  WDQS materializes this as `wdt:` “truthy properties” chosen by rank. 
+  **Evolution:** add an optional *compiled projection* in Runtime Packs: per property (and optionally per (p,o)) include a “truthy-only” bitmap/list that only includes best-rank statements, so offline queries behave like `wdt:` by default (with an escape hatch to query all ranks).
+
+* **Entity types beyond Items/Properties.** Wikidata highlights extensions like Lexeme/Form/Sense and extra datatypes. 
+  **Evolution:** confirm that `wikibase-entityid` covers these cleanly in Exchange and Runtime; if not, extend the entity id/value encoding (and pack dictionaries) to include `entity-type` beyond `item/property`.
+
+## 2) WDQS RDF mapping: are we aligned?
+
+WDQS stores:
+
+* a simplified `wdt:` triple for “truthy” claims 
+* and the full statement graph using a generated statement node (`p:` / `ps:` / `pq:`).  
+
+Kristal’s internal model already has statement objects with qualifiers/references, so it can **export** to this WDQS-style RDF mapping losslessly for supported constructs.
+
+**Evolution (practical):**
+
+* define a normative “WDQS-compatible RDF export profile” (prefixes, statement-node IRIs, and which ranks go to `wdt:`) so that Kristals can be round-tripped through WDQS conventions without ambiguity.
+
+## 3) Query/workload papers: do we already apply the ideas?
+
+### “Workload Matters” (VLDB 2014)
+
+The paper argues most RDF stores are “workload-oblivious” and proposes **workload-driven layouts** (“group-by-query representation”) to avoid fragmentation/poor localization/large intermediates. 
+
+Kristal Runtime is already explicitly a **workload/profile-driven** system:
+
+* primary primitive `(p,o) → {s}` 
+* constrained set algebra, limited joins, and “queries must be evaluable using runtime pack indexes”. 
+* runtime schema defines index patterns like `(p,o)->s`, `(p)->s`, `(p,s)->o`. 
+
+**Conclusion:** Kristal already implements the paper’s core direction (pre-optimized layouts for a defined workload). The main “next” step, if desired, is *adaptivity*:
+
+* **Evolution:** allow Runtime Packs to carry an optional “usage log → recompile hints” mechanism (still offline), so packs can be regenerated with better index coverage if real workloads shift (the paper’s “dynamic workloads” motivation). 
+
+## 4) Membership filters literature: do we already apply it?
+
+Binary fuse filters improve over xor filters: near-lower-bound space (≈13% overhead) while keeping speed, and faster construction.  They’re positioned as faster/smaller alternatives to Bloom/cuckoo/xor. 
+
+Kristal Runtime schema already anticipates this:
+
+* `filter.type` supports `xor`, `binary-fuse`, `bloom`. 
+
+**Evolution:**
+
+* make **binary-fuse** the recommended default for membership filtering (when immutable sets hold), and clearly specify what the filter gates (`claim_id` vs `spo_hash`). 
+* document expected false-positive rates and how false positives are pruned (the paper’s intended usage pattern). 
+
+## 5) WDQS reload blog: why it matters for Kristal
+
+The WDQS techblog post highlights:
+
+* WDQS scale (≈16.6B triples) and operational instability at scale 
+* reloading/import being measured in days to weeks, and mitigations like splitting the graph into coarse domains. 
+* significant performance sensitivity to dump format and ingestion setup (e.g., N-Triples speedups). 
+
+This strongly reinforces Kristal’s premise: **don’t ship “full WDQS at home” as the offline story; ship demand-driven, executable subsets**.
+
+**Evolution:**
+
+* formalize a “pack compiler pipeline” that starts from official dumps/exports and emits:
+
+  1. Exchange (canonical)
+  2. Runtime (indexes + filters) with predictable load times
+* optionally support coarse **domain partitioning** of packs (mirroring the split strategy, but as a product feature rather than ops mitigation). 
+
+---
+
+## Summary of “already covered” vs “add next”
+
+**Already covered in Kristal v0.1 design**
+
+* Wikibase statement structure (snaks/qualifiers/references/ranks) 
+* somevalue/novalue encoding 
+* workload-driven query profile + explicit index patterns 
+* membership filters including xor and binary-fuse 
+
+**High-leverage evolutions**
+
+1. Add a **truthy/best-rank compiled projection** (WDQS-like `wdt:` semantics offline). 
+2. Define a **WDQS-compatible RDF export profile** (p/ps/pq statement-node mapping). 
+3. Confirm/extend support for **Lexeme/Form/Sense** entity types and extra datatypes. 
+4. Promote **binary-fuse** as the default membership filter in Runtime guidance. 
+5. Add an optional **adaptivity loop**: log workload → recompile pack indexes (still deterministic/offline). 

@@ -1,0 +1,186 @@
+{
+  "schema_version": "3.0",
+  "artifact_type": "exchange",
+  "exchange_version": "3.0",
+  "created_at": "2026-01-07T16:10:00Z",
+
+  "canonicalization_profile": "jcs-rfc8785",
+  "canonicalization_version": "RFC8785",
+
+  "kristal_id": "krs_9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+  "content_hash": {
+    "algo": "sha256",
+    "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
+  },
+
+  "build": {
+    "build_id": "build-2026-01-07T161000Z-0007",
+    "compiler_name": "kristal-compiler",
+    "compiler_version": "3.0.0",
+    "config_hash": "sha256:3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1",
+    "git_commit": "a1b2c3d4e5f6g7h8i9j0"
+  },
+
+  "inputs": {
+    "source_snapshot_id": "snap-2026-01-06-wikipedia-dump-en",
+    "recipe_id": "recipe-demo-encyclopedia-core",
+    "claim_ir_ids": ["ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4"],
+    "resolved_claim_ir_ids": ["rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c"],
+    "previous_exchange_ids": []
+  },
+
+  "profiles_enabled": [
+    "export-jsonld",
+    "export-rdf-wdqs"
+  ],
+
+  "policies": {
+    "ordering_policies": ["SPO", "POS"],
+    "row_group_policy": { "type": "FIXED_ROWS", "rows": 100000 },
+    "membership_filter_policy": {
+      "family": "binary_fuse",
+      "variant": "3wise",
+      "key_space": "spo_hash",
+      "target_fpr": 0.001,
+      "bits_per_key": 9.5,
+      "seed": 42
+    },
+    "bitmap_policy": { "format": "roaring", "run_opt": true },
+    "join1_cap_policy": { "cap": 5000, "strict_mode": true, "on_exceed": "error" }
+  },
+
+  "evidence_index": [
+    {
+      "evidence_id": "ev-0001",
+      "source_uri": "https://en.wikipedia.org/wiki/Douglas_Adams",
+      "retrieved_at": "2026-01-06T09:12:43Z",
+      "locator": { "type": "html_xpath", "value": "//*[@id='mw-content-text']" },
+      "excerpt_sha256": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
+    },
+    {
+      "evidence_id": "ev-0002",
+      "source_uri": "https://example.org/notes/travel-briefing.txt",
+      "retrieved_at": "2026-01-06T10:00:00Z",
+      "locator": { "type": "line_range", "value": "L10-L25" },
+      "excerpt_sha256": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
+    }
+  ],
+
+  "exchange": {
+    "items": [
+      {
+        "entity_id": "Q42",
+        "type": "item",
+        "labels": { "en": "Douglas Adams" },
+        "descriptions": { "en": "English writer and humorist" },
+        "aliases": { "en": ["Douglas Noel Adams"] },
+
+        "statements": [
+          {
+            "statement_id": "st-Q42-P569-0001",
+            "claim_id": "clm-0001",
+
+            "property_id": "P569",
+            "snaktype": "value",
+            "datatype": "time",
+            "datavalue": {
+              "type": "time",
+              "value": {
+                "time": "+1952-03-11T00:00:00Z",
+                "timezone": 0,
+                "before": 0,
+                "after": 0,
+                "precision": 11,
+                "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+              }
+            },
+
+            "rank": "normal",
+
+            "qualifiers": [],
+
+            "references": [
+              {
+                "reference_id": "ref-0001",
+                "evidence_ids": ["ev-0001"],
+                "snaks": [
+                  {
+                    "property_id": "P854",
+                    "snaktype": "value",
+                    "datatype": "url",
+                    "datavalue": {
+                      "type": "string",
+                      "value": "https://en.wikipedia.org/wiki/Douglas_Adams"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "entity_id": "Q90",
+        "type": "item",
+        "labels": { "en": "Paris" },
+        "descriptions": { "en": "capital and most populous city of France" },
+        "aliases": { "en": [] },
+
+        "statements": [
+          {
+            "statement_id": "st-Q90-P17-0001",
+            "claim_id": "clm-0002",
+
+            "property_id": "P17",
+            "snaktype": "value",
+            "datatype": "wikibase-item",
+            "datavalue": {
+              "type": "wikibase-entityid",
+              "value": { "entity-type": "item", "numeric-id": 142, "id": "Q142" }
+            },
+
+            "rank": "normal",
+
+            "qualifiers": [],
+
+            "references": [
+              {
+                "reference_id": "ref-0002",
+                "evidence_ids": ["ev-0002"],
+                "snaks": [
+                  {
+                    "property_id": "P854",
+                    "snaktype": "value",
+                    "datatype": "url",
+                    "datavalue": {
+                      "type": "string",
+                      "value": "https://example.org/notes/travel-briefing.txt"
+                    }
+                  }
+                ]
+              }
+            ],
+
+            "notes": [
+              {
+                "code": "SOURCE_LOW_AUTHORITY",
+                "message": "Source is non-canonical; accepted under policy because claim is high-confidence and non-controversial."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  "signatures": [
+    {
+      "key_id": "kid-tenant_demo-2026-01",
+      "alg": "ed25519",
+      "signature": "base64url:U0lHTkFUVVJFX0VYQU1QTEVfTk9UX1JFQUw",
+      "created_at": "2026-01-07T16:10:05Z",
+      "signer": { "name": "Orgo Build Service", "org": "tenant_demo" }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "runtime_version": "0.1",
+  "source_kristals": [
+    "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "created_at": "2026-01-06T13:00:00Z",
+
+  "build": {
+    "compiler": "kristal-compiler",
+    "compiler_version": "0.1.0",
+    "parameters": {
+      "drop_unresolved": true,
+      "index_policy": "hybrid-by-cardinality"
+    }
+  },
+
+  "layout": {
+    "base_path": "./",
+    "endianness": "little",
+    "encoding": "parquet"
+  },
+
+  "dictionaries": {
+    "qid": {
+      "path": "dict/qid.dict",
+      "entry_count": 1,
+      "encoding": "fixed32"
+    },
+    "pid": {
+      "path": "dict/pid.dict",
+      "entry_count": 1,
+      "encoding": "fixed32"
+    },
+    "value": {
+      "path": "dict/value.dict",
+      "entry_count": 1,
+      "encoding": "mixed"
+    }
+  },
+
+  "triples": {
+    "path": "triples/triples.parquet",
+    "format": "parquet",
+    "row_count": 1,
+    "columns": ["s", "p", "o"]
+  },
+
+  "indexes": [
+    {
+      "type": "bitmap",
+      "pattern": "(p,o)->s",
+      "path": "index/po_to_s.roaring",
+      "encoding": "roaring",
+      "cardinality_hint": 1
+    }
+  ],
+
+  "membership_filters": [
+    {
+      "type": "binary-fuse",
+      "path": "filter/claim_id.fuse",
+      "false_positive_rate": 0.001,
+      "applies_to": "claim_id"
+    }
+  ],
+
+  "statistics": {
+    "triple_count": 1,
+    "predicate_cardinality": [
+      {
+        "pid": "P569",
+        "count": 1
+      }
+    ],
+    "po_cardinality": [
+      {
+        "pid": 0,
+        "oid": 0,
+        "count": 1
+      }
+    ]
+  }
+}

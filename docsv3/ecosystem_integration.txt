@@ -1,0 +1,172 @@
+# Kristals in the Ecosystem: Konnaxion × Orgo × Architect × SenTient
+
+## 1) What “Kristal” is in your stack
+
+**Kristal is the portable, offline-executable unit of encyclopedic knowledge in your ecosystem.** It is *not* a document and not free text; it is a **compiled knowledge artifact** designed to be **Wikidata/Wikibase-aligned**, **verifiable/traceable**, **AI-ready**, and **executable offline**. 
+
+Kristal exists as a **standard + compilation pipeline + runtime pack**:
+
+* **Claim-IR**: the *only* format probabilistic extractors (LLMs, classical extractors, hybrids) are allowed to output directly; it’s a strict, schema-constrained proposal format with explicit uncertainty and evidence. 
+* **Resolution (SenTient)**: maps surfaces to QIDs/PIDs and normalizes values, preserving unresolved ambiguity instead of forcing it. 
+* **Validation**: deterministic acceptance gate; if validation fails, it must not compile. 
+* **Kristal Exchange**: canonical, Wikibase-aligned, content-addressed source of truth. 
+* **Kristal Runtime Pack**: derived, offline-executable indexed form (no SPARQL, no network, no LLM dependency). 
+* **Deterministic Generation (Architect)**: generates natural language *after* validation; cannot introduce new facts and must trace statements back to Kristal claims. 
+
+## 2) Landscape: where Kristals sit (the “map”)
+
+**Kristals sit between (a) messy reality and (b) user-facing platforms + operational systems**, as the *verified, portable knowledge substrate*.
+
+**High-level flow (authoring → distribution → use → feedback):**
+
+**A. Inputs (messy)**
+
+* Documents, web pages, PDFs, datasets; optional hints. 
+
+**B. Knowledge compilation (Kristal stack)**
+
+* Claim-IR (proposal boundary) → SenTient resolution → deterministic validation → Kristal Exchange → Runtime Pack.  
+
+**C. Consumers (your ecosystem)**
+
+* **Konnaxion** consumes Kristals to power discovery/search/navigation, knowledge delivery (KonnectED), and integrity of civic/consensus workflows (Ekoh/Konsensus/Smart Vote). Konnaxion explicitly supports **universal navigation & search across modules** and offline-oriented UX via PWA caching / low-bandwidth support. 
+* **Orgo** consumes Kristals to turn knowledge into *operational work*, and produces operational signals that can trigger new Kristal builds; Orgo’s purpose is to ingest messy signals and turn them into structured **Cases & Tasks**, with multi-tenancy and offline sync support.  
+* **Architect** consumes Kristal query results and produces deterministic multilingual text (or other generated outputs) under strict rules; it’s a build-and-launch NLG system with explicit build pipelines.  
+* **SenTient** is the reconciliation engine that bridges unstructured text to a Wikidata/Wikibase-shaped graph using a funnel strategy (fast candidate generation → semantic scoring → QA/judging), including “scrutinizers” style QA checks.  
+
+## 3) Clear role boundaries (what each system is “for”)
+
+### Kristal (the substrate)
+
+**Primary job:** produce *portable, verifiable, offline-executable* encyclopedic knowledge units (Exchange + Runtime Pack) with deterministic compilation and generation rules.  
+
+**Non-goals (important boundary):**
+
+* Kristal Runtime Packs do **not** support full SPARQL semantics; they intentionally constrain queries and execution to stay offline and predictable. 
+
+### SenTient (the resolver / reconciler)
+
+**Primary job:** convert ambiguity (“surface forms”) into **ranked candidate QIDs/PIDs**, normalize literals, and preserve unresolved ambiguity rather than forcing it. 
+**Architecture style:** funnel logic with sidecar storage pattern (fast top → precise bottom). 
+
+### Architect (the deterministic renderer)
+
+**Primary job:** transform validated knowledge into deterministic text (or language outputs) without adding facts; generation happens after validation and must trace back to Kristal claims. 
+**Operationally:** it is explicitly a build pipeline from filesystem → index → JSON → compilation artifacts → worker/API. 
+
+### Konnaxion (the mass platform layer)
+
+**Primary job:** a unified multi-module platform with global navigation/search and offline/low-bandwidth support, plus collective-intelligence mechanisms (Ekoh/Konsensus/Smart Vote) and content distribution (KonnectED).  
+**Operational detail that matters for Kristals:** Konnaxion already contemplates **offline package generation** and versioned offline artifacts. 
+
+### Orgo (the operating system layer)
+
+**Primary job:** ingest messy signals and turn them into structured work (Cases/Tasks), under global invariants like multi-tenancy and identity separation, with offline sync capability.  
+**Offline mechanics that matter for Kristals:** offline nodes, sync sessions, and conflict handling are first-class. 
+
+## 4) The “place” of Kristals inside each product (explicit integration points)
+
+### 4.1 Kristals inside **Konnaxion**
+
+Konnaxion’s platform structure is ideal for Kristals because it already wants:
+
+1. **One global search/navigation layer across modules** 
+2. **Offline/low-bandwidth delivery modes** via PWA caching and “offline access mode” concepts 
+3. **Weighted curation / expert verification workflows** (Ekoh + Smart Vote)  
+4. **Offline package generation** as a scheduled, versioned artifact 
+
+**Concrete placement:**
+
+* **Kristal Runtime Packs become the offline knowledge payload** distributed to devices/users/regions (mirrors Konnaxion’s planned offline packages). 
+* **Kristal Exchange becomes the auditable canonical reference** for “verified knowledge items” that Konnaxion modules can cite, debate around, and rank—without letting debate mutate the underlying truth substrate. (This is a design inference, grounded by Exchange being canonical source-of-truth.) 
+* **Ekoh/Konsensus can weight “which Kristals are promoted”** (distribution priority, featured packs, recommended knowledge blocks), rather than deciding facts. This aligns with “weighted content curation” mechanics already described. 
+
+**What this unlocks on “massive platforms”:**
+
+* A consistent “knowledge primitive” that can be embedded in feeds, search results, debate references, educational modules, and even moderation/verification badges—without relying on live endpoints. 
+
+### 4.2 Kristals inside **Orgo**
+
+Orgo is explicitly about converting messy signals into structured work and doing it safely at scale (multi-tenant, identity model, offline sync). 
+
+**Concrete placement:**
+
+* **Orgo becomes the operational control plane for Kristal production and distribution**:
+
+  * When Orgo ingests signals (email, HTTP, offline imports), it can trigger “needs-a-kristal” workflows: create a Case/Task for extraction, reconciliation, validation, and release. 
+  * Orgo’s offline nodes + sync sessions can distribute Kristal packs to constrained environments (schools, field devices, regulated deployments) and reconcile back usage/feedback. 
+  * Orgo already supports offline email archive imports for historical analysis—those archives can be a primary input stream into Claim-IR/SenTient pipelines. 
+
+**Orgo ↔ Kristal “division of labor”:**
+
+* Orgo stores: assignments, cases, approvals, audit logs, distribution status, sync conflicts.
+* Kristal stores: the actual verified knowledge payload (Exchange + Runtime).
+
+### 4.3 Kristals inside **SenTient**
+
+Kristal’s pipeline explicitly delegates **Resolution** to SenTient, with rules such as “no forced disambiguation without evidence,” “no silent coercion,” and “unresolved content must be preserved.” 
+
+SenTient’s funnel architecture operationalizes this at scale (fast candidate spotting → semantic scoring → judge/QA). 
+Its QA approach (“scrutinizers”) provides a natural bridge into Kristal’s deterministic validation philosophy. 
+
+**Concrete placement:**
+
+* SenTient is the **resolver service** that turns Claim-IR’s explicit ambiguity into ranked IDs and normalized values, producing “resolved Claim-IR” plus warnings. 
+* SenTient outputs feed directly into **deterministic validation** and Exchange finalization. 
+
+### 4.4 Kristals inside **Architect**
+
+Kristal’s pipeline makes Architect the deterministic renderer: generation occurs after validation; no new facts may be introduced; all statements trace back to Kristal claims. 
+
+Architect is already designed as a build pipeline with clear stages (filesystem → indexer → JSON → orchestrator/factory → compiled artifact → worker/API). 
+
+**Concrete placement:**
+
+* Architect consumes **queries over Kristal Runtime Packs** (or over Exchange-derived, validated query results) and produces:
+
+  * human-readable articles/snippets
+  * multilingual variants
+  * structured educational pages
+* Architect’s own deterministic ethos (system prompts for deterministic codegen, “judge” validation patterns) aligns with Kristal’s “isolate uncertainty early, be deterministic late” model. 
+
+## 5) The core operating loop you’re building (explicit)
+
+### Loop 1: “Reality → Kristal”
+
+1. **Signal enters** (Konnaxion content submission, Orgo email/import/API, web/PDF ingestion) 
+2. **Claim-IR is produced** (LLM/extractor output; strict schema; explicit evidence/uncertainty) 
+3. **SenTient resolves** surfaces to ranked QIDs/PIDs and normalizes values 
+4. **Deterministic validation** gates compilation 
+5. **Kristal Exchange is finalized** (canonical, mergeable, content-addressed) 
+6. **Runtime Pack is compiled** for offline execution 
+
+### Loop 2: “Kristal → People”
+
+7. **Konnaxion distributes** packs (versioned offline packages; PWA/offline mode; low-bandwidth UX)  
+8. **Architect renders** text from validated claims (no new facts) 
+9. **Orgo operationalizes**: tasks/cases created from knowledge gaps, verification needs, distribution issues 
+
+### Loop 3: “People → System feedback”
+
+10. **Feedback becomes structured signals** (Orgo cases; Konnaxion votes/curation signals) that trigger revisions/new Kristals.  
+
+## 6) A practical “adopt it yourself” deployment model (explicit, minimal moving parts)
+
+### Model A — Kristals as an internal backbone (recommended first)
+
+* **Orgo runs the Kristal build workflow** (tasks/cases: ingest → resolve → validate → publish).
+* **SenTient runs as a resolution service** invoked by the workflow. 
+* **Outputs are two artifacts per release:**
+
+  * Kristal Exchange (audit/canonical) 
+  * Runtime Pack (distribution/execution) 
+* **Konnaxion consumes runtime packs** for offline knowledge delivery and fast search primitives (within the constrained query model). 
+* **Architect consumes validated query results** for deterministic publishing. 
+
+### Model B — Kristals as a public standard (later)
+
+Once stable internally, you can publish the Kristal format externally as the “interop layer” while keeping your Orgo/Konnaxion operational advantage as the distribution + adoption engine. (This is an execution strategy inference; Kristal’s spec already frames itself as a proposal intended for community discussion and prototyping.) 
+
+## 7) The one-sentence placement summary
+
+**Kristals are the verified, offline-executable knowledge substrate; SenTient compiles ambiguity into IDs; Architect deterministically renders validated knowledge into text; Orgo operationalizes the workflows and governance; Konnaxion distributes and leverages the result at platform scale with search/navigation, offline access, and collective curation mechanisms.**    

@@ -1,0 +1,107 @@
+## Additional literature mapping (new uploads) vs Kristal
+
+### SHACL (Shapes Constraint Language)
+
+**What the spec adds:** an RDF-native way to validate a *data graph* against a *shapes graph* , producing an RDF validation results graph with a `sh:ValidationReport` and `sh:conforms` / `sh:result` entries .
+
+**Kristal status: PARTIAL (concept-level, not SHACL-compatible yet).**
+
+* Kristal explicitly positions itself alongside W3C standards and mentions “Shape Expressions (ShEx) concepts for validation” (not SHACL). 
+* Kristal already standardizes “validation and integrity rules”  and has JSON-Schema-based validation in the reference guidance. 
+
+**High-leverage evolution:**
+
+* Define an **optional SHACL output profile**: project Kristal Exchange (or the RDF/JSON-LD export) into a data graph, ship a shapes graph for core constraints, and emit standard `sh:ValidationReport` results. This makes Kristal validation tooling interoperable with off-the-shelf SHACL engines. 
+* Decide explicitly whether Kristal aims for SHACL-Core-only or also SHACL-SPARQL (which depends on SPARQL). SHACL-Core does not require SPARQL. 
+
+---
+
+### Triple Pattern Fragments (TPF)
+
+**What the paper adds:** a low-cost interface defined around *triple-pattern selector functions* , with fragment metadata including an (approximate) cardinality estimate (e.g., `void:triples`). 
+
+**Kristal status: YES (architecturally aligned), missing key “TPF interface” features.**
+
+* Kristal’s query scope is explicitly “triple-pattern–based” and “not full SPARQL”. 
+* Kristal even states it draws on “Linked Data Fragments (TPF) ideas for constrained querying”. 
+
+**High-leverage evolution:**
+
+* Add **TPF-like affordances** to the Runtime Pack query API:
+
+  * per-triple-pattern **cardinality estimates** (exact or approximate; TPF allows approximation) 
+  * standardized **pagination** for triple-pattern results
+  * optional hypermedia controls if exposing a web interface (TPF frames itself as a hypermedia-driven REST API). 
+* This can stay “offline-first”: the same interface can be local (file://) or served statically.
+
+---
+
+### Trusty URIs (verifiable, immutable artifacts)
+
+**What the paper adds:** embedding cryptographic hashes into URIs (“artifact codes”), with modular hashing for different abstraction levels (byte-level vs RDF-graph-level), using SHA-256 in current modules ; plus RDF-graph module details (sorting statements, handling blank nodes)  and compatibility with `ni:` URIs. 
+
+**Kristal status: YES (content-addressing exists), but not “trusty-URI-grade”.**
+
+* Kristal Exchange is content-addressed: `kristal_id = sha256(canonical_json(...))`  and the schema enforces `kristal_id` as `sha256:<64 hex>`. 
+* Statement IDs are also described as hash-derived. 
+
+**High-leverage evolution:**
+
+* Add an **optional URI form** for Kristal identity (e.g., `ni:///sha-256;<digest>` or a Trusty-like `...RA...` form) so Kristals become directly dereferenceable/verifiable “digital artifacts” in Linked Data contexts. 
+* If Kristal wants a serialization-independent RDF identity (like Trusty “RA” for RDF graphs), specify:
+
+  * canonical RDF projection rules,
+  * sorting rules,
+  * blank-node handling/skolemization rules. 
+    (Right now Kristal’s identity is canonical-JSON-based, which is fine, but not equivalent to RDF-level identity.)
+
+---
+
+### Validating UTF-8 very fast (SIMD)
+
+**What the paper adds:** SIMD-based UTF-8 validation at very high throughput; the paper frames UTF-8 validation as a common ingestion bottleneck and reports order-of-magnitude speedups over common routines. 
+
+**Kristal status: NOT SPEC’D (implementation opportunity).**
+
+* Kristal assumes large-scale offline compilation and ingestion (e.g., from Wikidata/Wikibase artifacts), but does not standardize input parsing performance strategies.
+
+**High-leverage evolution (non-normative guidance):**
+
+* In compiler/ingestion notes, recommend SIMD UTF-8 validation for:
+
+  * Wikibase JSON dumps,
+  * evidence packs / quotes,
+  * any large-scale text ingestion path. 
+    This belongs in implementation guidance, not the normative format spec.
+
+---
+
+### Wikibase JSON canonical format
+
+**What the spec adds:** practical guarantees/quirks of Wikibase JSON:
+
+* aims for JSON interoperability (RFC 7159) and permits different string encodings (escaped Unicode vs native UTF-8) 
+* JSON dumps encode each entity as **one line** to enable line-by-line streaming. 
+
+**Kristal status: YES (explicitly aligned).**
+
+* Kristal Exchange “mirrors Wikibase’s statement structure” and claims a lossless mapping to Wikibase JSON for supported features. 
+* Kristal mandates export compatibility to Wikibase JSON. 
+
+**High-leverage evolution:**
+
+* Add explicit “robust ingestion” requirements/recommendations for Wikibase JSON realities:
+
+  * accept both UTF-8 and escaped forms 
+  * support streaming/line-by-line dump processing 
+  * clarify number handling where Wikibase may use strings for quantities. 
+
+---
+
+## Net: do we “already apply elements” of these new papers?
+
+* **TPF:** yes at the query *model* level; missing the interface-level pieces (cardinality metadata, paging, hypermedia).  
+* **Trusty URIs:** yes for hashing/content addressing; missing the URI-grade, serialization-independent RDF artifact identity story.  
+* **SHACL:** not yet (Kristal references ShEx concepts instead); can be added as an optional validation/export profile.  
+* **UTF-8 SIMD validation:** not a spec feature; strong implementation guidance candidate. 
+* **Wikibase JSON details:** already aligned; can tighten ingestion/export robustness using the documented edge cases.  

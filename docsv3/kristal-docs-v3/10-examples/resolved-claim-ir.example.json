@@ -1,0 +1,182 @@
+{
+  "schema_version": "3.0",
+  "artifact_type": "resolved-claim-ir",
+  "artifact_id": "rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c",
+  "created_at": "2026-01-07T15:20:00Z",
+
+  "tenant_id": "tenant_demo",
+  "build_id": "build-2026-01-07T152000Z-0001",
+
+  "source": {
+    "claim_ir_id": "ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4",
+    "source_snapshot_id": "snap-2026-01-06-wikipedia-dump-en",
+    "recipe_id": "recipe-demo-encyclopedia-core"
+  },
+
+  "resolver": {
+    "name": "SenTient",
+    "version": "0.9.0",
+    "config_hash": "sha256:7d3d5b7a2b6f4d6d2c3fbb65d36d7b6c3a2f8f7f8c9a0b1c2d3e4f5a6b7c8d9e",
+    "scoring_model": "funnel-v1",
+    "max_candidates": 5,
+    "preserve_ambiguity": true,
+    "min_confidence_accept": 0.92
+  },
+
+  "evidence": [
+    {
+      "evidence_id": "ev-0001",
+      "source_uri": "https://en.wikipedia.org/wiki/Douglas_Adams",
+      "retrieved_at": "2026-01-06T09:12:43Z",
+      "locator": { "type": "html_xpath", "value": "//*[@id='mw-content-text']" },
+      "excerpt": "Douglas Noel Adams (11 March 1952 – 11 May 2001) was an English author...",
+      "excerpt_sha256": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
+    },
+    {
+      "evidence_id": "ev-0002",
+      "source_uri": "https://example.org/notes/travel-briefing.txt",
+      "retrieved_at": "2026-01-06T10:00:00Z",
+      "locator": { "type": "line_range", "value": "L10-L25" },
+      "excerpt": "Paris is the capital of France. Paris has many museums.",
+      "excerpt_sha256": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
+    }
+  ],
+
+  "resolved_claims": [
+    {
+      "claim_id": "clm-0001",
+      "status": "resolved",
+      "needs_human_review": false,
+
+      "original": {
+        "subject": { "surface": "Douglas Adams", "language": "en" },
+        "predicate": { "surface": "date of birth", "language": "en" },
+        "object": { "surface": "11 March 1952", "language": "en" },
+        "confidence": 0.74,
+        "evidence_ids": ["ev-0001"]
+      },
+
+      "resolution": {
+        "subject": {
+          "chosen": {
+            "entity_id": "Q42",
+            "label": "Douglas Adams",
+            "match_type": "exact_alias",
+            "confidence": 0.997
+          },
+          "candidates": [
+            { "entity_id": "Q42", "label": "Douglas Adams", "confidence": 0.997 },
+            { "entity_id": "Q214338", "label": "Douglas Adams (disambiguation)", "confidence": 0.031 }
+          ]
+        },
+
+        "predicate": {
+          "chosen": {
+            "property_id": "P569",
+            "label": "date of birth",
+            "match_type": "label_match",
+            "confidence": 0.995
+          },
+          "candidates": [
+            { "property_id": "P569", "label": "date of birth", "confidence": 0.995 },
+            { "property_id": "P570", "label": "date of death", "confidence": 0.072 }
+          ]
+        },
+
+        "object": {
+          "kind": "literal",
+          "datatype": "xsd:date",
+          "normalized": "1952-03-11",
+          "confidence": 0.98,
+          "normalization": {
+            "steps": [
+              { "op": "parse_date", "input": "11 March 1952", "output": "1952-03-11" },
+              { "op": "type_assign", "datatype": "xsd:date" }
+            ]
+          }
+        }
+      },
+
+      "notes": [
+        {
+          "code": "RESOLUTION_USED_CONTEXT",
+          "message": "Used local context and evidence excerpt to disambiguate subject and property."
+        }
+      ]
+    },
+
+    {
+      "claim_id": "clm-0002",
+      "status": "ambiguous",
+      "needs_human_review": true,
+
+      "original": {
+        "subject": { "surface": "Paris", "language": "en" },
+        "predicate": { "surface": "country", "language": "en" },
+        "object": { "surface": "France", "language": "en" },
+        "confidence": 0.62,
+        "evidence_ids": ["ev-0002"]
+      },
+
+      "resolution": {
+        "subject": {
+          "chosen": null,
+          "candidates": [
+            { "entity_id": "Q90", "label": "Paris", "confidence": 0.881 },
+            { "entity_id": "Q207511", "label": "Paris (mythology)", "confidence": 0.211 },
+            { "entity_id": "Q191", "label": "Paris, Texas", "confidence": 0.144 }
+          ],
+          "unresolved": {
+            "reason": "SUBJECT_AMBIGUOUS",
+            "message": "Multiple plausible entity matches for 'Paris' given limited context; preserving ambiguity."
+          }
+        },
+
+        "predicate": {
+          "chosen": {
+            "property_id": "P17",
+            "label": "country",
+            "match_type": "label_match",
+            "confidence": 0.991
+          },
+          "candidates": [
+            { "property_id": "P17", "label": "country", "confidence": 0.991 }
+          ]
+        },
+
+        "object": {
+          "kind": "entity",
+          "chosen": {
+            "entity_id": "Q142",
+            "label": "France",
+            "match_type": "exact_alias",
+            "confidence": 0.996
+          },
+          "candidates": [
+            { "entity_id": "Q142", "label": "France", "confidence": 0.996 }
+          ]
+        }
+      },
+
+      "issues": [
+        {
+          "severity": "WARNING",
+          "code": "SUBJECT_AMBIGUOUS",
+          "message": "Subject entity could not be uniquely resolved; compilation may proceed only if policy allows unresolved subjects.",
+          "location": {
+            "claim_id": "clm-0002",
+            "evidence_id": "ev-0002"
+          }
+        }
+      ]
+    }
+  ],
+
+  "summary": {
+    "resolved_count": 1,
+    "ambiguous_count": 1,
+    "unresolved_count": 0,
+    "error_count": 0,
+    "warning_count": 1
+  }
+}

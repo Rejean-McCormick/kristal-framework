@@ -1,0 +1,56 @@
+Je peux lister les personnes **et leurs canaux de contact officiels** (pages contact / emails publics). Je ne peux pas fournir des adresses “personnelles/non publiées” ou déduites.
+
+## Personnes citées (idées directes) + contact
+
+### Daniel Lemire (simdjson, Roaring bitmaps, filters via co-auteurs, performance)
+
+* Email (public, page institutionnelle UQAM): **[lemire.daniel.2@uqam.ca](mailto:lemire.daniel.2@uqam.ca)** ([professeurs.uqam.ca][1])
+* Page profil (UQAM): [https://professeurs.uqam.ca/professeur/lemire.daniel.2](https://professeurs.uqam.ca/professeur/lemire.daniel.2) ([professeurs.uqam.ca][1])
+
+### Ruben Verborgh (Linked Data Fragments / TPF; design “query surface”)
+
+* Page contact officielle (avec emails): [https://ruben.verborgh.org/contact/](https://ruben.verborgh.org/contact/) ([ruben.verborgh.org][2])
+
+  * Email recherche (public): **[ruben.verborgh@ugent.be](mailto:ruben.verborgh@ugent.be)** ([ruben.verborgh.org][2])
+  * Email Solid/Inrupt (public): **[ruben@inrupt.com](mailto:ruben@inrupt.com)** ([ruben.verborgh.org][2])
+  * Email perso (public sur sa page): **[ruben@verborgh.org](mailto:ruben@verborgh.org)** ([ruben.verborgh.org][2])
+
+### Javier D. Fernández (HDT; compression RDF; packaging)
+
+* Email (public, dans le PDF HDT): **[jfergar83@gmail.com](mailto:jfergar83@gmail.com)** ([aic.ai.wu.ac.at][3])
+* (Option) Projet HDT / équipe: [https://www.rdfhdt.org/team/](https://www.rdfhdt.org/team/) ([rdfhdt.org][4])
+
+### Miguel A. Martínez-Prieto (HDT; structures compactes)
+
+* Email (public, dans le PDF HDT): **[migumar2@infor.uva.es](mailto:migumar2@infor.uva.es)** ([aic.ai.wu.ac.at][3])
+
+### Claudio Gutiérrez (HDT; Web sémantique / RDF)
+
+* Email (public, dans le PDF HDT): **[cgutierr@dcc.uchile.cl](mailto:cgutierr@dcc.uchile.cl)** ([aic.ai.wu.ac.at][3])
+
+### Axel Polleres (HDT; RDF / moteurs)
+
+* Email (public, dans le PDF HDT): **[axel.polleres@siemens.com](mailto:axel.polleres@siemens.com)** ([aic.ai.wu.ac.at][3])
+
+### Mario Arias (HDT; outillage)
+
+* Email (public, dans le PDF HDT): **[mario.arias@deri.org](mailto:mario.arias@deri.org)** ([aic.ai.wu.ac.at][3])
+* (Autre email listé publiquement dans repo hdt-java): **[mario.arias@gmail.com](mailto:mario.arias@gmail.com)** ([GitHub][5])
+
+### Thomas Graf (Xor/Binary Fuse filters, co-auteur avec Lemire)
+
+* Je n’ai pas récupéré de source fiable avec un email public dans les résultats ci-dessus (je préfère ne pas deviner).
+  Si tu veux, je peux chercher spécifiquement sa page institutionnelle / PDF où l’email apparaît.
+
+## Organisations / “sources d’idées” (pas une personne unique)
+
+* W3C (JSON-LD, SHACL, PROV-O, RDFC): [https://www.w3.org/](https://www.w3.org/)
+* Wikibase/Wikidata (modèle/JSON): [https://www.mediawiki.org/wiki/Wikibase/DataModel](https://www.mediawiki.org/wiki/Wikibase/DataModel) ([professeurs.uqam.ca][1]) (DataModel) ; [https://www.wikidata.org/wiki/Wikidata:Data_model](https://www.wikidata.org/wiki/Wikidata:Data_model)
+
+Si tu me dis “tu veux inclure aussi les auteurs de SHACL/JSON-LD/PROV-O/RDFC”, je peux compléter la liste avec **les éditeurs/rapporteurs officiels** et leurs contacts publics (quand disponibles), en gardant la même règle: uniquement ce qui est publié officiellement.
+
+[1]: https://professeurs.uqam.ca/professeur/lemire.daniel.2?utm_source=chatgpt.com "Daniel Lemire | Répertoire des professeures et ..."
+[2]: https://ruben.verborgh.org/contact/?utm_source=chatgpt.com "Contact Me"
+[3]: https://aic.ai.wu.ac.at/~polleres/publications/fern-etal-2013-HDT-JWS.pdf?utm_source=chatgpt.com "Binary RDF Representation for Publication and Exchange ( ..."
+[4]: https://www.rdfhdt.org/team/?utm_source=chatgpt.com "Team"
+[5]: https://github.com/rdfhdt/hdt-java?utm_source=chatgpt.com "HDT Java library and tools."

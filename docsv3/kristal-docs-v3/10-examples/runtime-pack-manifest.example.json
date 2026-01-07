@@ -1,0 +1,118 @@
+{
+  "manifest_version": "3.0.0",
+  "runtime_pack_id": "2c6b4e3a6c52c9d2f4c6d5d25fb1b7c2dbcf7e4ef8b0e7d1b4e8b6f2a9c1d0ee",
+  "created_at": "2026-01-07T12:34:56Z",
+  "profiles": [
+    "profile-query-tpf-pagination@1",
+    "profile-jsonld-export@1"
+  ],
+  "exchange_ref": {
+    "exchange_id": "9f3e6e5d2c1a4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
+    "exchange_manifest_hash": "0b1c2d3e4f5061728394a5b6c7d8e9f00112233445566778899aabbccddeeff0",
+    "exchange_version": "exchange-2026-01-07"
+  },
+  "compiler": {
+    "name": "kristal-compiler",
+    "version": "3.0.0",
+    "git_commit": "a1b2c3d4e5f6g7h8i9j0",
+    "build_platform": "linux-x86_64"
+  },
+  "build": {
+    "build_id": "f3a2c6f8-7dd4-4a5f-9b84-4a0a7b1d0d0d",
+    "deterministic": true,
+    "canonicalization_profile": "jcs-rfc8785@1",
+    "config_hash": "7a1f9c2d3e4b5a6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7"
+  },
+  "policies": {
+    "data_ordering": {
+      "policy": "qid_pid_statement_id_asc",
+      "notes": "Sort primary triple store by subject(QID), predicate(PID), then stable statement_id."
+    },
+    "row_grouping": {
+      "policy": "fixed_rows_1m",
+      "notes": "Row groups are fixed at 1,000,000 rows."
+    },
+    "membership_filter": {
+      "kind": "bloom",
+      "seed": 42,
+      "bits_per_key": 10,
+      "hash_functions": 7,
+      "notes": "Bloom filter for fast membership checks in offline devices."
+    },
+    "bitmap": {
+      "format": "roaring_run_optimized",
+      "run_optimize": true,
+      "notes": "Roaring bitmaps with run optimization applied deterministically."
+    },
+    "parquet": {
+      "compression": "zstd",
+      "dictionary_encoding": true,
+      "statistics": "rowgroup",
+      "bloom_filters": {
+        "enabled": false
+      }
+    }
+  },
+  "query_contract": {
+    "contract_id": "kristal-query-core@1",
+    "supports_pagination": true,
+    "supports_cardinality_estimates": false
+  },
+  "files": [
+    {
+      "path": "data/triples.parquet",
+      "role": "parquet_data",
+      "sha256": "b0a4e6d88f4f7d34f9b3d8e0c1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4",
+      "size_bytes": 987654321,
+      "mime_type": "application/vnd.apache.parquet"
+    },
+    {
+      "path": "index/spo.roaring",
+      "role": "bitmap_index",
+      "sha256": "c4b3a2f1e0d9c8b7a6f50918273645566778899aabbccddeeff00112233445566",
+      "size_bytes": 123456789,
+      "mime_type": "application/octet-stream"
+    },
+    {
+      "path": "filters/membership.bloom",
+      "role": "membership_filter",
+      "sha256": "ddeeff00112233445566778899aabbccddeeff00112233445566778899aabbcc",
+      "size_bytes": 543210,
+      "mime_type": "application/octet-stream"
+    },
+    {
+      "path": "query/capabilities.json",
+      "role": "metadata",
+      "sha256": "112233445566778899aabbccddeeff00112233445566778899aabbccddeeff00",
+      "size_bytes": 2048,
+      "mime_type": "application/json"
+    },
+    {
+      "path": "exports/jsonld/exchange.jsonld",
+      "role": "other",
+      "sha256": "8899aabbccddeeff00112233445566778899aabbccddeeff0011223344556677",
+      "size_bytes": 34567890,
+      "mime_type": "application/ld+json"
+    },
+    {
+      "path": "runtime-pack-manifest.json",
+      "role": "metadata",
+      "sha256": "0f0e0d0c0b0a09080706050403020100ffeeddccbbaa99887766554433221100",
+      "size_bytes": 8192,
+      "mime_type": "application/json"
+    }
+  ],
+  "integrity": {
+    "hash_alg": "sha256",
+    "manifest_sha256": "0f0e0d0c0b0a09080706050403020100ffeeddccbbaa99887766554433221100",
+    "pack_sha256": "aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55"
+  },
+  "signatures": [
+    {
+      "key_id": "tenant_123_root_ed25519_v1",
+      "alg": "ed25519",
+      "signature": "MEUCIQDYf3sYwqU5r7pD3dB9q8o2mTg1b2dQdGm0dXk7xwIgN5v7yQw4z3Q0+g8xR9pW1w3GqVq+v3n2fY0aQn8=",
+      "created_at": "2026-01-07T12:35:10Z"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+## Coverage of the uploaded literature vs current Kristal spec
+
+### 1) Binary Fuse Filters (and Xor/Bloom-style membership filters)
+
+**Core idea in the paper:** very compact approximate membership filters (binary fuse) that are *smaller* (at comparable FPR) than prior xor-filter variants while keeping fast lookups. 
+**Kristal status: YES (explicitly included).**
+
+* Kristal Runtime Pack schema explicitly supports membership filter types `bloom`, `xor`, and `binary-fuse`. 
+* Example runtime manifest already uses a `binary-fuse` membership filter. 
+* Implementation notes explicitly call out membership filters for merge/dedup workflows (“skip non-overlapping packs”). 
+
+**Gaps to evolve:**
+
+* Kristal defines *that* filters exist, but not a normative **selection rule** (when to choose bloom vs xor vs binary-fuse) nor standard metadata (e.g., bits/key, hash seed, build parameters) to ensure reproducibility across implementations.
+
+---
+
+### 2) Roaring compressed bitmaps
+
+**Core idea in the paper:** a bitmap format that switches container representations to get fast set ops with good compression; later extensions emphasize run-length (“runs”) where beneficial and serialization/memory-mapping patterns.  
+**Kristal status: YES (structurally aligned).**
+
+* Kristal’s runtime approach is explicitly “bitmap / list-based set operations” for predictable offline performance. 
+* Runtime pack guidance specifies a **hybrid-by-cardinality** approach: large sets → compressed bitmaps; medium → delta lists; tiny → arrays. 
+* Manifest example uses bitmap encoding with `roaring`. 
+
+**Gaps to evolve:**
+
+* Kristal references roaring as an encoding choice, but does not standardize **run-optimization expectations** (e.g., whether builders should run container optimization before writing) or serialization conventions for memory-mapped execution.
+
+---
+
+### 3) COTTAS (columnar Parquet triple-table RDF)
+
+**Core idea in the paper:** store RDF data columnarly (Parquet), rely on Parquet compression and scan pruning, and add index configurations; mention Bloom filters and BRIs (min/max, etc.) to reduce scanned data.  
+**Kristal status: PARTIAL (same direction, different emphasis).**
+
+* Kristal explicitly recommends DuckDB/Parquet for triple-table storage. 
+* Kristal recommends sorting triples by `(p,o,s)` and building `(p,o) → {s}` as the always-on index. 
+
+**What Kristal already “applies” from COTTAS:**
+
+* Columnar triple table + compression + leveraging modern analytics engines (Parquet/DuckDB). 
+* The idea of optimizing around common triple-pattern access via physical layout and indexes. 
+
+**Gaps to evolve (high leverage):**
+
+* COTTAS leans heavily on Parquet-native scan pruning (BRIs/min-max stats, Bloom filters).  Kristal mentions sorting but does not currently standardize **row-group sizing**, **statistics/Bloom enablement**, or “scan plan” behavior when an index is absent.
+* COTTAS discusses different index configurations; Kristal standardizes a minimal required `(p,o)→{s}` and leaves the rest open. 
+
+---
+
+### 4) Constructing demand-driven Wikidata subsets
+
+**Core idea in the paper:** generate topical Wikidata subsets starting from **seed entities**, iteratively expanding a graph using SPARQL CONSTRUCT and applying a **filter function** to exclude statements/entities as needed. 
+**Kristal status: PARTIAL/NO (assumption present, method not standardized).**
+
+* Kristal assumes “offline subsets of Wikidata data” exist. 
+* But Kristal does not define a standard *procedure* (seed selection, expansion depth, property allow/deny lists, filter functions, determinism constraints) for subset construction.
+
+**Gaps to evolve:**
+
+* Add a “subset builder” stage (either normative or strongly recommended profile) aligned with the seed+filter iterative approach from the paper. 
+
+---
+
+### 5) JSON-LD 1.1
+
+**Core idea relevant here:** JSON-LD as an interoperable RDF-compatible JSON format; JSON-LD 1.1 adds features like **graph containers** for representing graphs/datasets in JSON. 
+**Kristal status: PARTIAL (export intent declared; no canonical mapping defined).**
+
+* Kristal explicitly states export to RDF / JSON-LD is always possible.  
+* But Kristal does not define a canonical JSON-LD `@context` / framing profile, nor how to represent provenance/evidence cleanly as an RDF dataset (where JSON-LD 1.1 graph containers become relevant). 
+
+---
+
+## Summary: do we “already apply elements from it all”?
+
+* **Yes, directly:** binary-fuse/xor/bloom membership filters (as a defined runtime feature)  and roaring-style compressed bitmap set operations for indexes .
+* **Yes, directionally:** columnar Parquet triple-table and sort-for-access patterns (COTTAS-adjacent), but Kristal’s core acceleration is **explicit indexes + set algebra** rather than scan-pruning-first.  
+* **Not yet (but assumed):** a standardized demand-driven Wikidata subset construction method.  
+* **Not yet (but promised):** a canonical JSON-LD 1.1 mapping/profile for Kristal Exchange and provenance.  
+
+## Concrete evolution items (ordered by leverage)
+
+1. **Make membership filters reproducible:** standard metadata + selection guidance (bloom vs xor vs binary-fuse) and build-parameter recording; keep “optional” but make it deterministic when present (consistent with “defer safely” guidance). 
+2. **Standardize roaring writing conventions:** require/encourage run-optimization and define serialization/mmap expectations (align with roaring’s strengths for immutable, memory-mapped usage).  
+3. **Adopt COTTAS-style Parquet knobs where they complement Kristal:** specify optional row-group sizing, sorting guarantees, and (optionally) Parquet Bloom/statistics usage for fallback scans.  
+4. **Define a demand-driven subset builder profile:** seed schema + deterministic expansion rules + filter functions (paper-aligned) so “offline subsets” becomes a reproducible artifact.  
+5. **Publish a canonical JSON-LD 1.1 profile for Kristal Exchange:** stable `@context` + dataset/graph mapping for provenance/evidence (graph containers).  

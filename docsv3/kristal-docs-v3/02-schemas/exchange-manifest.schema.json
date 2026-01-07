@@ -1,0 +1,357 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/exchange-manifest.schema.json",
+  "title": "Kristal v3 Exchange Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kristal_id",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "build",
+    "inputs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Manifest schema version."
+    },
+
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique ID for this manifest (UUID or similar)."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the manifest was produced."
+    },
+
+    "kristal_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content-addressed ID of the Exchange artifact."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization profile identifier (e.g., 'jcs-rfc8785')."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization version (e.g., RFC version, implementation profile version)."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized Exchange artifact with signatures excluded."
+    },
+
+    "build": {
+      "$ref": "#/$defs/build",
+      "description": "Deterministic build correlation and compiler identity."
+    },
+
+    "inputs": {
+      "$ref": "#/$defs/inputs",
+      "description": "Input snapshot identifiers and upstream artifact references."
+    },
+
+    "profiles_enabled": {
+      "type": "array",
+      "description": "Explicitly enabled optional profiles during compilation/validation.",
+      "items": { "type": "string", "minLength": 1 }
+    },
+
+    "exports": {
+      "$ref": "#/$defs/exports",
+      "description": "Deterministic export declarations and (optional) export integrity hashes."
+    },
+
+    "policies": {
+      "$ref": "#/$defs/policies",
+      "description": "Policy selections that may affect derived artifacts; Exchange SHOULD record those relevant to reproducibility."
+    },
+
+    "signatures": {
+      "type": "array",
+      "description": "Optional signature set over the declared content_hash or the canonicalized payload (as defined by the signing profile).",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "references": {
+      "type": "object",
+      "description": "Optional references to specs/docs for traceability.",
+      "additionalProperties": false,
+      "properties": {
+        "spec_version": { "type": "string", "minLength": 1 },
+        "docs_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Must not change core identity/hashing semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algo", "value"],
+      "properties": {
+        "algo": {
+          "type": "string",
+          "description": "Hash algorithm identifier.",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Hex-encoded hash digest."
+        }
+      }
+    },
+
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build_id", "compiler_name", "compiler_version", "config_hash"],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Correlation ID for end-to-end tracing (shared across pipeline stages)."
+        },
+        "compiler_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compiler_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "config_hash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hash of compilation configuration (string hash or digest)."
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional SCM commit identifier for the compiler/runtime."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Optional build environment metadata (non-normative).",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_snapshot_id"],
+      "properties": {
+        "source_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the source snapshot (documents/datasets) used to build the Exchange."
+        },
+        "recipe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional subset/build recipe identifier."
+        },
+        "claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Claim-IR artifact identifiers used.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "resolved_claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Resolved Claim-IR artifact identifiers used.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "previous_exchange_ids": {
+          "type": "array",
+          "description": "Optional parent Exchange IDs (for incremental builds / merges).",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+
+    "exports": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "jsonld": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile": { "type": "string", "minLength": 1 },
+            "context_uri": { "type": "string", "format": "uri" },
+            "export_hash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        "rdf": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile": { "type": "string", "minLength": 1 },
+            "truthy_mode": {
+              "type": "string",
+              "description": "How truthy/best-rank is projected for WDQS compatibility.",
+              "enum": ["none", "truthy", "best_rank"]
+            },
+            "rdf_hash": {
+              "$ref": "#/$defs/hash",
+              "description": "Optional export integrity hash when the RDFC profile is enabled."
+            }
+          }
+        }
+      }
+    },
+
+    "policies": {
+      "type": "object",
+      "description": "Portable policy selections. Exchange may record these for reproducibility and auditing.",
+      "additionalProperties": false,
+      "properties": {
+        "ordering_policies": {
+          "type": "array",
+          "description": "Selected triple-table orderings (portable enum set).",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["SPO", "SOP", "PSO", "POS", "OSP", "OPS"]
+          }
+        },
+        "row_group_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["FIXED_ROWS", "FIXED_BYTES", "ADAPTIVE"]
+            },
+            "rows": { "type": "integer", "minimum": 1 },
+            "bytes": { "type": "integer", "minimum": 1 },
+            "target_rows": { "type": "integer", "minimum": 1 },
+            "target_bytes": { "type": "integer", "minimum": 1 }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "type": { "const": "FIXED_ROWS" } } },
+              "then": { "required": ["rows"] }
+            },
+            {
+              "if": { "properties": { "type": { "const": "FIXED_BYTES" } } },
+              "then": { "required": ["bytes"] }
+            },
+            {
+              "if": { "properties": { "type": { "const": "ADAPTIVE" } } },
+              "then": { "required": ["target_rows", "target_bytes"] }
+            }
+          ]
+        },
+        "membership_filter_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "key_space", "target_fpr"],
+          "properties": {
+            "family": { "type": "string", "enum": ["binary_fuse", "xor"] },
+            "variant": { "type": "string", "enum": ["3wise", "4wise"] },
+            "key_space": {
+              "type": "string",
+              "description": "What keys are filtered for membership checks.",
+              "enum": ["claim_id", "spo_hash", "entity_id", "custom"]
+            },
+            "target_fpr": { "type": "number", "minimum": 0, "maximum": 1 },
+            "bits_per_key": { "type": "number", "minimum": 0 },
+            "seed": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "bitmap_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format"],
+          "properties": {
+            "format": { "type": "string", "enum": ["roaring"] },
+            "run_opt": { "type": "boolean" }
+          }
+        },
+        "join1_cap_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cap", "strict_mode"],
+          "properties": {
+            "cap": { "type": "integer", "minimum": 1 },
+            "strict_mode": { "type": "boolean" },
+            "on_exceed": {
+              "type": "string",
+              "enum": ["error", "truncate"],
+              "description": "Deterministic behavior when strict_mode is true and cap is exceeded."
+            }
+          }
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key identifier (KID) used to verify this signature."
+        },
+        "alg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature algorithm identifier (e.g., ed25519, rsa-pss-sha256)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature value (encoding as specified by the signing profile; commonly base64url)."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "org": { "type": "string", "minLength": 1 }
+          }
+        },
+        "certificate_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional pointer to a certificate chain or public key material."
+        }
+      }
+    }
+  }
+}
