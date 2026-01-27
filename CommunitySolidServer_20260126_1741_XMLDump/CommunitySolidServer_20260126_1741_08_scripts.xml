@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<volume>
+  <meta>
+    <generated_at>2026-01-26T17:41:03.901285</generated_at>
+    <title>FOLDER: scripts</title>
+    <root_dir>C:\MyCode\Kristals\CommunitySolidServer</root_dir>
+    <file_count>4</file_count>
+    <total_size_mb>0.0068</total_size_mb>
+    <home>Index.xml</home>
+    <prev_volume>CommunitySolidServer_20260126_1741_07_.github.xml</prev_volume>
+    <prev_title>.github</prev_title>
+    <next_title></next_title>
+    <short_title>scripts</short_title>
+  </meta>
+  <file_index>
+    <entry path="scripts/finalizeRelease.ts" kind="source" size="2115" lines="66" />
+    <entry path="scripts/formatChangelog.ts" kind="source" size="1304" lines="47" />
+    <entry path="scripts/tsconfig.json" kind="source" size="131" lines="9" />
+    <entry path="scripts/upgradeConfig.ts" kind="source" size="3533" lines="95" />
+  </file_index>
+  <files>
+    <file path="scripts/finalizeRelease.ts" size="2115" lines="66" kind="source">
+#!/usr/bin/env ts-node
+/* eslint-disable import/extensions, no-console */
+import * as readline from 'node:readline';
+import simpleGit from 'simple-git';
+import { version } from '../package.json';
+
+/**
+ * Script: upgradeConfigs.ts
+ * Run with: ts-node scripts/upgradeConfig.ts
+ * ------------------------------------------
+ * Amend the previous commit with changes to the changelog
+ * Then tag and push it. This script is run after
+ * `npx commit-and-tag-version`
+ */
+
+/**
+ * Amends the previous commit, creates the annotated release tag
+ * and then pushes commit and tag.
+ */
+async function commitAndTag(): Promise&lt;void&gt; {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  await simpleGit().commit([], 'CHANGELOG.md', { '--amend': null, '--no-edit': null, '--no-verify': null });
+  await simpleGit().addAnnotatedTag(`v${version}`, `Release Version ${version}`);
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  await simpleGit().push({ '--follow-tags': null });
+}
+
+/**
+ * Prompts the user for input
+ *
+ * @param query - A string to prompt the user
+ *
+ * @returns Promise with the input of the user
+ */
+async function waitForUserInput(query: string): Promise&lt;string&gt; {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  return new Promise((resolve): void =&gt; rl.question(query, (answer): void =&gt; {
+    rl.close();
+    resolve(answer);
+  }));
+}
+
+/**
+ * Halts the script, waiting for user input before
+ * committing the changelog changes, adding an
+ * annotated tag and pushing the changes to origin.
+ */
+async function finalizeRelease(): Promise&lt;void&gt; {
+  await waitForUserInput('Manually edit CHANGELOG.md, press any key to finalize...');
+  return commitAndTag();
+}
+
+/**
+ * Ends the process and writes out an error in case something goes wrong.
+ */
+function endProcess(error: Error): never {
+  console.error(error);
+  process.exit(1);
+}
+
+finalizeRelease()
+  .then((): void =&gt; console.info(`Changes and tag v${version} pushed to origin.`))
+  .catch(endProcess);
+
+    </file>
+    <file path="scripts/formatChangelog.ts" size="1304" lines="47" kind="source">
+#!/usr/bin/env ts-node
+
+/* eslint-disable no-console */
+import { readFile, writeFile } from 'fs-extra';
+
+/**
+ * Script called after the changelog changes of standard-version
+ * This script can be extended to add further custom formatting
+ * to the changelog.
+ * Current automatic changes:
+ *  - Change all version titles to H2 ("### [vX.Y.Z]" to "## [vX.Y.Z]")
+ *  - Capitalize all list entries
+ */
+
+/**
+ * Capitalize all list entries
+ *
+ * @param input - String to search/replace
+ *
+ * @returns Promise with output string
+ */
+async function capitalizeListEntries(input: string): Promise&lt;string&gt; {
+  return input.replaceAll(/^\W*\* [a-z]/gmu, (match): string =&gt; match.toUpperCase());
+}
+
+/**
+ * Ends the process and writes out an error in case something goes wrong.
+ */
+function endProcess(error: Error): never {
+  console.error(error);
+  process.exit(1);
+}
+
+/**
+ * Main function for changelog formatting
+ *
+ * @param filePath - Path to the changelog file
+ *
+ * @returns Promise
+ */
+async function formatChangelog(filePath: string): Promise&lt;void&gt; {
+  let changelog = await readFile(filePath, 'utf8');
+  changelog = await capitalizeListEntries(changelog);
+  return writeFile(filePath, changelog, 'utf8');
+}
+
+formatChangelog('CHANGELOG.md').catch(endProcess);
+
+    </file>
+    <file path="scripts/tsconfig.json" size="131" lines="9" kind="source">
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": true
+  },
+  "include": [
+    "."
+  ]
+}
+
+    </file>
+    <file path="scripts/upgradeConfig.ts" size="3533" lines="95" kind="source">
+#!/usr/bin/env ts-node
+/* eslint-disable no-console */
+import escapeStringRegexp from 'escape-string-regexp';
+import { readdir, readFile, writeFile } from 'fs-extra';
+import simpleGit from 'simple-git';
+import { joinFilePath, readPackageJson } from '../src/util/PathUtil';
+
+/**
+ * Script: upgradeConfigs.ts
+ * Run with: ts-node scripts/upgradeConfig.ts
+ * ------------------------------------------
+ * Upgrades the lsd:module references to CSS in package.json
+ * and all JSON-LD config files.
+ * This script is run alongside standard-version after the
+ * version bump is done in package.json but before the
+ * release has been committed.
+ */
+
+/**
+ * Search and replace the version of a component with given name
+ *
+ * @param  filePath - File to search/replace
+ * @param  regex - RegExp matching the component reference
+ * @param  version - Semantic version to change to
+ */
+async function replaceComponentVersion(filePath: string, regex: RegExp, version: string): Promise&lt;void&gt; {
+  console.log(`Replacing version in ${filePath}`);
+  const data = await readFile(filePath, 'utf8');
+  const result = data.replace(regex, `$1^${version}`);
+  return writeFile(filePath, result, 'utf8');
+}
+
+/**
+ * Recursive search for files that match a given Regex
+ *
+ * @param  path - Path of folder to start search in
+ * @param  regex - A regular expression to which file names will be matched
+ *
+ * @returns Promise with all file pathss
+ */
+async function getFilePaths(path: string, regex: RegExp): Promise&lt;string[]&gt; {
+  const entries = await readdir(path, { withFileTypes: true });
+
+  const files = entries
+    .filter((file): boolean =&gt; !file.isDirectory())
+    .filter((file): boolean =&gt; regex.test(file.name))
+    .map((file): string =&gt; joinFilePath(path, file.name));
+
+  const folders = entries.filter((folder): boolean =&gt; folder.isDirectory());
+
+  for (const folder of folders) {
+    files.push(...await getFilePaths(joinFilePath(path, folder.name), regex));
+  }
+
+  return files;
+}
+
+/**
+ * Changes version of Component references in package.json and
+ * JSON-LD config files (config/) to the current major version of
+ * the NPM package.
+ * Commits changes to config files (not package.json, changes to
+ * that file are included in the release commit).
+ */
+async function upgradeConfig(): Promise&lt;void&gt; {
+  const pkg = await readPackageJson() as Record&lt;string, unknown&gt;;
+  const major = (pkg.version as string).split('.')[0];
+
+  console.log(`Changing ${pkg['lsd:module'] as string} references to ${major}.0.0\n`);
+
+  const configs = await getFilePaths('config/', /.+\.json/u);
+  configs.push(...await getFilePaths('test/integration/config/', /.+\.json/u));
+  configs.push(...await getFilePaths('templates/config/', /.+\.json/u));
+
+  const escapedName = escapeStringRegexp(pkg['lsd:module'] as string);
+  const regex = new RegExp(`(${escapedName}/)${/\^\d+\.\d+\.\d+/u.source}`, 'gmu');
+
+  for (const config of configs) {
+    await replaceComponentVersion(config, regex, `${major}.0.0`);
+  }
+  await replaceComponentVersion('package.json', regex, `${major}.0.0`);
+
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  await simpleGit().commit(`chore(release): Update configs to v${major}.0.0`, configs, { '--no-verify': null });
+}
+
+/**
+ * Ends the process and writes out an error in case something goes wrong.
+ */
+function endProcess(error: Error): never {
+  console.error(error);
+  process.exit(1);
+}
+
+upgradeConfig().catch(endProcess);
+
+    </file>
+  </files>
+</volume>
