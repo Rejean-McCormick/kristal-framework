@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/authority-registry.schema.json",
+  "title": "Kristal v3 Authority Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "created_at",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "trust_roots",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Schema version for this registry format."
+    },
+
+    "registry_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content-addressed ID of this registry artifact."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when this registry was produced."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v3:jcs-rfc8785",
+      "description": "Canonicalization profile identifier (v3 canonical)."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1",
+      "description": "Canonicalization version (v3 canonical)."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized registry content with signatures excluded."
+    },
+
+    "trust_roots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_roots", "deprecated_roots", "blocked_roots"],
+      "properties": {
+        "active_roots": {
+          "type": "array",
+          "description": "Pinned trust roots accepted for verification.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        },
+        "deprecated_roots": {
+          "type": "array",
+          "description": "Pinned trust roots accepted only if deployment policy allows a grace period.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        },
+        "blocked_roots": {
+          "type": "array",
+          "description": "Pinned trust roots explicitly rejected.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        }
+      }
+    },
+
+    "revocation_list": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional offline-friendly revocation list reference (content-addressed and signed).",
+      "properties": {
+        "artifact_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative or absolute path/URI to the revocation list artifact (e.g., 'revocations.json')."
+        },
+        "content_hash": { "$ref": "#/$defs/hash" },
+        "signatures": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/signature" }
+        }
+      }
+    },
+
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Scope-based acceptance rules for shard/federation authorities.",
+      "items": { "$ref": "#/$defs/rule" }
+    },
+
+    "signatures": {
+      "type": "array",
+      "description": "Optional signatures over declared hashed material (verification is fail-closed when signatures are declared).",
+      "items": { "$ref": "#/$defs/signature" }
+    }
+  },
+
+  "$defs": {
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": { "type": "string", "enum": ["sha256"] },
+        "value": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature"],
+      "properties": {
+        "key_id": { "type": "string", "minLength": 1 },
+        "alg": {
+          "type": "string",
+          "enum": ["ed25519", "rsa-pss-sha256", "ecdsa-p256-sha256"]
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 16,
+          "description": "Base64-encoded signature bytes."
+        },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "trust_root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_id", "category"],
+      "properties": {
+        "root_id": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "enum": ["personal", "recognized"] },
+        "label": { "type": "string" },
+
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional identifier for the root key (deployment-defined)."
+        },
+
+        "did": { "type": "string", "minLength": 1 },
+
+        "public_key_jwk": {
+          "type": "object",
+          "description": "Optional JWK for offline verification.",
+          "additionalProperties": true
+        },
+
+        "x5c": {
+          "type": "array",
+          "description": "Optional X.509 certificate chain (base64 DER).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "not_before": { "type": "string", "format": "date-time" },
+        "not_after": { "type": "string", "format": "date-time" }
+      },
+      "anyOf": [
+        { "required": ["public_key_jwk"] },
+        { "required": ["did"] },
+        { "required": ["x5c"] },
+        { "required": ["key_id"] }
+      ]
+    },
+
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": { "type": "string", "minLength": 1 },
+        "subdomain": { "type": "string", "minLength": 1 },
+        "tenant_id": { "type": "string", "minLength": 1 },
+        "env": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id", "scope", "allowed_root_categories"],
+      "properties": {
+        "rule_id": { "type": "string", "minLength": 1 },
+        "scope": { "$ref": "#/$defs/scope" },
+
+        "allowed_root_categories": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["personal", "recognized"] }
+        },
+
+        "allowed_root_ids": {
+          "type": "array",
+          "description": "Optional allow-list of specific root_id values. If omitted, any root in allowed categories may be accepted (subject to pin sets + revocation + deployment policy).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "required_profiles": {
+          "type": "array",
+          "description": "Optional list of profile IDs that must be present/attested for artifacts in this scope (e.g., validation/export profiles).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "min_signatures": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Minimum number of valid signatures required for acceptance under this rule."
+        },
+
+        "revocation_policy": {
+          "type": "string",
+          "enum": ["ignore", "require_if_present", "require_strict"],
+          "default": "require_if_present",
+          "description": "How revocation list presence affects acceptance."
+        }
+      }
+    }
+  }
+}

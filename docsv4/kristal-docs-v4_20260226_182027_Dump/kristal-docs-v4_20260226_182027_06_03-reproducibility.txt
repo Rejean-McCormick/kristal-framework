@@ -1,0 +1,1008 @@
+==== VOLUME META ====
+generated_at: 2026-02-26T18:20:27.646234
+title: FOLDER: 03-reproducibility
+root_dir: C:\MyCode\Kristals\docsv4\kristal-docs-v4
+file_count: 4
+total_size_mb: 0.0352
+home: 00_START_HERE.instructions.md
+prev_volume: kristal-docs-v4_20260226_182027_05_06-integration.txt
+next_volume: kristal-docs-v4_20260226_182027_07_01-core-spec.txt
+prev_title: 06-integration
+next_title: 01-core-spec
+short_title: 03-reproducibility
+
+==== FILE_INDEX ====
+ENTRY id=2038738c6936 path="03-reproducibility/allowed-runtime-pack-policies.md" kind=markdown size=7531 lines=200 chunks=0
+ENTRY id=9d0067ab28eb path="03-reproducibility/deterministic-build-rules.md" kind=markdown size=9551 lines=171 chunks=0
+ENTRY id=311155d0a577 path="03-reproducibility/reproducibility-acceptance-tests.md" kind=markdown size=7926 lines=262 chunks=0
+ENTRY id=59ef8fd5b1b5 path="03-reproducibility/subset-recipes.md" kind=markdown size=11855 lines=315 chunks=0
+
+==== FILES ====
+
+----- FILE BEGIN -----
+path="03-reproducibility/allowed-runtime-pack-policies.md"
+id=2038738c6936
+kind=markdown
+size=7531
+lines=200
+chunks=0
+----
+# Allowed Runtime Pack Policies (Kristal v3)
+
+## Status
+Draft (normative for v3 portability)
+
+## Purpose
+Kristal v3 aims to keep the **determinism surface area small** while still enabling high-performance offline execution. To avoid “compliant but incomparable” packs, v3 defines a **portable enumerated policy set** for Runtime Pack construction.
+
+A v3 Runtime Pack MUST:
+1. Select policy values from the allowed sets below, and
+2. Record those selections in the Runtime Pack manifest under `policies`.
+
+Anything outside these policies is either:
+- a **non-normative implementation detail**, or
+- an **optional profile extension** that MUST be explicitly declared and must not change core IDs unless included in the declared reproducibility surface.
+
+## Normative language
+The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** are to be interpreted as normative requirements.
+
+---
+
+# 1. Policy recording requirements
+
+## 1.1 Manifest structure (minimum)
+The Runtime Pack manifest MUST include a `policies` object with (at minimum):
+
+- `policies.data_ordering`
+- `policies.row_grouping`
+- `policies.membership_filter`
+- `policies.bitmap`
+
+The manifest MAY also include:
+
+- `policies.parquet`
+
+Implementations MAY include additional policy keys only if the Runtime Pack manifest schema permits, but MUST NOT omit the keys above.
+
+## 1.2 Determinism requirement
+Given identical:
+- inputs (same snapshots),
+- compiler version + config hash,
+- and the **same recorded policies**,
+
+then the resulting Runtime Pack MUST be reproducible (see `03-reproducibility/reproducibility-acceptance-tests.md`).
+
+---
+
+# 2. Data ordering policies (portable)
+
+Ordering is treated as an index. Runtime Pack builders MUST pick from the following ordering policies for the primary triples store.
+
+## 2.1 Allowed ordering policies
+Exactly one of the following MUST be selected in `policies.data_ordering.policy`:
+
+- `qid_pid_statement_id_asc`
+- `lexicographic_sop_asc`
+- `none`
+
+## 2.2 Semantics (normative)
+- `qid_pid_statement_id_asc` MUST define a total order where the primary sort is by subject (QID-like), then predicate (PID-like), then a stable statement identifier (e.g., `statement_id`) as the tie-breaker.
+- `lexicographic_sop_asc` MUST define a total order by stable byte-wise lexicographic comparison of an implementation-defined *canonical* triple key encoding whose fields are `(s, o, p)` in that order.
+- `none` indicates the pack does not declare a portable total order. Packs that claim pagination profiles SHOULD NOT use `none`.
+
+## 2.3 Tie-breakers (mandatory)
+If the chosen ordering can produce ties under its primary key(s), implementations MUST apply a deterministic tie-breaker chain that produces a total order:
+1. The ordering policy’s primary keys
+2. A stable statement identifier when available
+3. Stable byte comparison of a canonical serialized key (implementation-defined but deterministic)
+
+---
+
+# 3. Row-group sizing policies (portable)
+
+Row-group policy impacts scan behavior and Parquet block indexes.
+
+## 3.1 Allowed row-group modes
+Exactly one of the following MUST be selected in `policies.row_grouping.policy`:
+
+- `fixed_rows_100k`
+- `fixed_rows_1m`
+- `fixed_bytes_128mb`
+
+## 3.2 Determinism constraints
+- The selected policy MUST be applied deterministically.
+- Implementations MUST NOT vary row groups based on unstable runtime factors (e.g., CPU count).
+
+---
+
+# 4. Membership filter policies (portable)
+
+Membership filters accelerate scans by quickly rejecting “not present” membership queries. They are probabilistic, so v3 makes determinism requirements explicit.
+
+## 4.1 Allowed filter kinds
+Exactly one of the following MUST be selected in `policies.membership_filter.kind`:
+
+- `none`
+- `bloom`
+- `cuckoo`
+- `xor8`
+- `xor16`
+
+## 4.2 Required parameters
+For `kind = none`, no additional parameters are required.
+
+For `kind != none`, the manifest MUST record all required parameters for that kind:
+
+- `bloom`:
+  - `seed`
+  - `bits_per_key`
+  - `hash_functions`
+
+- `cuckoo`:
+  - `seed`
+  - `fingerprint_bits`
+  - `load_factor`
+
+- `xor8` / `xor16`:
+  - `seed`
+  - `bits_per_key`
+
+## 4.3 False positives (mandatory pruning rule)
+Membership filters MAY return false positives. Therefore:
+- A “membership hit” MUST NOT be treated as proof of membership.
+- Implementations MUST deterministically prune false positives by validating against authoritative data (the triples store / index).
+- No probabilistic acceptance is permitted at the semantic layer.
+
+---
+
+# 5. Bitmap index policies (portable)
+
+Bitmaps accelerate joins and multi-value lookups.
+
+## 5.1 Allowed bitmap formats
+The allowed bitmap formats are:
+
+- `roaring`
+- `roaring_run_optimized`
+
+Selected via `policies.bitmap.format`.
+
+## 5.2 Run optimization
+- If run optimization is enabled, it MUST be recorded as: `policies.bitmap.run_optimize = true`
+- If not enabled, it MUST be recorded as: `policies.bitmap.run_optimize = false`
+
+## 5.3 Container statistics (optional profile extension)
+Recording bitmap container statistics (for cost modeling) is an OPTIONAL profile extension. If enabled, it MUST be declared as a profile and MUST NOT affect core identity unless included in the reproducibility surface.
+
+---
+
+# 6. Parquet-level policies (portable core vs profile)
+
+## 6.1 Parquet schema invariants (portable core)
+- Column names and logical types for the triples table MUST follow the v3 runtime schema definition.
+- Sorting declaration MUST match the chosen data ordering policy, if applicable.
+
+## 6.2 Allowed Parquet policy fields
+If `policies.parquet` is present, it MUST use only allowed enumerations:
+
+- `compression` in `{zstd, snappy, gzip, none}`
+- `dictionary_encoding` in `{true, false}`
+- `statistics` in `{none, page, rowgroup}`
+
+## 6.3 Bloom filters (optional profile)
+Parquet Bloom filters MAY be enabled as an optional performance profile, recorded as:
+
+- `policies.parquet.bloom_filters.enabled = true|false`
+
+If enabled and the manifest schema permits additional details, the pack SHOULD record:
+- which columns have bloom filters, and
+- sizing/hash parameters needed to reproduce them.
+
+Bloom filters MUST NOT be required for core conformance.
+
+---
+
+# 7. Query contract linkage (portable)
+
+This document specifies build-affecting Runtime Pack construction policies. Runtime query semantics are specified by `04-query/query-contract.md` and any declared query profiles.
+
+A Runtime Pack SHOULD declare `query_contract` in the manifest (e.g., `contract_id`, and capability flags) and MUST ensure any declared pagination behavior derives its stable order from `policies.data_ordering`.
+
+---
+
+# 8. Versioning
+- Policy enumerations are versioned by the Runtime Pack manifest schema version.
+- Any change to enumerations or semantics MUST bump the relevant schema/profile version.
+- Implementations MUST reject unknown policy values and unknown schema/profile versions unless explicitly configured to allow them.
+
+---
+
+# 9. Summary (portable minimum)
+
+A v3 Runtime Pack MUST record, at minimum:
+- `policies.data_ordering`
+- `policies.row_grouping`
+- `policies.membership_filter` (including required parameters for the selected kind)
+- `policies.bitmap` (including `run_optimize`)
+- (optionally) `policies.parquet`
+
+These policies define the **portable comparability surface** for Runtime Packs in v3.
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="03-reproducibility/deterministic-build-rules.md"
+id=9d0067ab28eb
+kind=markdown
+size=9551
+lines=171
+chunks=0
+----
+# Deterministic build rules (Kristal v3)
+
+## Status
+Normative (v3 core)
+
+## Purpose
+
+This document defines the **deterministic build requirements** for producing Kristal v3 artifacts, specifically:
+- **Kristal Exchange** (canonical source of truth)
+- **Kristal Runtime Pack** (derived offline-executable index)
+
+The goal is **interoperability and reproducibility**: independent implementations MUST be able to rebuild artifacts with **bit-identical outputs** when given identical inputs and the same recorded policies.
+
+## Scope
+
+These rules apply to:
+- the compilation pipeline stages that produce Exchange and Runtime Pack artifacts
+- all content-addressed IDs and signatures associated with these artifacts
+- manifests and files that claim deterministic outputs
+
+These rules do **not** mandate a specific runtime performance strategy. They mandate that whatever strategy is used must be selected from **portable, enumerated policies** and must be **fully recorded** to enable reproducibility.
+
+## Definitions
+
+- **Deterministic build:** given the same input snapshot and the same recorded policies/parameters, the compiler produces identical outputs.
+- **Reproducible build:** a third party can rerun the compiler using only the recorded manifests + referenced inputs and reproduce the exact outputs.
+- **Input snapshot:** the complete set of inputs used for compilation, including Claim-IR, Resolved Claim-IR, validation rulesets, referenced evidence blobs (where applicable), and any subset-recipe inputs if used.
+- **Portable policy:** an allowed, enumerated policy defined in `03-reproducibility/allowed-runtime-pack-policies.md`.
+- **Hash target:** the JSON object that is canonicalized and hashed to produce a content-addressed ID, after applying required exclusions.
+
+Normative keywords: MUST, MUST NOT, SHOULD, SHOULD NOT, MAY.
+
+## Normative requirements
+
+### 1) Determinism declaration
+
+1.1 A Runtime Pack MUST declare whether it is deterministic.  
+1.2 Kristal v3 Runtime Packs claiming v3 core conformance MUST set `build.deterministic = true` in the Runtime Pack Manifest.  
+1.3 If an implementation cannot guarantee determinism for a given build, it MUST either:
+- refuse to emit a v3 core-conformant pack, or
+- emit a pack under a non-core profile that explicitly states non-deterministic behavior.
+
+### 2) Canonicalization and hashing dependencies
+
+2.1 Any JSON objects used for content-addressed IDs MUST be canonicalized using the declared canonicalization profile (RFC 8785 / JCS for v3 core).  
+2.2 v3 core requires:
+- `canonicalization_profile = "kristal.v3:jcs-rfc8785"`
+- `canonicalization_version = "1"`
+
+These values MUST be recorded by:
+- every Exchange artifact, and
+- every Runtime Pack Manifest (or its declared hashed-material projection).
+
+2.3 For any content-addressed ID computation, the hashed material MUST:
+- exclude the output ID field itself (e.g., `kristal_id`, `runtime_pack_id`), and
+- exclude any `signatures` / attestations fields (wherever they appear),
+and MUST otherwise follow the relevant hashed material definition for the artifact type (Exchange vs Runtime Pack).
+
+2.4 If a manifest declares hashes/signatures and verification fails, consumers MUST fail-closed (see `01-core-spec/signatures-trust.md`).
+
+### 3) Input snapshot is part of determinism
+
+3.1 A deterministic build MUST be parameterized by an explicit input snapshot.  
+3.2 The Runtime Pack Manifest MUST reference the Exchange it was compiled from (`exchange_ref.exchange_id`).  
+3.3 The compiler configuration that affects output bytes MUST be hashed and recorded (`build.config_hash`).  
+3.4 Any “implicit inputs” (defaults, environment variables, locale, system time) that affect output bytes MUST be eliminated or explicitly recorded under a portable, declared mechanism (e.g., policy fields or config hash inputs).
+
+### 4) Ordering determinism (no unstable iteration)
+
+4.1 The compiler MUST NOT rely on non-deterministic iteration order (e.g., hash maps without sorted traversal).  
+4.2 All collections that affect output bytes MUST be processed in a deterministic order defined by an allowed ordering policy.
+
+4.3 If an ordering policy is used, it MUST be recorded in the Runtime Pack Manifest under `policies.data_ordering`.
+
+### 5) Portable, enumerated policies (small surface area)
+
+5.1 Build-affecting behaviors MUST be chosen from the allowed policy set defined in `03-reproducibility/allowed-runtime-pack-policies.md`.  
+5.2 If a required behavior is not covered by an allowed policy, the implementation MUST:
+- propose a new policy for standardization, or
+- emit a non-core profile pack that does not claim v3 core conformance.
+
+This requirement exists to prevent “technically reproducible but practically incomparable” builds.
+
+### 6) Parquet determinism (layout and encoding)
+
+6.1 If Parquet is used, deterministic builds MUST:
+- use a portable `data_ordering` policy
+- use a portable `row_grouping` policy
+- record Parquet encoding settings that affect file bytes (compression, dictionary encoding, stats, bloom filters if enabled)
+
+6.2 The exact Parquet-related settings MUST be recorded in the Runtime Pack Manifest under `policies.parquet`.
+
+6.3 If bloom filters are enabled, they MUST be treated as profile-bound unless explicitly included in v3 core allowed policies.
+
+### 7) Membership filters and bitmaps determinism
+
+7.1 If the pack includes membership filters (Bloom/Cuckoo/Xor/Binary-fuse), the kind and all parameters that affect bytes MUST be recorded in `policies.membership_filter` including (as applicable):
+- seed(s)
+- bits-per-key / fpp target
+- fingerprint size / load factor
+- hash function family / count
+- any builder variant identifiers
+
+7.2 If the pack includes bitmaps (e.g., Roaring), the bitmap format and any optimization steps that affect bytes MUST be recorded in `policies.bitmap`, including whether run optimization was applied.
+
+7.3 Implementations MUST ensure membership filter and bitmap construction is deterministic (no random seeds unless explicitly recorded).
+
+### 8) File inventory and integrity
+
+8.1 The Runtime Pack Manifest MUST enumerate all files included in the pack under `files[]`, including:
+- `path`
+- `role`
+- `sha256`
+- `size_bytes`
+
+8.2 The set of files and their hashes MUST be sufficient for consumers to verify the pack contents and integrity.
+
+8.3 The file inventory MUST be deterministic:
+- stable, deterministic ordering of `files[]` entries (e.g., lexical by `path`), and
+- stable normalization of `path` values (no platform-specific separators).
+
+### 9) Runtime Pack ID derivation
+
+9.1 The `runtime_pack_id` MUST be derived from a canonical, deterministic representation of the pack’s hashed material.  
+9.2 The hashed material MUST:
+- exclude `runtime_pack_id` itself, and
+- exclude any `signatures` / attestations fields (wherever they appear).
+
+9.3 The hashed material MUST include, at minimum, a canonical projection covering:
+- the referenced Exchange ID (`exchange_ref.exchange_id`)
+- the deterministic build identity inputs (`build.config_hash`, `build.deterministic`)
+- the declared canonicalization profile+version used for hashing
+- the recorded portable policy selections (`policies.*`)
+- the file inventory entries (each file’s `path` + `sha256` + `size_bytes` + `role`)
+
+9.4 The exact hashed material projection (field set + ordering + exclusions) MUST be documented and test-vectorized.
+
+### 10) Time, randomness, and environment constraints
+
+10.1 The build MUST NOT incorporate non-deterministic sources (system time, nondeterministic PRNG, thread scheduling) into any bytes that are hashed or part of the pack outputs.  
+10.2 `created_at` MAY reflect build time but MUST NOT affect any content-addressed IDs.  
+10.3 If parallel compilation is used, the output MUST be equivalent to a deterministic serial order.
+
+### 11) Validation as an acceptance gate
+
+11.1 Runtime Pack compilation MUST depend on a successful deterministic validation step.  
+11.2 If validation fails, the compiler MUST NOT produce:
+- an Exchange commit, or
+- a Runtime Pack that claims v3 conformance.
+
+### 12) Reproducibility acceptance criteria
+
+12.1 A v3 core-conformant build MUST pass the acceptance tests defined in:
+`03-reproducibility/reproducibility-acceptance-tests.md`
+
+12.2 At minimum, acceptance testing MUST verify:
+- identical inputs + policies → identical output bytes for all pack files
+- identical manifests (excluding non-hashed timestamps) and identical file inventories
+- stable IDs across independent implementations
+
+## Non-normative notes
+
+- Keeping the policy surface area small is intentional: it encourages comparable builds and reduces ecosystem fragmentation.
+- Advanced optimizations (e.g., Parquet bloom filters) should typically be gated behind explicit profiles unless they are proven portable and deterministic across toolchains.
+- Operational resilience patterns (circuit breakers, DLQs, blue/green, canary) are described in `08-ops/` and are not part of artifact conformance.
+
+## Open questions (to resolve in v3 finalization)
+
+- Finalize the exact canonical “hashed material” projection for `runtime_pack_id` (normative field set + ordering + path normalization).
+- Decide which Parquet knobs are permitted in v3 core vs profile-only.
+- Decide whether `lexicographic_sop_asc` and `qid_pid_statement_id_asc` are sufficient ordering policies for core.
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="03-reproducibility/reproducibility-acceptance-tests.md"
+id=311155d0a577
+kind=markdown
+size=7926
+lines=262
+chunks=0
+----
+# Reproducibility Acceptance Tests (Kristal v3)
+
+## Status
+Draft (normative acceptance criteria)
+
+## Purpose
+Define the **acceptance tests** that determine whether a Kristal v3 implementation produces **reproducible** artifacts.
+
+In v3, reproducibility is a first-class requirement:
+- Exchange rebuilds MUST produce identical `kristal_id` given the same inputs and rules.
+- Runtime Pack rebuilds MUST produce identical `pack_id` (or equivalent) and identical declared payload hashes given the same inputs, compiler, configuration, and policy selections.
+
+These tests are designed to prevent “works on my machine” builds and to ensure artifacts are comparable across toolchains.
+
+## Normative language
+The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** are to be interpreted as normative requirements.
+
+---
+
+# 1. Definitions
+
+## 1.1 Inputs
+An **Input Snapshot** is a content-addressed reference to the exact source inputs used for a build (datasets, Claim-IR sets, resolved Claim-IR sets, configuration files, etc.).
+
+## 1.2 Build determinism surface
+The determinism surface for a build is defined by:
+- the declared input snapshots,
+- the compiler identity and version,
+- the full build configuration (identified by `config_hash`),
+- and the recorded `policy_selections` (see `03-reproducibility/allowed-runtime-pack-policies.md`).
+
+## 1.3 Artifact hashes
+- `kristal_id`: content hash of Exchange (signatures excluded).
+- `pack_id`: content hash of Runtime Pack (as defined by Runtime Pack contract).
+- `payload_hashes`: hashes of pack payload components (Parquet files, index files, etc.), as declared in the pack manifest.
+
+---
+
+# 2. Exchange reproducibility tests (mandatory)
+
+## EX-1: Exchange hash determinism (same toolchain)
+**Goal:** Exchange rebuild is byte-stable and ID-stable.
+
+**Given**
+- identical input snapshots
+- identical compiler version
+- identical config hash
+- identical canonicalization profile/version
+
+**Then**
+- the rebuilt Exchange MUST produce the same `kristal_id`
+- and the canonicalized Exchange bytes used for hashing MUST match (byte equality)
+
+**Failure**
+- If `kristal_id` differs, build is non-reproducible → FAIL.
+
+---
+
+## EX-2: Exchange hash determinism (cross toolchain)
+**Goal:** Independent implementations converge on the same ID.
+
+**Given**
+- a published Exchange fixture + expected `kristal_id`
+- canonicalization defined as RFC 8785 (JCS)
+
+**Then**
+- any v3 core conformant implementation MUST compute the expected `kristal_id`.
+
+**Failure**
+- mismatch → FAIL (interop-breaking).
+
+---
+
+## EX-3: Signature envelope invariance
+**Goal:** Signature presence does not alter the hashed payload.
+
+**Given**
+- an Exchange artifact `E0` without signatures
+- a signed Exchange artifact `E1` containing signatures in the signature envelope
+
+**Then**
+- the hash input (`exchange_without_signatures`) MUST be identical for `E0` and `E1`
+- `kristal_id(E0)` MUST equal `kristal_id(E1)`
+
+**Failure**
+- if signatures affect hash input → FAIL.
+
+---
+
+## EX-4: Fail-closed verification (Exchange)
+**Goal:** declared integrity cannot be ignored.
+
+**Given**
+- an Exchange artifact that declares a hash/signature
+- a verifier implementation
+
+**Then**
+- verifier MUST error if:
+  - signature verification fails
+  - declared hash does not match computed hash
+  - integrity material is malformed/ambiguous
+
+**Failure**
+- verifier continues “best effort” → FAIL.
+
+---
+
+# 3. Runtime Pack reproducibility tests (mandatory)
+
+## RP-1: Pack rebuild determinism (same toolchain)
+**Goal:** same inputs → identical pack.
+
+**Given**
+- identical input snapshots
+- identical compiler identity + version
+- identical config hash
+- identical policy selections
+
+**Then**
+- rebuilt Runtime Pack MUST produce identical:
+  - `pack_id`
+  - `payload_hashes` (for each payload component)
+  - `policy_selections` recorded in manifest
+
+**Failure**
+- any mismatch → FAIL.
+
+---
+
+## RP-2: Pack determinism under stable ordering policy
+**Goal:** ordering is not implementation-dependent.
+
+**Given**
+- a fixed ordering policy (e.g., `ORDER_SET([SPO])`)
+- a fixed tie-breaker rule (including `claim_id`)
+
+**Then**
+- the triples table ordering MUST be identical between rebuilds
+- and consistent across platforms (Windows/Linux/macOS) for the same toolchain.
+
+**Failure**
+- any reordering → FAIL.
+
+---
+
+## RP-3: Row-group policy determinism
+**Goal:** row-group assignment is deterministic.
+
+**Given**
+- a declared row-group policy (e.g., `FIXED_ROWS(500000)`)
+
+**Then**
+- the boundaries of row-groups MUST be identical across rebuilds
+- and MUST NOT depend on unstable runtime factors (thread scheduling, CPU count, memory pressure)
+
+**Failure**
+- row-group boundaries differ → FAIL.
+
+---
+
+## RP-4: Membership filter determinism
+**Goal:** filter metadata and behavior are reproducible.
+
+**Given**
+- membership filter policy declared (e.g., `BINARY_FUSE`)
+- declared parameters (seed(s), bits-per-key, variant, key-space encoding)
+
+**Then**
+- the filter construction MUST be identical across rebuilds
+- filter metadata recorded in manifest MUST match exactly
+
+**And**
+- filter false positives MUST be pruned deterministically against authoritative data
+
+**Failure**
+- filter differs under same seeds/params → FAIL.
+
+---
+
+## RP-5: Bitmap determinism (Roaring + run optimization)
+**Goal:** bitmap encoding does not drift.
+
+**Given**
+- bitmap policy `ROARING`
+- run optimization flag ENABLED or DISABLED
+
+**Then**
+- emitted bitmap files (or their declared hashes) MUST match across rebuilds.
+
+**Failure**
+- mismatch → FAIL.
+
+---
+
+## RP-6: Fail-closed verification (Runtime Pack)
+**Goal:** declared integrity cannot be ignored.
+
+**Given**
+- a Runtime Pack that declares payload hashes and/or signatures
+
+**Then**
+- pack loaders/verifiers MUST error if:
+  - any payload hash mismatch occurs
+  - any declared signature fails verification
+  - integrity fields are malformed/ambiguous
+
+**Failure**
+- “load anyway” behavior → FAIL.
+
+---
+
+# 4. Cross-platform reproducibility tests (recommended)
+
+## XP-1: Cross-OS rebuild reproducibility
+**Goal:** avoid platform-specific drift.
+
+**Run**
+- Build the same inputs/config/policies on at least two OS environments.
+
+**Then**
+- Exchange `kristal_id` MUST match.
+- Runtime Pack `pack_id` and payload hashes SHOULD match.
+
+**Note**
+If exact Runtime Pack bit identity is not feasible cross-OS due to dependency formats, the implementation MUST:
+- declare which payload components are excluded from the reproducibility surface, and
+- provide a deterministic canonical representation for pack identity.
+
+---
+
+# 5. Performance and resource invariants (recommended)
+
+These are not core determinism requirements, but SHOULD be recorded for operational predictability:
+- build wall time
+- peak memory
+- pack size
+- index sizes (bitmaps, filters)
+
+If recorded, these MUST NOT affect core identity unless explicitly included in the declared reproducibility surface.
+
+---
+
+# 6. Test artifacts and fixtures
+
+Implementations MUST provide:
+- Exchange fixtures + expected `kristal_id`
+- Runtime Pack fixtures + expected `pack_id` + expected payload hashes
+- JCS canonicalization vectors + expected hashes
+- Query fixtures for stable paging (cursor/offset), join caps, and error modes
+
+See `09-test-vectors/` and `10-examples/`.
+
+---
+
+# 7. Definition of done (reproducibility)
+
+A Kristal v3 implementation passes reproducibility if:
+- All Exchange tests EX-1 through EX-4 pass (mandatory).
+- All Runtime Pack tests RP-1 through RP-6 pass (mandatory).
+- Cross-platform test XP-1 is run for at least one release candidate (recommended).
+
+Failure of any mandatory test blocks release of v3 artifacts.
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="03-reproducibility/subset-recipes.md"
+id=59ef8fd5b1b5
+kind=markdown
+size=11855
+lines=315
+chunks=0
+----
+# Subset recipes (Kristal v3 reproducibility)
+
+## Status
+
+Draft (normative for subset builder reproducibility)
+
+## Purpose
+
+A **subset recipe** is a declarative, reproducible input that defines how to derive a **deterministic subset** of a larger knowledge source snapshot so that the resulting artifacts (Exchange and Runtime Pack) are reproducible and comparable across toolchains. Subset recipes are first-class in v3: they specify seeds, deterministic expansion rules, allow/deny constraints, depth limits, stopping criteria, and snapshot identifiers. :contentReference[oaicite:0]{index=0} :contentReference[oaicite:1]{index=1}
+
+Normative keywords: MUST, MUST NOT, SHOULD, SHOULD NOT, MAY.
+
+---
+
+## 1. Scope and non-goals
+
+### 1.1 In scope
+
+- Recipe object model (fields and semantics)
+- Deterministic subset selection and expansion rules
+- Deterministic truncation / stopping criteria
+- Recipe identity (content-addressed `recipe_id`)
+- How to record recipe references in build manifests
+
+### 1.2 Out of scope
+
+- Full Wikidata subset research algorithms (this spec provides a constrained, portable baseline)
+- Query/runtime behavior (see `04-query/query-contract.md`)
+- Runtime Pack layout policies (see `03-reproducibility/allowed-runtime-pack-policies.md`)
+
+---
+
+## 2. Determinism contract (core)
+
+### 2.1 Deterministic subset requirement
+
+Given identical:
+- **source snapshot** (content-addressed identifier),
+- **subset recipe** (content-addressed identifier),
+- **compiler identity/version**,
+- and any declared **policies/profiles** affecting selection,
+
+then the subset builder MUST produce identical **selected sets**:
+- selected entities,
+- selected statements/claims,
+- and any selected evidence blobs (if included),
+
+and MUST therefore be able to reproduce identical downstream artifacts. Subset-recipe inputs are explicitly part of the build input snapshot. :contentReference[oaicite:2]{index=2}
+
+### 2.2 Offline constraint
+
+Subset evaluation MUST be executable without network access. Any external dependency MUST be represented as a content-addressed input snapshot referenced by the recipe (or by the build manifests).
+
+---
+
+## 3. Recipe identity (content-addressed)
+
+### 3.1 `recipe_id`
+
+A subset recipe MUST have a stable content-addressed identifier:
+
+- `recipe_id = "sha256:" + hex(SHA-256(JCS(hash_target(recipe))))`
+
+Where:
+- `JCS` is RFC 8785 JSON Canonicalization Scheme (same canonicalization family used by v3 core artifacts).
+- `hash_target(recipe)` is the recipe object with:
+  - `recipe_id` removed (output field),
+  - and any signature/attestation envelope removed if present.
+
+### 3.2 Canonical recipe representation
+
+The normative recipe format is a **JSON object**. If a producer stores recipes in another syntax (YAML, TOML, etc.), it MUST define a deterministic mapping into the normative JSON object prior to hashing, and the resulting JSON object MUST be the one used to compute `recipe_id`.
+
+---
+
+## 4. Recipe object model (normative)
+
+A conforming recipe MUST be a JSON object with the following top-level fields.
+
+### 4.1 Required fields
+
+- `spec_version` (string)
+  - MUST be `"subset-recipe@1"` for this version of the spec.
+- `recipe_id` (string)
+  - MUST be present and MUST match the computed content-addressed ID (Section 3.1).
+- `source_snapshot_id` (string)
+  - Content-addressed identifier of the upstream dataset/snapshot this recipe is evaluated against.
+- `seeds` (object)
+  - Seed sets that anchor the subset.
+- `expansion` (object)
+  - Deterministic expansion rules.
+- `constraints` (object)
+  - Allow/deny lists and other guards.
+- `stopping` (object)
+  - Depth/budget/termination rules.
+
+### 4.2 Optional fields
+
+- `recipe_version` (string)
+  - Human-managed semantic version for the recipe’s intent (does not replace `recipe_id`).
+- `description` (string)
+- `profiles_enabled` (array of strings)
+  - Explicit optional profiles that affect selection behavior (if any).
+- `signatures` (array)
+  - Optional; MUST NOT affect `recipe_id` (Section 3.1).
+
+---
+
+## 5. Seeds (normative)
+
+### 5.1 Seed kinds
+
+`seeds` MUST include at least one of:
+
+- `entity_ids`: array of entity identifiers (e.g., QID-like strings)
+- `property_ids`: array of property identifiers (e.g., PID-like strings)
+- `statement_ids`: array of stable statement identifiers (if your source snapshot exposes them)
+
+### 5.2 Deterministic seed normalization
+
+Before evaluation:
+- Seed arrays MUST be deduplicated.
+- Seed arrays MUST be sorted deterministically using a stable byte-wise lexicographic order over their canonical string form.
+- Empty/unknown identifiers MUST be rejected (validation error).
+
+---
+
+## 6. Expansion rules (normative baseline)
+
+`expansion.rules` MUST be an array of rule objects. Each rule object MUST have:
+- `rule_id` (string, non-empty; unique within the recipe)
+- `kind` (string enum; see below)
+- `params` (object; parameters for the rule)
+
+Rules are applied in a deterministic pipeline:
+1. Seeds initialize the frontier at depth 0.
+2. For each depth `d` from 0..`max_depth` (inclusive), apply rules in recipe order.
+3. All sets produced at each step MUST be merged with deterministic deduplication and deterministic ordering (see Section 8).
+
+### 6.1 Allowed rule kinds (portable baseline)
+
+Implementations claiming conformance to `subset-recipe@1` MUST implement at least:
+
+1) `OUTGOING_EDGES`
+- Meaning: for each entity in frontier, include statements where the entity is the subject, and optionally add referenced target entities to the next frontier.
+- Required params:
+  - `predicates`: array of property IDs, or `"*"` to mean “all predicates allowed by constraints”
+  - `include_targets`: boolean (if true, entity-valued objects become candidates for next frontier)
+  - `include_qualifiers`: boolean
+  - `include_references`: boolean
+
+2) `INCOMING_EDGES`
+- Meaning: for each entity in frontier, include statements where the entity appears as an entity-valued object, and optionally add the statement subjects to the next frontier.
+- Required params:
+  - `predicates`: array of property IDs, or `"*"`
+  - `include_subjects`: boolean (if true, statement subjects become candidates for next frontier)
+  - `include_qualifiers`: boolean
+  - `include_references`: boolean
+
+3) `TAXONOMY_CLOSURE`
+- Meaning: include closure over a declared taxonomy predicate set (e.g., subclass-of / instance-of equivalents) up to a bound.
+- Required params:
+  - `predicates`: array of property IDs (taxonomy edges)
+  - `direction`: `"up" | "down" | "both"`
+  - `max_hops`: integer >= 1
+
+4) `LABELS_AND_DESCRIPTIONS`
+- Meaning: include label/alias/description facts required for UX.
+- Required params:
+  - `languages`: array of BCP-47 tags or `"*"`
+  - `include_aliases`: boolean
+  - `include_descriptions`: boolean
+
+If an implementation supports additional rule kinds, they MUST be declared as a profile (via `profiles_enabled`) and MUST remain deterministic and testable.
+
+---
+
+## 7. Constraints (allow/deny) (normative)
+
+`constraints` MUST include:
+
+- `allow_entities` (array) and `deny_entities` (array)
+- `allow_properties` (array) and `deny_properties` (array)
+
+Rules:
+- Deny lists MUST take precedence over allow lists.
+- If an allow list is non-empty, only identifiers present in it are eligible (after applying deny precedence).
+- Constraints MUST apply consistently to:
+  - seed sets,
+  - expansion results (statements and next-frontier candidates),
+  - and truncation tie-breaking sets.
+
+---
+
+## 8. Deterministic ordering and truncation (mandatory)
+
+### 8.1 Stable ordering keys
+
+All intermediate and final sets MUST be ordered deterministically:
+
+- **Entity ordering key**: canonical string ID (byte-wise lexicographic).
+- **Property ordering key**: canonical string ID (byte-wise lexicographic).
+- **Statement ordering key** (preferred):
+  1) stable `statement_id` if available, else
+  2) deterministic surrogate key computed as JCS+SHA256 over a canonical tuple of `(subject_id, predicate_id, object_value, qualifiers, references)` with stable ordering inside nested structures.
+
+### 8.2 Budget limits and deterministic truncation
+
+When a stopping/budget limit is reached (Section 9), the subset builder MUST truncate deterministically:
+
+- It MUST sort candidates by the relevant stable ordering key.
+- It MUST select the first `N` items deterministically.
+- It MUST record (in build metadata / manifest extensions) that truncation occurred, including which limit triggered it and the resulting counts.
+
+Silent, non-declared truncation MUST NOT occur.
+
+---
+
+## 9. Stopping criteria (normative)
+
+`stopping` MUST include:
+
+- `max_depth` (integer >= 0)
+- and at least one budget:
+  - `max_entities` (integer >= 1) OR
+  - `max_statements` (integer >= 1)
+
+Optional:
+- `max_evidence_blobs` (integer)
+- `max_frontier_per_depth` (integer; must truncate deterministically if exceeded)
+
+Stopping rules:
+- Depth is evaluated as BFS depth from seeds.
+- Budgets are global across the run unless a profile explicitly defines per-depth budgets.
+
+---
+
+## 10. Recording subset recipes in manifests (normative guidance)
+
+Subset recipes participate in determinism as inputs. :contentReference[oaicite:3]{index=3}
+
+### 10.1 Exchange Manifest
+
+If a subset recipe was used to produce an Exchange:
+- The Exchange Manifest MUST record the recipe reference in a deterministic way.
+- If the manifest schema does not yet provide a dedicated `inputs.subset_recipe` field, producers SHOULD record:
+  - `extensions.subset_recipe.recipe_id`
+  - `extensions.subset_recipe.spec_version`
+  - `extensions.subset_recipe.source_snapshot_id`
+
+The Exchange manifest schema explicitly allows `extensions` for implementation-specific fields that must not change core identity/hashing semantics. :contentReference[oaicite:4]{index=4}
+
+### 10.2 Runtime Pack Manifest
+
+If a Runtime Pack was compiled from an Exchange built via a subset recipe:
+- The Runtime Pack Manifest SHOULD also record the subset recipe reference (directly, or by carrying the Exchange Manifest hash + a deterministic pointer in extensions).
+
+---
+
+## 11. Conformance tests (recommended)
+
+Implementations SHOULD add subset recipe fixtures to the reproducibility test corpus:
+
+- **SR-1 (same toolchain)**: same `source_snapshot_id` + same recipe JSON → identical selected entity/statement sets
+- **SR-2 (cross toolchain)**: published recipe fixture with expected `recipe_id` and expected selected set hashes → independent implementations match
+- **SR-3 (budget truncation)**: force truncation and verify deterministic truncation + explicit truncation declaration
+
+---
+
+## 12. Minimal example (non-normative)
+
+```json
+{
+  "spec_version": "subset-recipe@1",
+  "recipe_id": "sha256:<computed>",
+  "source_snapshot_id": "sha256:<snapshot>",
+  "seeds": {
+    "entity_ids": ["Q42", "Q1"],
+    "property_ids": ["P31"]
+  },
+  "expansion": {
+    "rules": [
+      {
+        "rule_id": "r1",
+        "kind": "OUTGOING_EDGES",
+        "params": {
+          "predicates": "*",
+          "include_targets": true,
+          "include_qualifiers": true,
+          "include_references": true
+        }
+      },
+      {
+        "rule_id": "r2",
+        "kind": "LABELS_AND_DESCRIPTIONS",
+        "params": {
+          "languages": ["en", "fr"],
+          "include_aliases": true,
+          "include_descriptions": true
+        }
+      }
+    ]
+  },
+  "constraints": {
+    "allow_entities": [],
+    "deny_entities": [],
+    "allow_properties": [],
+    "deny_properties": []
+  },
+  "stopping": {
+    "max_depth": 2,
+    "max_entities": 50000,
+    "max_statements": 200000
+  }
+}
+----- FILE END -----

@@ -1,0 +1,127 @@
+## What this literature changes for Kristals (and what you already match)
+
+### 1) Runtime Pack storage: push Parquet further (COTTAS → Kristals)
+
+Your Runtime Pack is already explicitly “triple table + indexes + set algebra”, with Parquet recommended for the triples table . COTTAS shows how to get *much more* out of Parquet for RDF-like triple/quad tables:
+
+* **Exploit Parquet BRIs (min/max “zone maps”)** to prune row groups/pages during scans, especially if columns are *well-clustered / ordered* .
+* **Exploit Parquet Bloom filters per column chunk** to skip whole row groups when a value can’t be present (no false negatives; tuneable FPR) .
+* **Treat “indexing” as “sorting the triple table”**: COTTAS lists the classic SPO/SOP/PSO/POS/OSP/OPS orderings and explains the granularity trade-off via row-group sizing .
+
+**Concrete Kristals improvement**
+
+* Add to `manifest.json` explicit *sort order(s)* used for the triples table and the **row group size policy**, because those directly control BRI/Bloom effectiveness (COTTAS calls this out) .
+* Consider **optional Parquet-level Bloom filters on `p` and/or `(p,o)`** (or on dictionary-encoded IDs), not just external membership filters. This complements your current “(p,o) → S-set” indexes .
+
+---
+
+### 2) Index payloads: Roaring “run” optimization + row reordering
+
+You already plan “compressed bitmaps for large sets” . The Roaring paper’s key operational insight is that **data ordering changes container mix**, and that **Roaring+Run can shift storage heavily to run containers on sorted data** .
+
+**Concrete Kristals improvement**
+
+* When building S-sets, **apply run optimization** (Roaring+Run) and **record container stats** per index (optional) to drive future heuristics (the paper uses container stats as the lens) .
+* Consider **row reordering / clustering** upstream (triples table order, and/or ID assignment strategy) to increase runs, which helps both Roaring+Run and Parquet BRIs .
+
+---
+
+### 3) Membership filters: make Binary Fuse the default (and standardize parameters)
+
+Kristals already includes **binary-fuse membership filters** in the pack manifest example, with an explicit `false_positive_rate` , and the spec expects compatibility validation including FPR bounds .
+
+Binary Fuse Filters provides the “why” and a performance target:
+
+* Binary fuse filters are designed to be **closer to the theoretical lower bound** than xor filters while keeping speed .
+* The paper also reports binary fuse can be **>2× faster to construct** than xor filters in their experiments  and includes benchmark curves for construction/query time vs FPR .
+
+**Concrete Kristals improvement**
+
+* Promote `binary-fuse` from “supported” to **recommended default**, and standardize:
+
+  * default FPRs per use case (e.g., `claim_id` vs `(s,p,o)` hash),
+  * construction variant (3-wise vs 4-wise) as an explicit manifest parameter (their benchmarks distinguish them) .
+
+---
+
+### 4) Provenance & trust: adopt Nanopublication structure + PROV-O terms
+
+Kristals currently aims at deterministic IDs and offline execution; to make *claims portable, attributable, and verifiable*, nanopublications + PROV-O are the “standard Lego bricks”.
+
+**Nanopublications**
+
+* A nanopublication is explicitly: **assertion graph + provenance graph + publication info graph**, linked from a head graph using `np:hasAssertion`, `np:hasProvenance`, `np:hasPublicationInfo` .
+* It also recommends **Trusty URIs as integrity keys** to enforce immutability / detect changes .
+
+**PROV-O**
+
+* PROV-O gives the core classes (**Entity / Activity / Agent**) and the standard relations to form provenance chains (`prov:used`, `prov:wasGeneratedBy`, `prov:wasDerivedFrom`, attribution/association, timestamps) , with crisp definitions for `prov:Entity` .
+
+**Concrete Kristals improvement**
+
+* For Kristal Exchange, define an optional “nanopub mode”:
+
+  * Assertion = the resolved claim(s)
+  * Provenance = `prov:wasDerivedFrom` source artifacts and `prov:wasAttributedTo` agents (fits the nanopub guidance) 
+  * Publication info = compiler identity + build timestamp 
+* For Kristal IDs: consider aligning the Kristal/claim identifier with a **trusty-URI-like hash commitment** over the canonicalized dataset (nanopub integrity key pattern) .
+
+---
+
+### 5) Canonicalization: use the RDFC-1.0 test suite as your compliance gate
+
+You already talk about canonicalization/hashing and verifying pack compatibility & integrity . The RDFC-1.0 test suite is the practical “do we canonicalize blank nodes and datasets correctly?” gate, with many approved eval/map tests around blank-node structures and datasets .
+
+**Concrete Kristals improvement**
+
+* Add to CI: run canonicalization on the RDFC test inputs and compare to expected outputs (eval tests) and/or expected identifier maps (map tests) .
+* Record in manifest the **canonicalization profile/version** used so hashes remain comparable across toolchains.
+
+---
+
+### 6) JSON ingestion performance: “on-demand” parsing + simdjson-style two-stage
+
+Kristals already keeps strings/JSON off the hot runtime path via dense integer IDs . The remaining pain point is **Exchange ingestion/compilation**.
+
+* The on-demand JSON literature argues for **lazy materialization / only parse what you touch**, rather than building full DOMs .
+* simdjson’s approach is built around a **two-stage parse** (structural scan then fast materialization), enabling very high throughput .
+
+**Concrete Kristals improvement**
+
+* Specify a *compiler requirement*: Exchange readers should support **field-skipping / lazy parsing** for JSON(-LD) inputs, and report measured throughput in build metadata (so compilation cost becomes predictable, matching your runtime philosophy).
+
+---
+
+### 7) Demand-driven subsets: make “subset recipes” first-class
+
+You appear to want Kristals to package *just enough KG* for offline answering. The “demand-driven Wikidata subsets” work is essentially a formalization of that: build subsets from seeds and expand selectively with constraints .
+
+**Concrete Kristals improvement**
+
+* Add a “subset construction recipe” section to Exchange/manifest:
+
+  * seeds (entities/properties)
+  * expansion rules (which edges, depth limits)
+  * filters (black/white lists)
+  * stopping criteria
+* This makes Kristals reproducible and comparable (“same recipe → same subset”), which pairs well with canonicalization+hashing.
+
+---
+
+## Summary of “already applied” vs “to add”
+
+**Already aligned in your Kristals doc**
+
+* Triple table + (p,o)→S-set + set algebra model 
+* Parquet recommended for triples table 
+* Compressed bitmap/list encodings chosen by cardinality thresholds 
+* Binary-fuse membership filter in manifest example 
+
+**High-leverage additions**
+
+* Treat Parquet ordering + BRIs + Bloom filters as *core* performance knobs (COTTAS) 
+* Standardize binary-fuse parameters and make it default (Binary Fuse Filters) 
+* Enable Roaring+Run and data clustering for better compression (Roaring) 
+* Add nanopub/PROV-O shaped provenance + integrity commitments (Nanopubs + PROV-O)  
+* Gate canonicalization on the W3C RDFC tests 
+* Make subset-construction recipes explicit and reproducible (demand-driven subsets) 

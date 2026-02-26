@@ -1,0 +1,84 @@
+{
+  "schema_version": "3.0",
+  "created_at": "2026-02-26T17:55:07Z",
+  "federation_id": "sha256:9f3c0b9a6b2b0bb6d4ed5a7b0f8d0f9e2d8f1c3b4a5e6f7a8b9c0d1e2f3a4b5c",
+  "canonicalization_profile": "kristal.v3:jcs-rfc8785",
+  "canonicalization_version": "1",
+  "content_hash": {
+    "alg": "sha256",
+    "value": "3a7b1f0e9c2d4a6b8e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d"
+  },
+  "authority_registry_ref": {
+    "registry_id": "sha256:0d8c7b6a5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
+    "ref": "authority/authority-registry.json",
+    "content_hash": {
+      "alg": "sha256",
+      "value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
+    }
+  },
+  "shards": [
+    {
+      "shard_id": "sha256:1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+      "scope": {
+        "domain": "heritage",
+        "subdomain": "unesco",
+        "time_window": "2026-01"
+      },
+      "shard_manifest_ref": "shards/heritage-unesco-2026-01/exchange-shard-manifest.json",
+      "shard_manifest_hash": {
+        "alg": "sha256",
+        "value": "6f1d7a3c2b9e0f4a5c6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3"
+      }
+    },
+    {
+      "shard_id": "sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "scope": {
+        "domain": "notes",
+        "subdomain": "local",
+        "time_window": "2026-01"
+      },
+      "shard_manifest_ref": "shards/notes-local-2026-01/exchange-shard-manifest.json",
+      "shard_manifest_hash": {
+        "alg": "sha256",
+        "value": "c3b2a1908f7e6d5c4b5a4938271605f4e3d2c1b0a9f8e7d6c5b4a3928171605f"
+      }
+    }
+  ],
+  "composition_policy": {
+    "policy_id": "kristal.v3:federation-composition",
+    "policy_version": "1",
+    "ordering": {
+      "primary": "scope.domain_asc",
+      "secondary": "authority_precedence",
+      "tertiary": "shard_id_asc"
+    },
+    "authority_precedence": ["recognized", "personal"],
+    "conflict_resolution": {
+      "mode": "precedence",
+      "tie_breaker": "shard_id_asc"
+    }
+  },
+  "trust_requirements": [
+    {
+      "scope": { "domain": "heritage" },
+      "required_authority_class": "recognized"
+    },
+    {
+      "scope": { "domain": "notes" },
+      "required_authority_class": "personal_or_recognized"
+    }
+  ],
+  "publisher": {
+    "authority_id": "authority:curator",
+    "key_id": "curator-ed25519-2026-01"
+  },
+  "signatures": [
+    {
+      "key_id": "curator-ed25519-2026-01",
+      "alg": "ed25519",
+      "signature": "mS7m9WmYvC8h3mZp3tG0Gf9G5a2lqkFf2m2cYw9qj3bR2cQkQq1y5w",
+      "created_at": "2026-02-26T17:55:07Z"
+    }
+  ],
+  "extensions": {}
+}

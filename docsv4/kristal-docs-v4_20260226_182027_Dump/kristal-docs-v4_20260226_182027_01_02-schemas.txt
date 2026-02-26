@@ -1,0 +1,2606 @@
+==== VOLUME META ====
+generated_at: 2026-02-26T18:20:27.581211
+title: FOLDER: 02-schemas
+root_dir: C:\MyCode\Kristals\docsv4\kristal-docs-v4
+file_count: 8
+total_size_mb: 0.0746
+home: 00_START_HERE.instructions.md
+next_volume: kristal-docs-v4_20260226_182027_02_05-profiles.txt
+prev_title: 
+next_title: 05-profiles
+short_title: 02-schemas
+
+==== FILE_INDEX ====
+ENTRY id=6ee51a7d81ac path="02-schemas/authority-registry.schema.json" kind=source size=7414 lines=232 chunks=0
+ENTRY id=82894b0565fb path="02-schemas/claim-ir.schema.json" kind=source size=12443 lines=412 chunks=2
+ENTRY id=491e7747f940 path="02-schemas/exchange-federation-manifest.schema.json" kind=source size=8758 lines=283 chunks=0
+ENTRY id=aa02b1b408c1 path="02-schemas/exchange-manifest.schema.json" kind=source size=12057 lines=366 chunks=2
+ENTRY id=201794a3fc73 path="02-schemas/exchange-shard-manifest.schema.json" kind=source size=2457 lines=80 chunks=0
+ENTRY id=43853abab415 path="02-schemas/resolved-claim-ir.schema.json" kind=source size=14763 lines=474 chunks=2
+ENTRY id=abf486b1e488 path="02-schemas/runtime-pack-manifest.schema.json" kind=source size=12567 lines=371 chunks=2
+ENTRY id=ccc506f37a7e path="02-schemas/validation-report.schema.json" kind=source size=7781 lines=233 chunks=0
+
+==== FILES ====
+
+----- FILE BEGIN -----
+path="02-schemas/authority-registry.schema.json"
+id=6ee51a7d81ac
+kind=source
+size=7414
+lines=232
+chunks=0
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/authority-registry.schema.json",
+  "title": "Kristal v3 Authority Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_id",
+    "created_at",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "trust_roots",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Schema version for this registry format."
+    },
+
+    "registry_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Content-addressed ID of this registry artifact."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when this registry was produced."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v3:jcs-rfc8785",
+      "description": "Canonicalization profile identifier (v3 canonical)."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1",
+      "description": "Canonicalization version (v3 canonical)."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized registry content with signatures excluded."
+    },
+
+    "trust_roots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_roots", "deprecated_roots", "blocked_roots"],
+      "properties": {
+        "active_roots": {
+          "type": "array",
+          "description": "Pinned trust roots accepted for verification.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        },
+        "deprecated_roots": {
+          "type": "array",
+          "description": "Pinned trust roots accepted only if deployment policy allows a grace period.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        },
+        "blocked_roots": {
+          "type": "array",
+          "description": "Pinned trust roots explicitly rejected.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        }
+      }
+    },
+
+    "revocation_list": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional offline-friendly revocation list reference (content-addressed and signed).",
+      "properties": {
+        "artifact_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative or absolute path/URI to the revocation list artifact (e.g., 'revocations.json')."
+        },
+        "content_hash": { "$ref": "#/$defs/hash" },
+        "signatures": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/signature" }
+        }
+      }
+    },
+
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Scope-based acceptance rules for shard/federation authorities.",
+      "items": { "$ref": "#/$defs/rule" }
+    },
+
+    "signatures": {
+      "type": "array",
+      "description": "Optional signatures over declared hashed material (verification is fail-closed when signatures are declared).",
+      "items": { "$ref": "#/$defs/signature" }
+    }
+  },
+
+  "$defs": {
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": { "type": "string", "enum": ["sha256"] },
+        "value": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature"],
+      "properties": {
+        "key_id": { "type": "string", "minLength": 1 },
+        "alg": {
+          "type": "string",
+          "enum": ["ed25519", "rsa-pss-sha256", "ecdsa-p256-sha256"]
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 16,
+          "description": "Base64-encoded signature bytes."
+        },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+
+    "trust_root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_id", "category"],
+      "properties": {
+        "root_id": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "enum": ["personal", "recognized"] },
+        "label": { "type": "string" },
+
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional identifier for the root key (deployment-defined)."
+        },
+
+        "did": { "type": "string", "minLength": 1 },
+
+        "public_key_jwk": {
+          "type": "object",
+          "description": "Optional JWK for offline verification.",
+          "additionalProperties": true
+        },
+
+        "x5c": {
+          "type": "array",
+          "description": "Optional X.509 certificate chain (base64 DER).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "not_before": { "type": "string", "format": "date-time" },
+        "not_after": { "type": "string", "format": "date-time" }
+      },
+      "anyOf": [
+        { "required": ["public_key_jwk"] },
+        { "required": ["did"] },
+        { "required": ["x5c"] },
+        { "required": ["key_id"] }
+      ]
+    },
+
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": { "type": "string", "minLength": 1 },
+        "subdomain": { "type": "string", "minLength": 1 },
+        "tenant_id": { "type": "string", "minLength": 1 },
+        "env": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id", "scope", "allowed_root_categories"],
+      "properties": {
+        "rule_id": { "type": "string", "minLength": 1 },
+        "scope": { "$ref": "#/$defs/scope" },
+
+        "allowed_root_categories": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["personal", "recognized"] }
+        },
+
+        "allowed_root_ids": {
+          "type": "array",
+          "description": "Optional allow-list of specific root_id values. If omitted, any root in allowed categories may be accepted (subject to pin sets + revocation + deployment policy).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "required_profiles": {
+          "type": "array",
+          "description": "Optional list of profile IDs that must be present/attested for artifacts in this scope (e.g., validation/export profiles).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+
+        "min_signatures": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Minimum number of valid signatures required for acceptance under this rule."
+        },
+
+        "revocation_policy": {
+          "type": "string",
+          "enum": ["ignore", "require_if_present", "require_strict"],
+          "default": "require_if_present",
+          "description": "How revocation list presence affects acceptance."
+        }
+      }
+    }
+  }
+}
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/claim-ir.schema.json"
+id=82894b0565fb
+kind=source
+size=12443
+lines=412
+chunks=2
+
+--- CHUNK BEGIN ---
+id=82894b0565fb:1-350
+start=1
+end=350
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/claim-ir.schema.json",
+  "title": "Claim-IR v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "subject", "claims"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0"
+    },
+
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "doc_id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "lang": { "$ref": "#/$defs/lang" },
+
+        "source_url": { "type": "string", "format": "uri" },
+        "source_id": { "type": "string", "minLength": 1 },
+
+        "retrieved_at": { "type": "string", "format": "date-time" },
+        "published_at": { "type": "string", "format": "date-time" },
+
+        "content_hash": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alg", "value"],
+          "properties": {
+            "alg": { "type": "string", "enum": ["sha256"] },
+            "value": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+          }
+        }
+      },
+      "anyOf": [
+        { "required": ["source_url"] },
+        { "required": ["source_id"] },
+        { "required": ["doc_id"] }
+      ]
+    },
+
+    "extraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "run_id": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+
+        "producer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["llm", "rules", "hybrid", "human"] },
+            "name": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider": { "type": "string" },
+            "name": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+
+        "prompt_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt_id": { "type": "string" },
+            "prompt_hash": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+          }
+        },
+
+        "notes": { "type": "string" }
+      }
+    },
+
+    "subject": { "$ref": "#/$defs/entity_ref" },
+
+    "claims": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/claim" }
+    },
+
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    },
+
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/error" }
+    }
+  },
+
+  "$defs": {
+    "qid": { "type": "string", "pattern": "^Q[1-9][0-9]*$" },
+    "pid": { "type": "string", "pattern": "^P[1-9][0-9]*$" },
+    "lang": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+
+    "entity_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "score"],
+      "properties": {
+        "id": { "$ref": "#/$defs/qid" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "label": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+
+    "property_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "score"],
+      "properties": {
+        "id": { "$ref": "#/$defs/pid" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "label": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+
+    "entity_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "qid": { "$ref": "#/$defs/qid" },
+        "surface": { "type": "string", "minLength": 1 },
+        "lang": { "$ref": "#/$defs/lang" },
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entity_candidate" }
+        }
+      },
+      "anyOf": [
+        { "required": ["qid"] },
+        { "required": ["surface"] }
+      ]
+    },
+
+    "predicate_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pid": { "$ref": "#/$defs/pid" },
+        "surface": { "type": "string", "minLength": 1 },
+        "lang": { "$ref": "#/$defs/lang" },
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/property_candidate" }
+        }
+      },
+      "anyOf": [
+        { "required": ["pid"] },
+        { "required": ["surface"] }
+      ]
+    },
+
+    "object_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["item", "string", "quantity", "time", "monolingual_text", "coord", "url"]
+        },
+        "value": {}
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "item" } } },
+          "then": { "properties": { "value": { "$ref": "#/$defs/entity_ref" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "string" } } },
+          "then": { "properties": { "value": { "type": "string" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "url" } } },
+          "then": { "properties": { "value": { "type": "string", "format": "uri" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "quantity" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["amount"],
+                "properties": {
+                  "amount": { "type": "number" },
+                  "unit_qid": { "$ref": "#/$defs/qid" },
+                  "lower_bound": { "type": "number" },
+                  "upper_bound": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "time" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["iso8601"],
+                "properties": {
+                  "iso8601": { "type": "string", "pattern": "^-?\\d{4}-\\d{2}-\\d{2}" },
+                  "precision": {
+                    "type": "string",
+                    "enum": ["year", "month", "day", "hour", "minute", "second"]
+                  },
+                  "calendar": { "type": "string" },
+                  "timezone": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "monolingual_text" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["text", "lang"],
+                "properties": {
+                  "text": { "type": "string" },
+                  "lang": { "$ref": "#/$defs/lang" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "coord" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["lat", "lon"],
+                "properties": {
+                  "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+                  "lon": { "type": "number", "minimum": -180, "maximum": 180 },
+                  "globe": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_id": { "type": "string", "minLength": 1 },
+            "source_url": { "type": "string", "format": "uri" },
+            "title": { "type": "string" },
+            "retrieved_at": { "type": "string", "format": "date-time" }
+          },
+          "anyOf": [
+            { "required": ["source_url"] },
+            { "required": ["source_id"] }
+          ]
+        },
+        "quote": { "type": "string" },
+        "page": { "type": "integer", "minimum": 1 },
+
+        "offsets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start_char": { "type": "integer", "minimum": 0 },
+            "end_char": { "type": "integer", "minimum": 0 }
+          }
+        },
+
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["css", "xpath", "json_pointer", "pdf_region"] },
+            "value": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confidence_interval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["low", "high"],
+          "properties": {
+            "low": { "type": "number", "minimum": 0, "maximum": 1 },
+            "high": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "method": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate", "object"],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+
+        "predicate": { "$ref": "#/$defs/predicate_ref" },
+        "object": { "$ref": "#/$defs/object_value" },
+
+        "qualifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["predicate", "object"],
+            "properties": {
+              "predicate": { "$ref": "#/$defs/predicate_ref" },
+              "object": { "$ref": "#/$defs/object_value" }
+            }
+          }
+        },
+--- CHUNK END ---
+
+--- CHUNK BEGIN ---
+id=82894b0565fb:351-412
+start=351
+end=412
+----
+
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence" }
+        },
+
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "uncertainty": { "$ref": "#/$defs/uncertainty" },
+
+        "alternatives": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/claim" }
+        },
+
+        "notes": { "type": "string" }
+      }
+    },
+
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "NO_CLAIMS_EXTRACTED",
+            "LOW_CONFIDENCE_EXTRACTION",
+            "AMBIGUOUS_SUBJECT",
+            "AMBIGUOUS_PREDICATE",
+            "UNRESOLVED_QID",
+            "UNRESOLVED_PID",
+            "EVIDENCE_MISSING",
+            "EVIDENCE_WEAK",
+            "VALUE_NORMALIZATION_NEEDED"
+          ]
+        },
+        "message": { "type": "string" },
+        "path": { "type": "string" }
+      }
+    },
+
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "SCHEMA_INVALID",
+            "REQUIRED_FIELD_MISSING",
+            "UNSUPPORTED_KIND",
+            "INVALID_VALUE_SHAPE"
+          ]
+        },
+        "message": { "type": "string" },
+        "path": { "type": "string" }
+      }
+    }
+  }
+}
+--- CHUNK END ---
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/exchange-federation-manifest.schema.json"
+id=491e7747f940
+kind=source
+size=8758
+lines=283
+chunks=0
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/exchange-federation-manifest.schema.json",
+  "title": "Kristal v3 Exchange Federation Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "created_at",
+    "federation_id",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "shards",
+    "composition_policy",
+    "signatures"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Manifest schema version."
+    },
+
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique ID for this manifest (UUID or similar)."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the manifest was produced (not part of federation hash target)."
+    },
+
+    "federation_id": {
+      "$ref": "#/$defs/federation_id",
+      "description": "Content-addressed ID of this federation manifest (recommended form: sha256:<hex>)."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization profile identifier (default for v3 core: kristal.v3:jcs-rfc8785)."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization version (default for v3 core: 1)."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized federation hash_target (federation_id/content_hash/signatures/created_at excluded)."
+    },
+
+    "shards": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Referenced shards and their seals (authority signatures).",
+      "items": { "$ref": "#/$defs/shard_ref" }
+    },
+
+    "composition_policy": {
+      "$ref": "#/$defs/composition_policy",
+      "description": "Deterministic composition rules (precedence / conflict handling)."
+    },
+
+    "trust_requirements": {
+      "$ref": "#/$defs/trust_requirements",
+      "description": "Optional policy hints (e.g., “domain X must be UNESCO-signed”)."
+    },
+
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Publisher seal(s) over the federation manifest hash (or as defined by signing profile). Not part of federation hash target.",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "references": {
+      "type": "object",
+      "description": "Optional references to specs/docs for traceability.",
+      "additionalProperties": false,
+      "properties": {
+        "spec_version": { "type": "string", "minLength": 1 },
+        "docs_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Must not change core identity/hashing semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+
+    "sha256_prefixed": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+
+    "federation_id": {
+      "$ref": "#/$defs/sha256_prefixed"
+    },
+
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "description": "Hash algorithm identifier.",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Lowercase hex-encoded hash digest."
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key identifier (KID) used to verify this signature."
+        },
+        "alg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature algorithm identifier (e.g., ed25519, rsa-pss-sha256)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature value (encoding as specified by the signing profile; commonly base64url)."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "org": { "type": "string", "minLength": 1 }
+          }
+        },
+        "certificate_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional pointer to a certificate chain or public key material."
+        }
+      }
+    },
+
+    "shard_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shard_id", "seals"],
+      "properties": {
+        "shard_id": {
+          "$ref": "#/$defs/sha256_prefixed",
+          "description": "Content-addressed ID of the shard Exchange (sha256:<hex>)."
+        },
+        "shard_manifest_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional URI to retrieve the shard manifest or shard bundle."
+        },
+        "scope_hint": {
+          "type": "object",
+          "description": "Optional scope hint for policy routing (domain/subdomain/time window).",
+          "additionalProperties": false,
+          "properties": {
+            "domain": { "type": "string", "minLength": 1 },
+            "subdomain": { "type": "string", "minLength": 1 },
+            "time_window": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": { "type": "string", "format": "date-time" },
+                "end": { "type": "string", "format": "date-time" }
+              }
+            }
+          }
+        },
+        "seals": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Seal signatures that attest shard integrity/authority (copied or referenced from shard manifest).",
+          "items": { "$ref": "#/$defs/signature" }
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "composition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_id"],
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Deterministic composition policy identifier (implementation-defined unless standardized by profile)."
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Policy parameters (must be deterministic for a given federation_id).",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "trust_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "description": "Optional hint rules for consumers (policy may ignore these).",
+          "items": { "$ref": "#/$defs/trust_rule" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "trust_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "requirement"],
+      "properties": {
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domain": { "type": "string", "minLength": 1 },
+            "subdomain": { "type": "string", "minLength": 1 },
+            "shard_id": { "$ref": "#/$defs/sha256_prefixed" }
+          },
+          "anyOf": [
+            { "required": ["domain"] },
+            { "required": ["shard_id"] }
+          ]
+        },
+        "requirement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "authority_group": {
+              "type": "string",
+              "minLength": 1,
+              "description": "e.g., 'UNESCO', 'recognized', 'personal' (consumer-defined)."
+            },
+            "required_key_ids": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/exchange-manifest.schema.json"
+id=aa02b1b408c1
+kind=source
+size=12057
+lines=366
+chunks=2
+
+--- CHUNK BEGIN ---
+id=aa02b1b408c1:1-350
+start=1
+end=350
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/exchange-manifest.schema.json",
+  "title": "Kristal v3 Exchange Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "created_at",
+    "kristal_id",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "build",
+    "inputs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Manifest schema version."
+    },
+
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique ID for this manifest (UUID or similar)."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the manifest was produced (not part of Exchange hash target)."
+    },
+
+    "kristal_id": {
+      "$ref": "#/$defs/kristal_id",
+      "description": "Content-addressed ID of the Exchange payload (sha256:<hex>)."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization profile identifier (default: kristal.v3:jcs-rfc8785)."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization version (default: 1)."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized Exchange payload hash_target (kristal_id/content_hash/signatures/attestations excluded)."
+    },
+
+    "build": {
+      "$ref": "#/$defs/build",
+      "description": "Deterministic build correlation and compiler identity (not part of Exchange hash target unless a profile specifies otherwise)."
+    },
+
+    "inputs": {
+      "$ref": "#/$defs/inputs",
+      "description": "Input snapshot identifiers and upstream artifact references."
+    },
+
+    "profiles_enabled": {
+      "type": "array",
+      "description": "Explicitly enabled optional profiles during compilation/validation.",
+      "items": { "type": "string", "minLength": 1 }
+    },
+
+    "exports": {
+      "$ref": "#/$defs/exports",
+      "description": "Deterministic export declarations and (optional) export integrity hashes."
+    },
+
+    "policies": {
+      "$ref": "#/$defs/policies",
+      "description": "Portable policy selections that may affect derived artifacts; Exchange SHOULD record those relevant to reproducibility."
+    },
+
+    "signatures": {
+      "type": "array",
+      "description": "Optional signature set over the declared content_hash or the canonicalized payload (as defined by the signing profile). Not part of the Exchange hash target.",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "references": {
+      "type": "object",
+      "description": "Optional references to specs/docs for traceability.",
+      "additionalProperties": false,
+      "properties": {
+        "spec_version": { "type": "string", "minLength": 1 },
+        "docs_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Must not change core identity/hashing semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+
+    "sha256_prefixed": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+
+    "kristal_id": {
+      "$ref": "#/$defs/sha256_prefixed"
+    },
+
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "description": "Hash algorithm identifier.",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Lowercase hex-encoded hash digest."
+        }
+      }
+    },
+
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build_id", "compiler_name", "compiler_version", "config_hash"],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Correlation ID for end-to-end tracing (shared across pipeline stages)."
+        },
+        "compiler_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compiler_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "config_hash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Digest of compilation configuration. Recommended form: <alg>:<hex> (e.g., sha256:<hex>)."
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional SCM commit identifier for the compiler/runtime."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Optional build environment metadata (non-normative).",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_snapshot_id"],
+      "properties": {
+        "source_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the source snapshot (documents/datasets) used to build the Exchange."
+        },
+        "recipe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional subset/build recipe identifier."
+        },
+        "claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Claim-IR artifact identifiers used.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "resolved_claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Resolved Claim-IR artifact identifiers used.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "previous_exchange_ids": {
+          "type": "array",
+          "description": "Optional parent Exchange IDs (for incremental builds / merges).",
+          "items": { "$ref": "#/$defs/kristal_id" }
+        }
+      }
+    },
+
+    "exports": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "jsonld": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile": { "type": "string", "minLength": 1 },
+            "context_uri": { "type": "string", "format": "uri" },
+            "export_hash": { "$ref": "#/$defs/hash" }
+          }
+        },
+        "rdf": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile": { "type": "string", "minLength": 1 },
+            "truthy_mode": {
+              "type": "string",
+              "description": "How truthy/best-rank is projected for WDQS compatibility.",
+              "enum": ["none", "truthy", "best_rank"]
+            },
+            "rdf_hash": {
+              "$ref": "#/$defs/hash",
+              "description": "Optional export integrity hash when the RDFC profile is enabled."
+            }
+          }
+        }
+      }
+    },
+
+    "policies": {
+      "type": "object",
+      "description": "Portable policy selections. Exchange may record these for reproducibility and auditing.",
+      "additionalProperties": false,
+      "properties": {
+        "ordering_policies": {
+          "type": "array",
+          "description": "Selected triple-table orderings (portable enum set).",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["SPO", "SOP", "PSO", "POS", "OSP", "OPS"]
+          }
+        },
+        "row_group_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["FIXED_ROWS", "FIXED_BYTES", "ADAPTIVE"]
+            },
+            "rows": { "type": "integer", "minimum": 1 },
+            "bytes": { "type": "integer", "minimum": 1 },
+            "target_rows": { "type": "integer", "minimum": 1 },
+            "target_bytes": { "type": "integer", "minimum": 1 }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "type": { "const": "FIXED_ROWS" } } },
+              "then": { "required": ["rows"] }
+            },
+            {
+              "if": { "properties": { "type": { "const": "FIXED_BYTES" } } },
+              "then": { "required": ["bytes"] }
+            },
+            {
+              "if": { "properties": { "type": { "const": "ADAPTIVE" } } },
+              "then": { "required": ["target_rows", "target_bytes"] }
+            }
+          ]
+        },
+        "membership_filter_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "key_space", "target_fpr"],
+          "properties": {
+            "family": { "type": "string", "enum": ["binary_fuse", "xor"] },
+            "variant": { "type": "string", "enum": ["3wise", "4wise"] },
+            "key_space": {
+              "type": "string",
+              "description": "What keys are filtered for membership checks.",
+              "enum": ["claim_id", "spo_hash", "entity_id", "custom"]
+            },
+            "target_fpr": { "type": "number", "minimum": 0, "maximum": 1 },
+            "bits_per_key": { "type": "number", "minimum": 0 },
+            "seed": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "bitmap_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format"],
+          "properties": {
+            "format": { "type": "string", "enum": ["roaring"] },
+            "run_opt": { "type": "boolean" }
+          }
+        },
+        "join1_cap_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cap", "strict_mode"],
+          "properties": {
+            "cap": { "type": "integer", "minimum": 1 },
+            "strict_mode": { "type": "boolean" },
+            "on_exceed": {
+              "type": "string",
+              "enum": ["error", "truncate"],
+              "description": "Deterministic behavior when strict_mode is true and cap is exceeded."
+            }
+          }
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key identifier (KID) used to verify this signature."
+        },
+        "alg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature algorithm identifier (e.g., ed25519, rsa-pss-sha256)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature value (encoding as specified by the signing profile; commonly base64url)."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signer": {
+--- CHUNK END ---
+
+--- CHUNK BEGIN ---
+id=aa02b1b408c1:351-366
+start=351
+end=366
+----
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "org": { "type": "string", "minLength": 1 }
+          }
+        },
+        "certificate_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional pointer to a certificate chain or public key material."
+        }
+      }
+    }
+  }
+}
+--- CHUNK END ---
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/exchange-shard-manifest.schema.json"
+id=201794a3fc73
+kind=source
+size=2457
+lines=80
+chunks=0
+----
+{
+  "schema_version": "3.0",
+  "artifact_type": "exchange_shard_manifest",
+
+  "created_at": "2026-02-26T18:05:00Z",
+
+  "shard_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+
+  "canonicalization_profile": "kristal.v3:jcs-rfc8785",
+  "canonicalization_version": "1",
+
+  "content_hash": {
+    "alg": "sha256",
+    "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
+  },
+
+  "scope": {
+    "domain": "heritage",
+    "subdomain": "unesco",
+    "time_window": {
+      "start": "2020-01-01",
+      "end": "2025-12-31"
+    },
+    "tenant_id": "tenant_demo",
+    "channel": "unesco-official"
+  },
+
+  "producer": {
+    "kind": "compiler",
+    "name": "kristal-compiler",
+    "version": "3.0.0",
+    "build_id": "build-2026-02-26T180500Z-0001",
+    "config_hash": "sha256:3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1",
+    "git_commit": "a1b2c3d4e5f6g7h8i9j0"
+  },
+
+  "inputs": {
+    "source_snapshot_id": "snap-2026-02-25-unesco-dump",
+    "recipe_id": "recipe-unesco-heritage-core",
+    "blueprint_hash": "sha256:7b1a9c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f",
+    "claim_ir_ids": ["ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4"],
+    "resolved_claim_ir_ids": ["rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c"],
+    "previous_exchange_ids": []
+  },
+
+  "validation_refs": [
+    {
+      "report_id": "vrpt-3b3f1f7e-9a1d-4d61-8b92-0ad7c9f0d1a2",
+      "kristal_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+      "build_id": "build-2026-02-26T180500Z-0001",
+      "validation_status": "passed",
+      "profiles": ["profile-validation-shacl@1"],
+      "report_hash": {
+        "alg": "sha256",
+        "value": "2f3e4d5c6b7a8901b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f50617283"
+      },
+      "uri": "konnaxion://validation-reports/vrpt-3b3f1f7e-9a1d-4d61-8b92-0ad7c9f0d1a2.json"
+    }
+  ],
+
+  "integrity": {
+    "hash_alg": "sha256",
+    "manifest_sha256": "53152b34512bdb2f05bbfa2d41f4f7e5e379e5df67c831f3039ccacc7b1ea7bd"
+  },
+
+  "authority": {
+    "authority_id": "did:example:unesco",
+    "trust_root": "recognized",
+    "key_id": "unesco-prod-ed25519-2026-01"
+  },
+
+  "signatures": [
+    {
+      "key_id": "unesco-prod-ed25519-2026-01",
+      "alg": "ed25519",
+      "signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+      "created_at": "2026-02-26T18:05:10Z"
+    }
+  ]
+}
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/resolved-claim-ir.schema.json"
+id=43853abab415
+kind=source
+size=14763
+lines=474
+chunks=2
+
+--- CHUNK BEGIN ---
+id=43853abab415:1-350
+start=1
+end=350
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/resolved-claim-ir.schema.json",
+  "title": "Resolved Claim-IR v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "input", "resolution", "subject", "claims"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "3.0" },
+
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_ir_ref"],
+      "properties": {
+        "claim_ir_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "doc_id": { "type": "string", "minLength": 1 },
+            "source_id": { "type": "string", "minLength": 1 },
+            "source_url": { "type": "string", "format": "uri" },
+            "run_id": { "type": "string", "minLength": 1 }
+          }
+        },
+        "claim_ir_hash": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["alg", "value"],
+          "properties": {
+            "alg": { "type": "string", "enum": ["sha256"] },
+            "value": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+          }
+        }
+      }
+    },
+
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "created_at", "resolver"],
+      "properties": {
+        "run_id": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+
+        "resolver": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "version": { "type": "string", "minLength": 1 },
+            "kind": {
+              "type": "string",
+              "enum": ["sentient", "hybrid", "human"]
+            }
+          }
+        },
+
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "timeout_ms": { "type": "integer", "minimum": 1 },
+            "max_candidates": { "type": "integer", "minimum": 1 },
+            "max_hops": { "type": "integer", "minimum": 0 },
+            "max_calls": { "type": "integer", "minimum": 1 }
+          }
+        },
+
+        "summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "entities_resolved": { "type": "integer", "minimum": 0 },
+            "entities_ambiguous": { "type": "integer", "minimum": 0 },
+            "entities_unresolved": { "type": "integer", "minimum": 0 },
+            "properties_resolved": { "type": "integer", "minimum": 0 },
+            "properties_ambiguous": { "type": "integer", "minimum": 0 },
+            "properties_unresolved": { "type": "integer", "minimum": 0 },
+            "warnings": { "type": "integer", "minimum": 0 }
+          }
+        },
+
+        "notes": { "type": "string" }
+      }
+    },
+
+    "subject": { "$ref": "#/$defs/entity_resolution" },
+
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resolved_claim" }
+    },
+
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    },
+
+    "errors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/error" }
+    }
+  },
+
+  "$defs": {
+    "qid": { "type": "string", "pattern": "^Q[1-9][0-9]*$" },
+    "pid": { "type": "string", "pattern": "^P[1-9][0-9]*$" },
+    "lang": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$" },
+
+    "resolution_status": {
+      "type": "string",
+      "enum": ["resolved", "ambiguous", "unresolved", "failed"]
+    },
+
+    "entity_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "score"],
+      "properties": {
+        "id": { "$ref": "#/$defs/qid" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+
+    "property_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "score"],
+      "properties": {
+        "id": { "$ref": "#/$defs/pid" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "label": { "type": "string" },
+        "description": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+
+    "entity_resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/resolution_status" },
+
+        "qid": { "$ref": "#/$defs/qid" },
+
+        "surface": { "type": "string", "minLength": 1 },
+        "lang": { "$ref": "#/$defs/lang" },
+
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entity_candidate" }
+        },
+
+        "decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": ["exact_match", "alias_match", "embedding_rank", "judge", "human"]
+            },
+            "score_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+            "chosen_candidate_index": { "type": "integer", "minimum": 0 },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "warnings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/warning" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "resolved" } } },
+          "then": { "required": ["qid"] }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["ambiguous", "unresolved"] } } },
+          "then": {
+            "anyOf": [
+              { "required": ["surface"] },
+              { "required": ["candidates"] }
+            ]
+          }
+        }
+      ]
+    },
+
+    "predicate_resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "$ref": "#/$defs/resolution_status" },
+
+        "pid": { "$ref": "#/$defs/pid" },
+
+        "surface": { "type": "string", "minLength": 1 },
+        "lang": { "$ref": "#/$defs/lang" },
+
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/property_candidate" }
+        },
+
+        "decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": ["exact_match", "alias_match", "embedding_rank", "judge", "human"]
+            },
+            "score_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+            "chosen_candidate_index": { "type": "integer", "minimum": 0 },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "warnings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/warning" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "resolved" } } },
+          "then": { "required": ["pid"] }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["ambiguous", "unresolved"] } } },
+          "then": {
+            "anyOf": [
+              { "required": ["surface"] },
+              { "required": ["candidates"] }
+            ]
+          }
+        }
+      ]
+    },
+
+    "normalized_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "notes": { "type": "string" }
+      }
+    },
+
+    "object_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["item", "string", "quantity", "time", "monolingual_text", "coord", "url"]
+        },
+        "value": {},
+        "normalized": { "$ref": "#/$defs/normalized_value" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "item" } } },
+          "then": {
+            "properties": { "value": { "$ref": "#/$defs/entity_resolution" } }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "string" } } },
+          "then": { "properties": { "value": { "type": "string" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "url" } } },
+          "then": { "properties": { "value": { "type": "string", "format": "uri" } } }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "quantity" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["amount"],
+                "properties": {
+                  "amount": { "type": "number" },
+                  "unit_qid": { "$ref": "#/$defs/qid" },
+                  "lower_bound": { "type": "number" },
+                  "upper_bound": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "time" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["iso8601"],
+                "properties": {
+                  "iso8601": { "type": "string", "pattern": "^-?\\d{4}-\\d{2}-\\d{2}" },
+                  "precision": {
+                    "type": "string",
+                    "enum": ["year", "month", "day", "hour", "minute", "second"]
+                  },
+                  "calendar": { "type": "string" },
+                  "timezone": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "monolingual_text" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["text", "lang"],
+                "properties": {
+                  "text": { "type": "string" },
+                  "lang": { "$ref": "#/$defs/lang" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "coord" } } },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["lat", "lon"],
+                "properties": {
+                  "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+                  "lon": { "type": "number", "minimum": -180, "maximum": 180 },
+                  "globe": { "type": "string" }
+--- CHUNK END ---
+
+--- CHUNK BEGIN ---
+id=43853abab415:351-474
+start=351
+end=474
+----
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_id": { "type": "string", "minLength": 1 },
+            "source_url": { "type": "string", "format": "uri" },
+            "title": { "type": "string" },
+            "retrieved_at": { "type": "string", "format": "date-time" }
+          },
+          "anyOf": [{ "required": ["source_url"] }, { "required": ["source_id"] }]
+        },
+        "quote": { "type": "string" },
+        "page": { "type": "integer", "minimum": 1 },
+        "offsets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start_char": { "type": "integer", "minimum": 0 },
+            "end_char": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+
+    "uncertainty": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "method": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "resolved_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "predicate", "object"],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+
+        "predicate": { "$ref": "#/$defs/predicate_resolution" },
+        "object": { "$ref": "#/$defs/object_value" },
+
+        "qualifiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["predicate", "object"],
+            "properties": {
+              "predicate": { "$ref": "#/$defs/predicate_resolution" },
+              "object": { "$ref": "#/$defs/object_value" }
+            }
+          }
+        },
+
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_ref" }
+        },
+
+        "uncertainty": { "$ref": "#/$defs/uncertainty" },
+
+        "notes": { "type": "string" }
+      }
+    },
+
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "AMBIGUOUS_SUBJECT",
+            "AMBIGUOUS_PREDICATE",
+            "UNRESOLVED_QID",
+            "UNRESOLVED_PID",
+            "VALUE_NORMALIZATION_NEEDED",
+            "LOW_CONFIDENCE_RESOLUTION",
+            "LIMIT_REACHED",
+            "EVIDENCE_WEAK"
+          ]
+        },
+        "message": { "type": "string" },
+        "path": { "type": "string" }
+      }
+    },
+
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "SCHEMA_INVALID",
+            "RESOLUTION_FAILED",
+            "INVALID_VALUE_SHAPE",
+            "UNSUPPORTED_KIND"
+          ]
+        },
+        "message": { "type": "string" },
+        "path": { "type": "string" }
+      }
+    }
+  }
+}
+--- CHUNK END ---
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/runtime-pack-manifest.schema.json"
+id=abf486b1e488
+kind=source
+size=12567
+lines=371
+chunks=2
+
+--- CHUNK BEGIN ---
+id=abf486b1e488:1-350
+start=1
+end=350
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/runtime-pack-manifest.schema.json",
+  "title": "Kristal v3 Runtime Pack Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "runtime_pack_id",
+    "created_at",
+    "exchange_ref",
+    "compiler",
+    "build",
+    "policies",
+    "files"
+  ],
+  "properties": {
+    "manifest_version": {
+      "type": "string",
+      "description": "Runtime Pack manifest schema version.",
+      "pattern": "^3\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[0-9A-Za-z.-]+)?$"
+    },
+
+    "runtime_pack_id": {
+      "type": "string",
+      "description": "Content-addressed ID for this runtime pack (sha256 hex).",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 timestamp when the runtime pack was produced. MUST NOT affect any content-addressed IDs."
+    },
+
+    "profiles": {
+      "type": "array",
+      "description": "Optional standardized profiles this pack claims conformance to.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+
+    "exchange_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exchange_id"],
+      "properties": {
+        "exchange_id": {
+          "type": "string",
+          "description": "Content-addressed ID of the Kristal Exchange this pack was compiled from (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "exchange_manifest_hash": {
+          "type": "string",
+          "description": "Optional hash of the Exchange manifest referenced by this pack (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "exchange_version": {
+          "type": "string",
+          "description": "Optional human version label for Exchange (if used).",
+          "minLength": 1
+        }
+      }
+    },
+
+    "compiler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "git_commit": {
+          "type": "string",
+          "description": "Optional compiler source revision.",
+          "minLength": 7
+        },
+        "build_platform": {
+          "type": "string",
+          "description": "Optional platform identifier (e.g., linux-x86_64).",
+          "minLength": 1
+        }
+      }
+    },
+
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_id",
+        "deterministic",
+        "canonicalization_profile",
+        "canonicalization_version",
+        "config_hash"
+      ],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "description": "Opaque build correlation ID (UUID or other stable identifier).",
+          "minLength": 8
+        },
+        "deterministic": {
+          "type": "boolean",
+          "description": "True if this pack claims deterministic/reproducible build behavior under recorded policies.",
+          "const": true
+        },
+        "canonicalization_profile": {
+          "type": "string",
+          "description": "Canonicalization profile identifier used for any hashed JSON objects.",
+          "const": "kristal.v3:jcs-rfc8785"
+        },
+        "canonicalization_version": {
+          "type": "string",
+          "description": "Canonicalization profile version identifier.",
+          "const": "1"
+        },
+        "config_hash": {
+          "type": "string",
+          "description": "Content hash of the compiler configuration that affects outputs (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "policies": {
+      "type": "object",
+      "description": "Enumerated, v3-portable policies and their parameters. These fields MUST be sufficient to reproduce the pack.",
+      "additionalProperties": false,
+      "required": ["data_ordering", "row_grouping", "membership_filter", "bitmap"],
+      "properties": {
+        "data_ordering": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policy"],
+          "properties": {
+            "policy": {
+              "type": "string",
+              "description": "Portable ordering policy for deterministic Parquet output.",
+              "enum": [
+                "qid_pid_statement_id_asc",
+                "lexicographic_sop_asc",
+                "none"
+              ]
+            },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "row_grouping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["policy"],
+          "properties": {
+            "policy": {
+              "type": "string",
+              "description": "Portable row-group sizing policy for deterministic Parquet layout.",
+              "enum": [
+                "fixed_rows_100k",
+                "fixed_rows_1m",
+                "fixed_bytes_128mb"
+              ]
+            },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "membership_filter": {
+          "description": "Membership filter policy used by the pack (if any) and the parameters required to reproduce it.",
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind"],
+              "properties": {
+                "kind": { "type": "string", "const": "none" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "seed", "bits_per_key"],
+              "properties": {
+                "kind": { "type": "string", "const": "bloom" },
+                "seed": { "type": "integer", "minimum": 0 },
+                "bits_per_key": { "type": "integer", "minimum": 1 },
+                "hash_functions": { "type": "integer", "minimum": 1 },
+                "notes": { "type": "string" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "seed", "fingerprint_bits", "load_factor"],
+              "properties": {
+                "kind": { "type": "string", "const": "cuckoo" },
+                "seed": { "type": "integer", "minimum": 0 },
+                "fingerprint_bits": { "type": "integer", "minimum": 4 },
+                "load_factor": { "type": "number", "minimum": 0.01, "maximum": 0.99 },
+                "notes": { "type": "string" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "seed", "bits"],
+              "properties": {
+                "kind": { "type": "string", "enum": ["xor8", "xor16"] },
+                "seed": { "type": "integer", "minimum": 0 },
+                "bits": { "type": "integer", "enum": [8, 16] },
+                "notes": { "type": "string" }
+              }
+            }
+          ]
+        },
+
+        "bitmap": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format"],
+          "properties": {
+            "format": {
+              "type": "string",
+              "description": "Portable bitmap/index encoding convention for deterministic runtime behavior.",
+              "enum": [
+                "roaring",
+                "roaring_run_optimized"
+              ]
+            },
+            "run_optimize": {
+              "type": "boolean",
+              "description": "Whether run optimization was applied (must be recorded for reproducibility)."
+            },
+            "notes": { "type": "string" }
+          }
+        },
+
+        "parquet": {
+          "type": "object",
+          "description": "Parquet-level policies that affect deterministic output. Keep to portable, enumerated values.",
+          "additionalProperties": false,
+          "properties": {
+            "compression": {
+              "type": "string",
+              "enum": ["zstd", "snappy", "gzip", "none"]
+            },
+            "dictionary_encoding": { "type": "boolean" },
+            "statistics": {
+              "type": "string",
+              "enum": ["none", "page", "rowgroup"]
+            },
+            "bloom_filters": {
+              "type": "object",
+              "description": "Optional Parquet Bloom filter configuration (profile-bound).",
+              "additionalProperties": false,
+              "required": ["enabled"],
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "fpp": {
+                  "type": "number",
+                  "minimum": 0.0000001,
+                  "maximum": 0.5,
+                  "description": "False positive probability target."
+                },
+                "columns": {
+                  "type": "array",
+                  "items": { "type": "string", "minLength": 1 },
+                  "uniqueItems": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "query_contract": {
+      "type": "object",
+      "description": "Optional declaration of the offline query contract supported by this pack.",
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": { "type": "string", "minLength": 1 },
+        "supports_pagination": { "type": "boolean" },
+        "supports_cardinality_estimates": { "type": "boolean" }
+      }
+    },
+
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "description": "All physical files included in the runtime pack, with integrity metadata.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "sha256", "size_bytes"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Relative path within the runtime pack container."
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "parquet_data",
+              "bitmap_index",
+              "membership_filter",
+              "dictionary",
+              "metadata",
+              "other"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "mime_type": { "type": "string" }
+        }
+      }
+    },
+
+    "integrity": {
+      "type": "object",
+      "description": "Optional higher-level integrity metadata for the pack as a whole.",
+      "additionalProperties": false,
+      "properties": {
+        "hash_alg": { "type": "string", "const": "sha256" },
+        "pack_sha256": {
+          "type": "string",
+          "description": "Optional hash of the full pack container (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "manifest_sha256": {
+          "type": "string",
+          "description": "Optional hash of this manifest content excluding signatures (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "signatures": {
+      "type": "array",
+      "description": "Optional signatures over declared hashed material (verification is fail-closed when signatures are declared).",
+      "items": {
+--- CHUNK END ---
+
+--- CHUNK BEGIN ---
+id=abf486b1e488:351-371
+start=351
+end=371
+----
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key_id", "alg", "signature"],
+        "properties": {
+          "key_id": { "type": "string", "minLength": 1 },
+          "alg": {
+            "type": "string",
+            "description": "Signature algorithm identifier.",
+            "enum": ["ed25519", "rsa-pss-sha256", "ecdsa-p256-sha256"]
+          },
+          "signature": {
+            "type": "string",
+            "description": "Base64-encoded signature bytes.",
+            "minLength": 16
+          },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
+--- CHUNK END ---
+----- FILE END -----
+
+----- FILE BEGIN -----
+path="02-schemas/validation-report.schema.json"
+id=ccc506f37a7e
+kind=source
+size=7781
+lines=233
+chunks=0
+----
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/validation-report.schema.json",
+  "title": "Kristal v3 Validation Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "validation_status", "issues"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version for this report format.",
+      "const": "3.0"
+    },
+
+    "report_id": {
+      "type": "string",
+      "description": "Unique identifier for this validation report (UUID or similar).",
+      "minLength": 1
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the report was produced."
+    },
+
+    "kristal_id": {
+      "type": "string",
+      "description": "Content-addressed ID of the Exchange artifact being validated.",
+      "minLength": 1
+    },
+
+    "build_id": {
+      "type": "string",
+      "description": "Compiler/build correlation ID for end-to-end traceability.",
+      "minLength": 1
+    },
+
+    "validation_status": {
+      "type": "string",
+      "description": "Overall deterministic outcome for compilation gating.",
+      "enum": ["passed", "partial", "failed"]
+    },
+
+    "profiles": {
+      "type": "array",
+      "description": "Profiles enabled during validation (core is implicit).",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+
+    "tooling": { "$ref": "#/$defs/tooling" },
+
+    "inputs": {
+      "type": "object",
+      "description": "Optional identifiers for the validated artifacts and snapshots.",
+      "additionalProperties": false,
+      "properties": {
+        "exchange_uri": { "type": "string", "format": "uri" },
+        "runtime_pack_uri": { "type": "string", "format": "uri" },
+        "source_snapshot_id": { "type": "string", "minLength": 1 },
+        "recipe_id": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "stats": {
+      "type": "object",
+      "description": "Summary counts for quick gating and dashboards.",
+      "additionalProperties": false,
+      "properties": {
+        "error_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "info_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "limits": {
+      "type": "object",
+      "description": "Resource limits applied during validation (especially for expensive profiles).",
+      "additionalProperties": false,
+      "properties": {
+        "timeout_ms": { "type": "integer", "minimum": 0 },
+        "iteration_cap": { "type": "integer", "minimum": 0 },
+        "memory_cap_bytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "issues": {
+      "type": "array",
+      "description": "Deterministic issues emitted by validation (codes + locations).",
+      "items": { "$ref": "#/$defs/issue" }
+    },
+
+    "shacl": {
+      "type": "object",
+      "description": "Optional SHACL validation output (profile extension).",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "report_uri": { "type": "string", "format": "uri" },
+        "report_format": {
+          "type": "string",
+          "description": "Serialization format of the report if report_uri is provided.",
+          "enum": ["text/turtle", "application/n-triples", "application/n-quads", "application/ld+json", "application/rdf+xml"]
+        }
+      }
+    },
+
+    "shex": {
+      "type": "object",
+      "description": "Optional ShEx validation output (profile extension).",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "report_uri": { "type": "string", "format": "uri" },
+        "report_format": {
+          "type": "string",
+          "enum": ["application/json", "text/plain"]
+        }
+      }
+    },
+
+    "export_validation": {
+      "type": "object",
+      "description": "Optional results for validating deterministic exports (JSON-LD/RDF/WDQS profile checks).",
+      "additionalProperties": false,
+      "properties": {
+        "jsonld_profile": { "type": "string", "minLength": 1 },
+        "rdf_profile": { "type": "string", "minLength": 1 },
+        "wdqs_compat": { "type": "boolean" },
+        "rdf_hash": {
+          "type": "string",
+          "description": "Optional rdf_hash when RDFC integrity profile is enabled.",
+          "minLength": 1
+        }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific additional fields. Must not affect core conformance semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "tooling": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "validator_name": { "type": "string", "minLength": 1 },
+        "validator_version": { "type": "string", "minLength": 1 },
+        "compiler_name": { "type": "string", "minLength": 1 },
+        "compiler_version": { "type": "string", "minLength": 1 },
+        "canonicalization_profile": { "type": "string", "minLength": 1 },
+        "canonicalization_version": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "severity": {
+      "type": "string",
+      "enum": ["ERROR", "WARNING", "INFO"]
+    },
+
+    "entity_id": {
+      "type": "string",
+      "description": "Wikidata/Wikibase entity identifiers (item/property/lexeme/form/sense) or local placeholders.",
+      "pattern": "^(Q[1-9][0-9]*|P[1-9][0-9]*|L[1-9][0-9]*|L[1-9][0-9]*-[FS][1-9][0-9]*|[A-Za-z][A-Za-z0-9._:-]{0,127})$"
+    },
+
+    "json_pointer": {
+      "type": "string",
+      "description": "RFC 6901 JSON Pointer into Exchange / manifest / report objects.",
+      "pattern": "^/.*"
+    },
+
+    "issue_location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "json_pointer": { "$ref": "#/$defs/json_pointer" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "statement_id": { "type": "string", "minLength": 1 },
+        "claim_id": { "type": "string", "minLength": 1 },
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "source_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "code", "message"],
+      "properties": {
+        "severity": { "$ref": "#/$defs/severity" },
+
+        "code": {
+          "type": "string",
+          "description": "Stable machine-readable code (used for gating, dashboards, and mappings to SHACL/ShEx).",
+          "minLength": 1,
+          "pattern": "^[A-Z0-9_]+$"
+        },
+
+        "message": {
+          "type": "string",
+          "description": "Human-readable explanation of the issue.",
+          "minLength": 1
+        },
+
+        "location": { "$ref": "#/$defs/issue_location" },
+
+        "rule": {
+          "type": "object",
+          "description": "Optional rule metadata for deterministic debugging and traceability.",
+          "additionalProperties": false,
+          "properties": {
+            "rule_id": { "type": "string", "minLength": 1 },
+            "rule_version": { "type": "string", "minLength": 1 },
+            "profile": { "type": "string", "minLength": 1 }
+          }
+        },
+
+        "details": {
+          "type": "object",
+          "description": "Optional structured details (must remain deterministic for the same inputs).",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
+----- FILE END -----

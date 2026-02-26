@@ -1,0 +1,80 @@
+{
+  "schema_version": "3.0",
+  "artifact_type": "exchange_shard_manifest",
+
+  "created_at": "2026-02-26T18:05:00Z",
+
+  "shard_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+
+  "canonicalization_profile": "kristal.v3:jcs-rfc8785",
+  "canonicalization_version": "1",
+
+  "content_hash": {
+    "alg": "sha256",
+    "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
+  },
+
+  "scope": {
+    "domain": "heritage",
+    "subdomain": "unesco",
+    "time_window": {
+      "start": "2020-01-01",
+      "end": "2025-12-31"
+    },
+    "tenant_id": "tenant_demo",
+    "channel": "unesco-official"
+  },
+
+  "producer": {
+    "kind": "compiler",
+    "name": "kristal-compiler",
+    "version": "3.0.0",
+    "build_id": "build-2026-02-26T180500Z-0001",
+    "config_hash": "sha256:3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1",
+    "git_commit": "a1b2c3d4e5f6g7h8i9j0"
+  },
+
+  "inputs": {
+    "source_snapshot_id": "snap-2026-02-25-unesco-dump",
+    "recipe_id": "recipe-unesco-heritage-core",
+    "blueprint_hash": "sha256:7b1a9c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f",
+    "claim_ir_ids": ["ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4"],
+    "resolved_claim_ir_ids": ["rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c"],
+    "previous_exchange_ids": []
+  },
+
+  "validation_refs": [
+    {
+      "report_id": "vrpt-3b3f1f7e-9a1d-4d61-8b92-0ad7c9f0d1a2",
+      "kristal_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+      "build_id": "build-2026-02-26T180500Z-0001",
+      "validation_status": "passed",
+      "profiles": ["profile-validation-shacl@1"],
+      "report_hash": {
+        "alg": "sha256",
+        "value": "2f3e4d5c6b7a8901b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f50617283"
+      },
+      "uri": "konnaxion://validation-reports/vrpt-3b3f1f7e-9a1d-4d61-8b92-0ad7c9f0d1a2.json"
+    }
+  ],
+
+  "integrity": {
+    "hash_alg": "sha256",
+    "manifest_sha256": "53152b34512bdb2f05bbfa2d41f4f7e5e379e5df67c831f3039ccacc7b1ea7bd"
+  },
+
+  "authority": {
+    "authority_id": "did:example:unesco",
+    "trust_root": "recognized",
+    "key_id": "unesco-prod-ed25519-2026-01"
+  },
+
+  "signatures": [
+    {
+      "key_id": "unesco-prod-ed25519-2026-01",
+      "alg": "ed25519",
+      "signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+      "created_at": "2026-02-26T18:05:10Z"
+    }
+  ]
+}

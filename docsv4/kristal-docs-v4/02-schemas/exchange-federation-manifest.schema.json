@@ -1,0 +1,283 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/exchange-federation-manifest.schema.json",
+  "title": "Kristal v3 Exchange Federation Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "created_at",
+    "federation_id",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "shards",
+    "composition_policy",
+    "signatures"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Manifest schema version."
+    },
+
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique ID for this manifest (UUID or similar)."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the manifest was produced (not part of federation hash target)."
+    },
+
+    "federation_id": {
+      "$ref": "#/$defs/federation_id",
+      "description": "Content-addressed ID of this federation manifest (recommended form: sha256:<hex>)."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization profile identifier (default for v3 core: kristal.v3:jcs-rfc8785)."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonicalization version (default for v3 core: 1)."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized federation hash_target (federation_id/content_hash/signatures/created_at excluded)."
+    },
+
+    "shards": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Referenced shards and their seals (authority signatures).",
+      "items": { "$ref": "#/$defs/shard_ref" }
+    },
+
+    "composition_policy": {
+      "$ref": "#/$defs/composition_policy",
+      "description": "Deterministic composition rules (precedence / conflict handling)."
+    },
+
+    "trust_requirements": {
+      "$ref": "#/$defs/trust_requirements",
+      "description": "Optional policy hints (e.g., “domain X must be UNESCO-signed”)."
+    },
+
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Publisher seal(s) over the federation manifest hash (or as defined by signing profile). Not part of federation hash target.",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "references": {
+      "type": "object",
+      "description": "Optional references to specs/docs for traceability.",
+      "additionalProperties": false,
+      "properties": {
+        "spec_version": { "type": "string", "minLength": 1 },
+        "docs_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Must not change core identity/hashing semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+
+    "sha256_prefixed": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+
+    "federation_id": {
+      "$ref": "#/$defs/sha256_prefixed"
+    },
+
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "description": "Hash algorithm identifier.",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Lowercase hex-encoded hash digest."
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key identifier (KID) used to verify this signature."
+        },
+        "alg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature algorithm identifier (e.g., ed25519, rsa-pss-sha256)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature value (encoding as specified by the signing profile; commonly base64url)."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "org": { "type": "string", "minLength": 1 }
+          }
+        },
+        "certificate_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional pointer to a certificate chain or public key material."
+        }
+      }
+    },
+
+    "shard_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shard_id", "seals"],
+      "properties": {
+        "shard_id": {
+          "$ref": "#/$defs/sha256_prefixed",
+          "description": "Content-addressed ID of the shard Exchange (sha256:<hex>)."
+        },
+        "shard_manifest_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional URI to retrieve the shard manifest or shard bundle."
+        },
+        "scope_hint": {
+          "type": "object",
+          "description": "Optional scope hint for policy routing (domain/subdomain/time window).",
+          "additionalProperties": false,
+          "properties": {
+            "domain": { "type": "string", "minLength": 1 },
+            "subdomain": { "type": "string", "minLength": 1 },
+            "time_window": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": { "type": "string", "format": "date-time" },
+                "end": { "type": "string", "format": "date-time" }
+              }
+            }
+          }
+        },
+        "seals": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Seal signatures that attest shard integrity/authority (copied or referenced from shard manifest).",
+          "items": { "$ref": "#/$defs/signature" }
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "composition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_id"],
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Deterministic composition policy identifier (implementation-defined unless standardized by profile)."
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Policy parameters (must be deterministic for a given federation_id).",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "trust_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "array",
+          "description": "Optional hint rules for consumers (policy may ignore these).",
+          "items": { "$ref": "#/$defs/trust_rule" }
+        },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "trust_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "requirement"],
+      "properties": {
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "domain": { "type": "string", "minLength": 1 },
+            "subdomain": { "type": "string", "minLength": 1 },
+            "shard_id": { "$ref": "#/$defs/sha256_prefixed" }
+          },
+          "anyOf": [
+            { "required": ["domain"] },
+            { "required": ["shard_id"] }
+          ]
+        },
+        "requirement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "authority_group": {
+              "type": "string",
+              "minLength": 1,
+              "description": "e.g., 'UNESCO', 'recognized', 'personal' (consumer-defined)."
+            },
+            "required_key_ids": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}
