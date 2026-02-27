@@ -1,12 +1,12 @@
-# Vision and scope (Kristal v3)
+# Vision and scope (Kristal v4)
 
 Kristal is the portable, verifiable, offline-executable unit of encyclopedic knowledge in the ecosystem. A Kristal is **not a document** and not free text. It is a **compiled knowledge artifact** designed to be **Wikidata/Wikibase-aligned**, **traceable**, **AI-ready**, and **executable offline**.
 
-Kristal v3 tightens interoperability and reproducibility by making canonicalization + hashing unambiguous, defining strict pipeline contracts, and requiring deterministic build manifests—while keeping the normative core small and expressing advanced capabilities as explicit profiles.
+Kristal v4 tightens interoperability and reproducibility by making canonicalization + hashing unambiguous, defining strict pipeline contracts, and requiring deterministic build manifests—while keeping the normative core small and expressing advanced capabilities as explicit profiles.
 
 ## Goals
 
-Kristal v3 aims to:
+Kristal v4 aims to:
 
 1. **Interoperable identity**
    - Identical content yields identical IDs across languages and toolchains.
@@ -32,7 +32,7 @@ Kristal v3 aims to:
 
 ## Non-goals
 
-Kristal v3 does **not** attempt to:
+Kristal v4 does **not** attempt to:
 
 - Provide full SPARQL semantics in Runtime Packs.
 - Encode operational/deployment patterns as first-class objects inside Exchange or Runtime Pack schemas.
@@ -65,7 +65,7 @@ Each Kristal release produces two primary artifacts:
 
 ## Normative core vs profiles
 
-Kristal v3 is structured as:
+Kristal v4 is structured as:
 - **Core (normative, required):** minimal determinism surface area with strong defaults
 - **Profiles (optional, standardized):** advanced features (integrity, provenance, richer exports, pagination)
 

@@ -1,10 +1,10 @@
 # Multi-tenancy boundaries (global content IDs + tenant access control layering)
 
 ## Status
-Draft (Kristal v3)
+Draft (Kristal v4)
 
 ## Purpose
-Define the **multi-tenancy boundary model** for Kristal v3 so that:
+Define the **multi-tenancy boundary model** for Kristal v4 so that:
 - **IDs remain globally content-addressed** (same content → same `kristal_id`)
 - **tenant isolation** is enforced by **access control + signing keys + distribution channels**
 - operational systems (Orgo/Konnaxion) can safely manage builds, governance, and offline distribution without cross-tenant leakage

@@ -1,4 +1,4 @@
-# Subset recipes (Kristal v3 reproducibility)
+# Subset recipes (Kristal v4 reproducibility)
 
 ## Status
 

@@ -1,10 +1,10 @@
-# Orgo Workflow Contract (Kristal v3 Integration)
+# Orgo Workflow Contract (Kristal v4 Integration)
 
 ## Status
 Draft (normative integration contract)
 
 ## Purpose
-Define the required **workflow orchestration**, **governance**, and **auditability** behavior for Orgo when Orgo acts as the control plane for Kristal v3 production and distribution.
+Define the required **workflow orchestration**, **governance**, and **auditability** behavior for Orgo when Orgo acts as the control plane for Kristal v4 production and distribution.
 
 This contract is concerned with:
 - enforcing **pipeline ordering** (ingest → Claim-IR → resolution → validation → publish),

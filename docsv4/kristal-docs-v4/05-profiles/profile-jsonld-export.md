@@ -6,7 +6,7 @@ Draft (v3 profile)
 
 ## Purpose
 
-This document defines the **JSON-LD 1.1 export profile** for Kristal v3.
+This document defines the **JSON-LD 1.1 export profile** for Kristal v4.
 
 Goals:
 

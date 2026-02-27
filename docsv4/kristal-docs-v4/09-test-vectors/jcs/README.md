@@ -1,12 +1,12 @@
-# JCS Test Vectors (Kristal v3)
+# JCS Test Vectors (Kristal v4)
 
 ## Status
 Draft (normative test-vector guidance)
 
 ## Purpose
-This folder contains **golden test vectors** for Kristal v3’s canonicalization and identity rules.
+This folder contains **golden test vectors** for Kristal v4’s canonicalization and identity rules.
 
-Kristal v3 requires that:
+Kristal v4 requires that:
 - `canonical_json` is **RFC 8785 JSON Canonicalization Scheme (JCS)**, and
 - content-addressed IDs (e.g., `kristal_id`) are computed as:
 
@@ -117,7 +117,7 @@ Any mismatch indicates:
 
 # Conformance requirement
 
-A Kristal v3 core implementation MUST:
+A Kristal v4 core implementation MUST:
 
 * ship a vector set (this folder), and
 * pass all vectors in CI.

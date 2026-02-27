@@ -1,7 +1,7 @@
 # Profile: Validation Reporting (SHACL)
 
 ## Status
-Draft (Kristal v3 optional standardized profile)
+Draft (Kristal v4 optional standardized profile)
 
 ## Purpose
 Provide an interoperable **SHACL-based conformance report** for Kristal artifacts that:
@@ -28,7 +28,7 @@ Non-scope:
 
 ## Inputs
 - A validated or candidate Kristal Exchange artifact (and/or derived RDF projection) suitable for SHACL checking
-- The Kristal v3 core validation outputs (issue codes, locations) for mapping
+- The Kristal v4 core validation outputs (issue codes, locations) for mapping
 
 ## Outputs
 When enabled, an implementation MUST produce:

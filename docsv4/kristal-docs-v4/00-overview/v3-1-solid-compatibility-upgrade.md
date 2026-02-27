@@ -1,4 +1,4 @@
-# Kristal v3.1 — Solid Compatibility Upgrade (Official Specification)
+# Kristal v4.1 — Solid Compatibility Upgrade (Official Specification)
 
 **Status:** Draft
 **Version:** 3.1
@@ -9,7 +9,7 @@
 
 ## 1. Purpose
 
-Kristal v3.1 introduces a Solid-inspired modular architecture for Kristal / Konnaxion without changing the v3 core artifact model (Exchange + Runtime Packs). v3.1 standardizes **composition (DI), storage abstraction, handler pipelines, representation conversion, patch semantics, initialization, and ACL-style authorization** so implementations can swap modules and add Solid-compatible interfaces while preserving offline determinism.
+Kristal v4.1 introduces a Solid-inspired modular architecture for Kristal / Konnaxion without changing the v3 core artifact model (Exchange + Runtime Packs). v3.1 standardizes **composition (DI), storage abstraction, handler pipelines, representation conversion, patch semantics, initialization, and ACL-style authorization** so implementations can swap modules and add Solid-compatible interfaces while preserving offline determinism.
 
 ---
 
@@ -29,7 +29,7 @@ v3.1 MUST:
 
 ## 3. Non-goals (what we do NOT integrate from Solid)
 
-Kristal v3.1 explicitly does **not** become a full Solid server:
+Kristal v4.1 explicitly does **not** become a full Solid server:
 
 1. **No full SPARQL 1.1 semantics** as the core query surface; the v3 query contract remains intentionally constrained (triple-pattern, deterministic paging/ordering). 
 2. **No requirement that RDF is the canonical storage model.** RDF/JSON-LD are treated as export profiles; the canonical core remains the v3 Exchange model with content-addressed identity. 

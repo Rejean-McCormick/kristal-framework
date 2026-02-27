@@ -1,12 +1,12 @@
-# Profile: RDF Integrity (RDFC) (Kristal v3)
+# Profile: RDF Integrity (RDFC) (Kristal v4)
 
 ## Status
 Draft
 
 ## Purpose
-Provide an optional, standardized integrity mechanism for Kristal v3 RDF exports by computing a deterministic `rdf_hash` over a specified RDF projection using an RDF Dataset Canonicalization method and CI gating.
+Provide an optional, standardized integrity mechanism for Kristal v4 RDF exports by computing a deterministic `rdf_hash` over a specified RDF projection using an RDF Dataset Canonicalization method and CI gating.
 
-This profile is designed for deployments that need **semantic-web grade export integrity** (independent verifiers can confirm exported RDF content matches the declared hash), while keeping Kristal v3’s normative core small.
+This profile is designed for deployments that need **semantic-web grade export integrity** (independent verifiers can confirm exported RDF content matches the declared hash), while keeping Kristal v4’s normative core small.
 
 ## Scope
 In scope:

@@ -8,7 +8,7 @@ Draft (v3)
 
 This document specifies the **normative** rules for:
 
-* signature and attestation structures used in Kristal v3 artifacts
+* signature and attestation structures used in Kristal v4 artifacts
 * what is signed (and how signing inputs are constructed)
 * verification requirements, including **fail-closed** semantics
 * trust-root and key identity (`key_id` / KID), and offline verification expectations

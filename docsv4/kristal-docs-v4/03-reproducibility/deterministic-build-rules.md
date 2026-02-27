@@ -1,11 +1,11 @@
-# Deterministic build rules (Kristal v3)
+# Deterministic build rules (Kristal v4)
 
 ## Status
 Normative (v3 core)
 
 ## Purpose
 
-This document defines the **deterministic build requirements** for producing Kristal v3 artifacts, specifically:
+This document defines the **deterministic build requirements** for producing Kristal v4 artifacts, specifically:
 - **Kristal Exchange** (canonical source of truth)
 - **Kristal Runtime Pack** (derived offline-executable index)
 
@@ -35,7 +35,7 @@ Normative keywords: MUST, MUST NOT, SHOULD, SHOULD NOT, MAY.
 ### 1) Determinism declaration
 
 1.1 A Runtime Pack MUST declare whether it is deterministic.  
-1.2 Kristal v3 Runtime Packs claiming v3 core conformance MUST set `build.deterministic = true` in the Runtime Pack Manifest.  
+1.2 Kristal v4 Runtime Packs claiming v3 core conformance MUST set `build.deterministic = true` in the Runtime Pack Manifest.  
 1.3 If an implementation cannot guarantee determinism for a given build, it MUST either:
 - refuse to emit a v3 core-conformant pack, or
 - emit a pack under a non-core profile that explicitly states non-deterministic behavior.

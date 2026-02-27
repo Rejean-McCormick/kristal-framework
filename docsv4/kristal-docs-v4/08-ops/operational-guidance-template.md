@@ -165,7 +165,7 @@ Use it to document failure paths, resilience, observability, and “least-worst�
 
 **Owner team:**
 **Last updated:**
-**Applies to versions:** (Kristal v3.x, Orgo version, etc.)
+**Applies to versions:** (Kristal v4.x, Orgo version, etc.)
 **Change log:**
 
 * YYYY-MM-DD: …

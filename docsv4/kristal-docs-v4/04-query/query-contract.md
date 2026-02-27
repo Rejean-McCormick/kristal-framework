@@ -6,7 +6,7 @@ Draft (v3)
 
 ## Purpose
 
-This document defines the **offline query contract** for Kristal v3 **Runtime Packs** (and any local wrapper service that exposes them). The goal is a **portable, deterministic, offline-executable** query surface that supports common retrieval needs (search/navigation primitives, constrained graph lookups) without requiring full SPARQL.
+This document defines the **offline query contract** for Kristal v4 **Runtime Packs** (and any local wrapper service that exposes them). The goal is a **portable, deterministic, offline-executable** query surface that supports common retrieval needs (search/navigation primitives, constrained graph lookups) without requiring full SPARQL.
 
 This contract is intentionally constrained to preserve offline predictability and reproducibility.
 

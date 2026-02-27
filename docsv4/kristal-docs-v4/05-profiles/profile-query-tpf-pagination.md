@@ -1,7 +1,7 @@
 # Profile: Query (TPF-like pagination)
 
 ## Status
-Optional standardized profile (Kristal v3)
+Optional standardized profile (Kristal v4)
 
 ## Purpose
 

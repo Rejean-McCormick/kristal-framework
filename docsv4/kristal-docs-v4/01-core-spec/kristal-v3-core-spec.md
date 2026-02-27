@@ -1,10 +1,10 @@
-# Kristal v3 Core Specification
+# Kristal v4 Core Specification
 
 ## Status
 Draft (normative core)
 
 ## Purpose
-Define the **minimal normative requirements** for Kristal v3 conformance, with a strong focus on:
+Define the **minimal normative requirements** for Kristal v4 conformance, with a strong focus on:
 - cross-implementation interoperability,
 - deterministic identity and integrity verification,
 - reproducible compilation,
@@ -30,7 +30,7 @@ Everything not explicitly required here is either:
 The key words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** are to be interpreted as normative requirements.
 
 ## Conformance overview
-An implementation is **Kristal v3 Core Conformant** if it:
+An implementation is **Kristal v4 Core Conformant** if it:
 1. Implements the **canonicalization + identity** rules in this document.
 2. Implements **fail-closed integrity verification** semantics.
 3. Emits and honors **schema-conformant manifests** that satisfy minimal reproducibility requirements.
@@ -43,7 +43,7 @@ Optional profiles do not affect core conformance unless the implementation claim
 
 # 1. Artifact model
 
-Kristal v3 defines two primary artifact classes:
+Kristal v4 defines two primary artifact classes:
 
 1. **Kristal Exchange Artifact (Exchange)**
    - Canonical, auditable, content-addressed source of truth.
@@ -159,7 +159,7 @@ Unknown non-integrity fields MUST be ignored for forward compatibility, but inte
 
 # 4. Minimal reproducibility requirements (mandatory)
 
-Kristal v3 requires reproducibility to be a first-class acceptance criterion.
+Kristal v4 requires reproducibility to be a first-class acceptance criterion.
 
 ## 4.1 Manifests are schema-conformant (mandatory)
 Exchange and Runtime Pack manifests MUST conform to their schemas:
@@ -208,7 +208,7 @@ If deterministic output cannot be achieved for some optional optimization, that 
 
 # 5. Inter-system interface contracts (mandatory)
 
-Kristal v3 is defined as a pipeline boundary with strict contracts.
+Kristal v4 is defined as a pipeline boundary with strict contracts.
 
 ## 5.1 Claim-IR contract (proposal boundary)
 - Extractors (LLMs, classical systems, hybrids) MUST output **only Claim-IR**.
@@ -258,7 +258,7 @@ Manifest schema: `02-schemas/runtime-pack-manifest.schema.json`
 
 # 6. Deterministic baseline exports (mandatory when implemented)
 
-Kristal v3 defines baseline export profiles to support interoperability with Wikibase/Wikidata-shaped ecosystems.
+Kristal v4 defines baseline export profiles to support interoperability with Wikibase/Wikidata-shaped ecosystems.
 
 If an implementation supports exports, it MUST support:
 

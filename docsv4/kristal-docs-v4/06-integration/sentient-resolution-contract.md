@@ -1,10 +1,10 @@
-# SenTient Resolution Contract (Kristal v3 Integration)
+# SenTient Resolution Contract (Kristal v4 Integration)
 
 ## Status
 Draft (normative integration contract)
 
 ## Purpose
-Define the required **inputs**, **outputs**, and **deterministic semantics** for SenTient when SenTient acts as the reconciliation / resolution engine in the Kristal v3 pipeline.
+Define the required **inputs**, **outputs**, and **deterministic semantics** for SenTient when SenTient acts as the reconciliation / resolution engine in the Kristal v4 pipeline.
 
 This contract ensures:
 - ambiguity is preserved explicitly (no silent coercion),

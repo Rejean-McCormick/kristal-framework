@@ -1,4 +1,4 @@
-# Downgrade and Rollback Policy (Kristal v3)
+# Downgrade and Rollback Policy (Kristal v4)
 
 ## Status
 
@@ -6,7 +6,7 @@ Draft (normative)
 
 ## Purpose
 
-Define how Kristal v3 distributors and clients (notably Konnaxion offline package consumers and Orgo-controlled distribution flows) prevent:
+Define how Kristal v4 distributors and clients (notably Konnaxion offline package consumers and Orgo-controlled distribution flows) prevent:
 
 * **downgrade attacks** (maliciously providing an older, vulnerable, or compromised artifact), and
 * unsafe **rollbacks** (unintended reversion to older packs due to caching, sync conflicts, or operator error).

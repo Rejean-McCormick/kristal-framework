@@ -5,7 +5,7 @@
 Draft
 
 ## Purpose
-This directory contains pointers and packaging conventions for the **optional** Kristal v3 profile:
+This directory contains pointers and packaging conventions for the **optional** Kristal v4 profile:
 
 - `profile-rdf-integrity-rdfc` (RDF dataset canonicalization + `rdf_hash` + CI gating)
 

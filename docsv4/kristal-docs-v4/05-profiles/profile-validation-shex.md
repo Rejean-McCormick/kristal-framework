@@ -1,11 +1,11 @@
 # Profile: Validation (ShEx)
 
 ## Status
-Optional standardized profile (Kristal v3)
+Optional standardized profile (Kristal v4)
 
 ## Purpose
 
-This profile defines how a Kristal v3 implementation MAY publish **ShEx (Shape Expressions)** artifacts derived from validated Kristal Exchange data to support:
+This profile defines how a Kristal v4 implementation MAY publish **ShEx (Shape Expressions)** artifacts derived from validated Kristal Exchange data to support:
 - structural conformance checking by external tooling
 - implementer guidance and ecosystem interoperability
 - debugging and validation transparency

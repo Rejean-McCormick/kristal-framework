@@ -1,10 +1,10 @@
-# Key Management and Trust Roots (Kristal v3)
+# Key Management and Trust Roots (Kristal v4)
 
 ## Status
 Draft (implementation-ready defaults; future profiles may extend)
 
 ## Purpose
-Define how Kristal v3 artifacts (Exchange and Runtime Packs) are signed, how trust roots are established, and how verifiers validate signatures in a **fail-closed** manner when integrity declarations are present.
+Define how Kristal v4 artifacts (Exchange and Runtime Packs) are signed, how trust roots are established, and how verifiers validate signatures in a **fail-closed** manner when integrity declarations are present.
 
 This document is security and operations focused. It does **not** change Kristal’s core content-addressed identity rules; it defines the trust model around distribution and verification.
 
@@ -212,7 +212,7 @@ Deployments MUST define the revocation policy level per environment (e.g., requi
 - SHOULD sign resolver outputs only if the deployment treats resolver output as a distributable artifact (rare).
 
 ## Minimum security acceptance criteria
-A deployment meets minimum Kristal v3 security criteria if:
+A deployment meets minimum Kristal v4 security criteria if:
 1. Signed artifacts are verified fail-closed when signatures are present.
 2. Trust roots are pinned and enforceable offline (pin sets supported).
 3. Key rotation is supported (overlap windows + key ids recorded).

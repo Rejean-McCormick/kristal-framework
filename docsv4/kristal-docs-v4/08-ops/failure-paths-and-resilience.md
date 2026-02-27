@@ -1,7 +1,7 @@
 # Failure paths and resilience (non-normative)
 
 ## Status
-Non-normative operational guidance (Kristal v3)
+Non-normative operational guidance (Kristal v4)
 
 ## Purpose
 

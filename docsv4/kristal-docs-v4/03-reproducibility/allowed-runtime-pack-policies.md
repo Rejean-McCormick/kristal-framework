@@ -1,10 +1,10 @@
-# Allowed Runtime Pack Policies (Kristal v3)
+# Allowed Runtime Pack Policies (Kristal v4)
 
 ## Status
 Draft (normative for v3 portability)
 
 ## Purpose
-Kristal v3 aims to keep the **determinism surface area small** while still enabling high-performance offline execution. To avoid “compliant but incomparable” packs, v3 defines a **portable enumerated policy set** for Runtime Pack construction.
+Kristal v4 aims to keep the **determinism surface area small** while still enabling high-performance offline execution. To avoid “compliant but incomparable” packs, v3 defines a **portable enumerated policy set** for Runtime Pack construction.
 
 A v3 Runtime Pack MUST:
 1. Select policy values from the allowed sets below, and

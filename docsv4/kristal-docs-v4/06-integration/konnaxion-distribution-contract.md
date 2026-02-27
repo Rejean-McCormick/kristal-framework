@@ -6,7 +6,7 @@ Draft (v3 integration contract)
 
 ## Purpose
 
-This document defines the contract for how **Konnaxion** distributes, verifies, caches, and activates **Kristal v3 Runtime Packs** (and associated metadata) for offline/low-bandwidth operation.
+This document defines the contract for how **Konnaxion** distributes, verifies, caches, and activates **Kristal v4 Runtime Packs** (and associated metadata) for offline/low-bandwidth operation.
 
 Konnaxion’s responsibilities in the ecosystem:
 

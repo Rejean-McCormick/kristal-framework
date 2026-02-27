@@ -1,7 +1,7 @@
 # Profile: Provenance Packaging (Nanopublication + PROV-O)
 
 ## Status
-Draft (Kristal v3 optional standardized profile)
+Draft (Kristal v4 optional standardized profile)
 
 ## Purpose
 Provide a portable, interoperable way to package **assertions + provenance + publication metadata** for Kristal exports using:

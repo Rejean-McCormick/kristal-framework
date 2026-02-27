@@ -6,7 +6,7 @@ Draft (non-normative operational guidance)
 
 ## Purpose
 
-Define operational release strategies for distributing **Kristal Runtime Packs** safely (especially to offline or constrained environments) while preserving Kristal v3’s requirements:
+Define operational release strategies for distributing **Kristal Runtime Packs** safely (especially to offline or constrained environments) while preserving Kristal v4’s requirements:
 
 * deterministic artifacts,
 * fail-closed integrity,

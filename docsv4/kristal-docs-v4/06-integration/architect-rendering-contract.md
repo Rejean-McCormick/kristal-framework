@@ -6,7 +6,7 @@ Draft (v3 integration contract)
 
 ## Purpose
 
-This document defines the **contract between Architect and Kristal v3**.
+This document defines the **contract between Architect and Kristal v4**.
 
 Architect is the **deterministic renderer**: it produces text (and other publishable outputs) **only from validated Kristal knowledge**, without introducing new facts, and with **complete traceability** from every rendered assertion back to Kristal claim(s) and evidence.
 

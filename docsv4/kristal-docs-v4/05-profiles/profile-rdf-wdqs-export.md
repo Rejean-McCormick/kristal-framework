@@ -1,10 +1,10 @@
-# Profile: RDF WDQS Export (Kristal v3)
+# Profile: RDF WDQS Export (Kristal v4)
 
 ## Status
 Draft
 
 ## Purpose
-Define a deterministic RDF export profile for Kristal v3 that is compatible with common Wikidata Query Service (WDQS) expectations and downstream RDF tooling, while keeping Kristal’s core identity and offline runtime constraints intact.
+Define a deterministic RDF export profile for Kristal v4 that is compatible with common Wikidata Query Service (WDQS) expectations and downstream RDF tooling, while keeping Kristal’s core identity and offline runtime constraints intact.
 
 This profile specifies:
 - what graphs are exported,
@@ -117,7 +117,7 @@ Rules:
 The truthy projection MUST be deterministic given identical inputs.
 
 ## Rank rules
-Kristal v3’s WDQS export MUST support at least the following ranks:
+Kristal v4’s WDQS export MUST support at least the following ranks:
 - `preferred`
 - `normal`
 - `deprecated`

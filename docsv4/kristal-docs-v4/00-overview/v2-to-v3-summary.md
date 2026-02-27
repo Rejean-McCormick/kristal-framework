@@ -10,7 +10,7 @@ Draft
 
 ## Purpose
 
-Summarize the changes from Kristal v2 (draft) to Kristal v3, with emphasis on interoperability, determinism, and reproducible offline execution.
+Summarize the changes from Kristal v2 (draft) to Kristal v4, with emphasis on interoperability, determinism, and reproducible offline execution.
 
 ---
 

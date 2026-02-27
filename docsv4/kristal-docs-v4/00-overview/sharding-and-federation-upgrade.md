@@ -1,4 +1,4 @@
-# Sharding & Federation Upgrade (Kristal v3)
+# Sharding & Federation Upgrade (Kristal v4)
 
 **Status:** Draft (architecture + contracts)  
 **Version:** 3.0 (extension)  
@@ -8,7 +8,7 @@
 
 ## 1. Purpose
 
-Kristal v3’s core model (Exchange + Runtime Packs) is content-addressed, deterministic, and offline-verifiable. This upgrade adds:
+Kristal v4’s core model (Exchange + Runtime Packs) is content-addressed, deterministic, and offline-verifiable. This upgrade adds:
 
 1) **Domain sharding**: split canonical truth into independent Exchange units (“shards”) scoped by domain/subdomain/time-slice.
 2) **Federation**: compose multiple shards—possibly sealed by different authorities—under a single “federation root” without rewriting or re-signing the underlying shards.

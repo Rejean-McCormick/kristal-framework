@@ -1,10 +1,10 @@
-# Errata and alignment (Kristal v3 docs)
+# Errata and alignment (Kristal v4 docs)
 
 ## Status
 Editorial (v3 docs). Normative for documentation consistency and examples.
 
 ## Purpose
-This document records the **alignment decisions** required to keep Kristal v3 prose, schemas, and examples consistent. It is the single place to resolve or track mismatches discovered during v3 doc updates.
+This document records the **alignment decisions** required to keep Kristal v4 prose, schemas, and examples consistent. It is the single place to resolve or track mismatches discovered during v3 doc updates.
 
 ## Applies to
 - `01-core-spec/*`
