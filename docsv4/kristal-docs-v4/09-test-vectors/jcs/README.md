@@ -1,4 +1,3 @@
-````md
 # JCS Test Vectors (Kristal v3)
 
 ## Status
@@ -155,5 +154,4 @@ Examples of what a test runner should do:
 
 The exact runner is language-specific.
 
-```
-```
+

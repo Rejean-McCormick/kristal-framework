@@ -41,6 +41,7 @@ A **federation manifest** that references multiple shards and declares determini
 - **Authority**: the signer (or signer set) that seals a shard or federation root.
 - **Seal**: the integrity material binding an authority identity to an artifact identity (hash + signatures).
 - **Authority Registry**: pinned, versioned trust policy data mapping scopes to allowed authorities and required profiles.
+- **Revocations**: pinned, versioned revocation policy data (offline-friendly) used during verification.
 
 ---
 
@@ -62,16 +63,21 @@ Recommended examples:
 - `10-examples/exchange-federation-manifest.example.json`
 - `10-examples/authority-registry.example.json`
 
+**Recommended additional policy artifact (offline):**
+- `02-schemas/revocations.schema.json`
+- `10-examples/revocations.example.json`
+
 ---
 
 ## 5. Shard model
 
-### 5.1 Shard scope
-A shard MUST declare a scope that is deterministic and comparable, for example:
-- `domain` (e.g., "education", "heritage")
-- optional `subdomain`
-- optional `time_slice` (e.g., year/month window, snapshot range)
-- optional `tenant_id` / `visibility` if used by deployment policy (not required by core)
+### 5.1 Shard scope (canonical)
+A shard MUST declare a scope that is deterministic and comparable:
+
+- `domain` (required; e.g., `"education"`, `"heritage"`)
+- `subdomain` (optional)
+- `time_window` (optional; implementation-defined label, e.g., `"2026-01"`, `"2020-2025"`)
+- deployment policy MAY add `tenant_id`, `env`, or other fields (but MUST NOT change the meaning of the canonical keys above)
 
 ### 5.2 Shard identity
 A shard is content-addressed as a normal Exchange artifact:
@@ -93,8 +99,8 @@ A federation root is content-addressed from its own hashed material (manifest co
 ### 6.2 Composition is deterministic
 A Federation Manifest MUST define a deterministic composition policy, including:
 - shard precedence rules when multiple shards cover overlapping scope,
-- deterministic conflict resolution (e.g., authority precedence, latest time slice, explicit deny/allow lists),
-- stable ordering requirements for shard lists and policy lists.
+- deterministic conflict resolution (e.g., authority precedence, latest time window, explicit allow/deny),
+- stable ordering requirements for shard lists and rule lists.
 
 ### 6.3 Federation does not rewrite shards
 A federation root MUST NOT mutate shard bytes, shard identities, or shard seals. It only references them and declares how to compose them.
@@ -108,7 +114,8 @@ Authority Registry defines:
 - trust roots and authority identifiers,
 - which authorities are allowed for which scopes,
 - optional profile requirements (e.g., “must include validation profile X”),
-- revocation / deprecation / blocking sets (offline-friendly).
+- pin sets (active/deprecated/blocked),
+- an optional reference to revocations policy data.
 
 ### 7.2 Pinned & versioned
 Authority Registry MUST be treated as pinned/versioned policy data:
@@ -125,6 +132,7 @@ A consumer verifying a federated kristal MUST be able to do so offline given:
 - referenced shard bytes,
 - referenced validation report bytes (or their sealed identities),
 - an Authority Registry (pinned/versioned),
+- revocations policy data (if required by the Authority Registry / deployment policy),
 - trust roots needed to verify declared signatures.
 
 ### 8.1 Verify a shard
@@ -133,7 +141,7 @@ A consumer MUST:
 2. Validate shard Exchange identity and content_hash consistency (per v3 rules)
 3. Verify declared signatures/attestations (fail-closed if required)
 4. Verify referenced validation reports (schema-valid, signature-valid if declared)
-5. Check authority acceptance for the shard’s scope using Authority Registry
+5. Check authority acceptance for the shard’s scope using Authority Registry (+ revocations if required)
 6. Accept or reject shard deterministically
 
 ### 8.2 Verify a federation
@@ -152,14 +160,21 @@ A consumer MUST:
 ```json
 {
   "schema_version": "3.0",
+  "artifact_type": "exchange_shard_manifest",
+  "created_at": "2026-02-26T18:05:00Z",
+
   "shard_id": "sha256:...",
-  "scope": { "domain": "heritage", "subdomain": "unesco", "time_slice": "2026-01" },
-  "exchange_ref": { "kristal_id": "sha256:..." },
   "canonicalization_profile": "kristal.v3:jcs-rfc8785",
   "canonicalization_version": "1",
+
+  "scope": { "domain": "heritage", "subdomain": "unesco", "time_window": "2026-01" },
+
+  "exchange_ref": { "kristal_id": "sha256:..." },
+
   "validation_refs": [{ "report_id": "sha256:...", "role": "core" }],
+
   "integrity": { "content_hash": { "alg": "sha256", "value": "..." } },
-  "authority": { "authority_id": "authority:example", "kid": "..." },
+  "authority": { "authority_id": "authority:example", "key_id": "..." },
   "signatures": [ /* standard v3 signature objects */ ]
 }
 ````
@@ -169,15 +184,34 @@ A consumer MUST:
 ```json
 {
   "schema_version": "3.0",
+  "created_at": "2026-02-26T18:10:00Z",
+
   "federation_id": "sha256:...",
   "canonicalization_profile": "kristal.v3:jcs-rfc8785",
   "canonicalization_version": "1",
+
+  "authority_registry_ref": {
+    "registry_id": "sha256:... (or kristal:authority-registry:sha256:...)",
+    "ref": "authority/authority-registry.json",
+    "content_hash": { "alg": "sha256", "value": "..." }
+  },
+
   "shards": [
-    { "shard_id": "sha256:...", "ref": "uri-or-path", "seal_ref": "..." }
+    {
+      "shard_id": "sha256:...",
+      "scope": { "domain": "heritage", "subdomain": "unesco", "time_window": "2026-01" },
+      "shard_manifest_ref": "shards/heritage-unesco-2026-01/shard-manifest.json",
+      "shard_manifest_hash": { "alg": "sha256", "value": "..." },
+      "seals": [ /* optional copied signatures */ ]
+    }
   ],
-  "composition_policy": { "mode": "deterministic", "precedence": ["recognized", "personal"] },
-  "publisher_seal": { "authority_id": "authority:publisher", "kid": "..." },
-  "signatures": [ /* standard v3 signature objects */ ]
+
+  "composition_policy": { "policy_id": "deterministic-v1", "policy_version": "1", "parameters": {} },
+
+  "publisher": { "authority_id": "authority:publisher", "key_id": "..." },
+  "signatures": [ /* standard v3 signature objects */ ],
+
+  "extensions": {}
 }
 ```
 
@@ -186,7 +220,10 @@ A consumer MUST:
 ```json
 {
   "schema_version": "3.0",
-  "registry_id": "sha256:...",
+  "artifact_type": "authority_registry",
+  "created_at": "2026-02-26T18:00:00Z",
+
+  "registry_id": "kristal:authority-registry:sha256:...",
   "trust_roots": {
     "recognized": [{ "authority_id": "authority:unesco", "kids": ["..."] }],
     "personal": [{ "authority_id": "authority:me", "kids": ["..."] }]
@@ -200,7 +237,10 @@ A consumer MUST:
     "deprecated": [],
     "blocked": []
   },
-  "revocation_list_ref": { "ref": "revocations.json", "sha256": "..." },
+  "revocation_list": {
+    "ref": "authority/revocations.json",
+    "content_hash": { "alg": "sha256", "value": "..." }
+  },
   "signatures": [ /* standard v3 signature objects */ ]
 }
 ```
@@ -215,7 +255,7 @@ A consumer MUST:
 
   * publish shards first,
   * then publish federation roots referencing them,
-  * then add authority registry policy enforcement.
+  * then add authority registry policy enforcement (and revocations if required).
 
 ---
 
@@ -226,14 +266,13 @@ An implementation supporting sharding/federation MUST:
 * remain offline-correct and enforce fail-closed verification where integrity is declared,
 * compute and verify identities per v3 canonicalization/hashing rules,
 * implement deterministic composition policies,
-* implement authority-policy checks using a pinned/versioned authority registry.
+* implement authority-policy checks using a pinned/versioned authority registry (and revocations if required by policy).
 
 ---
 
 ## 12. Open questions (to finalize)
 
-* Do we standardize a single canonical `scope` schema (domain/subdomain/time) or allow multiple scope kinds with a required discriminator?
-* Do we require federation roots to declare whether shards are optional vs mandatory?
+* Do federation roots declare shards as optional vs mandatory (schema flag vs policy-driven)?
 * How are overlapping statements handled when two shards assert different values (authority precedence vs explicit deny/allow)?
-* Do we standardize a revocation artifact format, or keep revocation as deployment-specific policy data?
+* Do we standardize a small set of named composition policies (vs fully custom `policy_id`)?
 

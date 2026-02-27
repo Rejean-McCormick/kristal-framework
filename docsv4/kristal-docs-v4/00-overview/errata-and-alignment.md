@@ -11,6 +11,9 @@ This document records the **alignment decisions** required to keep Kristal v3 pr
 - `02-schemas/*`
 - `03-reproducibility/*`
 - `10-examples/*`
+- `00-overview/*` (when it defines artifact contracts)
+
+---
 
 ## Canonical conventions (must be applied everywhere)
 
@@ -32,7 +35,7 @@ The following legacy spellings are deprecated and must not appear in updated spe
 
 ### B) Hash target exclusions (IDs and hashes)
 When computing any content-addressed ID:
-- Exclude the output ID field itself (e.g., `kristal_id`, `runtime_pack_id`).
+- Exclude the output ID field itself (e.g., `kristal_id`, `runtime_pack_id`, `federation_id`, `shard_id`).
 - Exclude all signature/attestation material (`signatures`, and any equivalent fields), regardless of location.
 
 ### C) Timestamps vs determinism
@@ -55,29 +58,37 @@ When computing any content-addressed ID:
 Any richer signature payload/envelope belongs to an explicit signing profile and must not be required for v3 core conformance.
 
 ### F) Schema identifiers ($id)
-All JSON Schemas MUST use the `kristal.org` namespace, not `example.org`.
+All JSON Schemas MUST use the `kristal.org` namespace.
+
+### G) Identifier formats (registry IDs vs artifact IDs)
+To avoid schema/example mismatches:
+- `federation_id`, `shard_id`, `kristal_id` MUST use the canonical `sha256:<hex>` form unless a specific artifact explicitly standardizes a different namespace.
+- Policy artifacts (e.g., Authority Registry) MAY use a richer namespaced ID (e.g., `kristal:authority-registry:sha256:<hex>`).
+
+**Schema rule:** if an example uses a namespaced ID, schemas MUST accept it (do not over-constrain to `sha256:<hex>` only).
+
+### H) “additionalProperties: false” and examples
+If a schema sets `additionalProperties: false`, then every top-level field present in `10-examples/*.json` MUST be declared in that schema’s `properties`. No “extra fields” in examples.
+
+### I) Federation manifests: registry + publisher metadata
+Federation examples use:
+- `authority_registry_ref` (pointer + hash for pinned policy),
+- `publisher` (identity metadata),
+
+Therefore, the Federation Manifest schema MUST declare these fields if examples keep them at top-level (Decision H).
 
 ---
 
 ## Errata list and resolutions
 
 ### 1) Canonicalization profile mismatch across docs
-**Symptom**
-Different documents/examples use different identifiers/versions for the same canonicalization scheme.
-
 **Resolution**
-Adopt Section “Canonicalization profile (v3 core)” above. Update:
-- Core prose references
-- Schemas that constrain canonicalization fields
-- Examples/test vectors
+Adopt Section A above. Update prose, schemas, and examples.
 
 ### 2) “Minimal reproducibility manifest” prose does not match schemas
-**Symptom**
-The prose lists fields that do not align with the Exchange manifest schema structure/names.
-
 **Resolution**
 - Treat JSON schemas in `02-schemas/` as the source of truth for field names and structure.
-- Update the core prose to match schema names and groupings.
+- Update core prose to match schema names/groupings.
 
 **Mapping table (legacy → schema canonical)**
 | Legacy prose term | Canonical schema field |
@@ -87,51 +98,83 @@ The prose lists fields that do not align with the Exchange manifest schema struc
 | `input_snapshots` | `inputs.*` (Exchange) |
 | `policy_selections` | `policies.*` |
 
-(Extend this table as additional mismatches are found.)
-
 ### 3) `alg` vs `algo` inconsistency
-**Symptom**
-Some schemas/examples use `algo`, others use `alg`.
-
 **Resolution**
 Decision D applies: standardize on `alg`.
 
 ### 4) Ambiguity: are timestamps part of hashed material?
-**Symptom**
-Some prose implies manifest fields (including timestamps) are hashed, which contradicts deterministic ID requirements.
-
 **Resolution**
 Decision C applies: timestamps are not part of any hashed-material projection unless explicitly stated by a profile (no v3 core profile does).
 
 ### 5) Ambiguity: signature placement and hashing exclusions
-**Symptom**
-Docs leave room for interpretation about where signatures can appear and what gets removed before hashing.
-
 **Resolution**
 Decision B applies:
 - Signatures/attestations are excluded from hash targets wherever they appear.
 - Canonical placement for manifests/examples is a top-level `signatures[]` array only.
 
+### 6) Shard schema/example swapped
+**Symptom**
+`02-schemas/exchange-shard-manifest.schema.json` contains an instance-like object; `10-examples/exchange-shard-manifest.example.json` contains a JSON Schema.
+
+**Resolution**
+Swap contents (or rename) so:
+- `02-schemas/*.schema.json` are JSON Schemas
+- `10-examples/*.example.json` are instances
+
+### 7) Federation example contains fields not declared in schema
+**Symptom**
+Federation example includes `authority_registry_ref` and `publisher`, but the schema rejects unknown properties due to `additionalProperties:false`.
+
+**Resolution**
+Apply Decisions H + I:
+- Either declare both fields in schema (recommended), or move them under `extensions` in the example and remove from top-level.
+
+### 8) Registry ID pattern mismatch (sha256 vs kristal:* namespaced)
+**Symptom**
+Authority Registry IDs may be namespaced (e.g., `kristal:authority-registry:sha256:...`) while federation examples may use `sha256:...`.
+
+**Resolution**
+Decision G applies:
+- Do not constrain registry IDs to a single pattern in `authority_registry_ref.registry_id`.
+- Accept both `sha256:<hex>` and `kristal:*:sha256:<hex>`.
+
 ---
 
 ## Required file updates (tracking)
 
-### Deterministic build rules
-- Update canonicalization requirements to the canonical pair.
-- Clarify hash target exclusions and timestamp non-participation.
-- Ensure runtime pack hashed-material projection requirements are consistent with the Runtime Pack Manifest schema.
+### Core determinism + hashing rules
+- `03-reproducibility/deterministic-build-rules.md`
+  - Update canonicalization requirements to the canonical pair.
+  - Clarify hash target exclusions and timestamp non-participation.
 
-### Runtime Pack Manifest schema
-- `$id` must be `https://kristal.org/schemas/v3/runtime-pack-manifest.schema.json`
-- Add `build.canonicalization_version`
-- Constrain `build.canonicalization_profile/version` to canonical values
-- Ensure signature shape matches Decision E
+### Runtime Pack Manifest
+- `02-schemas/runtime-pack-manifest.schema.json`
+  - `$id` must be `https://kristal.org/schemas/v3/runtime-pack-manifest.schema.json`
+  - Constrain `build.canonicalization_profile/version` to canonical values
+  - Ensure signature shape matches Decision E
+- `10-examples/runtime-pack-manifest.example.json`
+  - Must match schema + Decisions A–E.
 
-### Exchange Manifest schema + Exchange example
-- Standardize hash algorithm key to `alg`
-- Standardize canonicalization fields to canonical values
-- Ensure any signature object matches Decision E
-- Ensure any `kristal_id` example reflects the canonical ID format used by the IDs spec
+### Exchange Manifest + Exchange example
+- `02-schemas/exchange-manifest.schema.json`
+  - Standardize hash algorithm key to `alg`
+  - Ensure signature object matches Decision E
+- `10-examples/exchange.example.json`
+  - Replace any `algo` → `alg`
+  - Ensure canonicalization fields match Decision A
+
+### Sharding & Federation
+- `02-schemas/exchange-shard-manifest.schema.json` + `10-examples/exchange-shard-manifest.example.json`
+  - Fix swap (Errata #6)
+- `02-schemas/exchange-federation-manifest.schema.json` + `10-examples/exchange-federation-manifest.example.json`
+  - Add/align `authority_registry_ref` + `publisher` (Errata #7)
+  - Relax `authority_registry_ref.registry_id` pattern (Errata #8)
+
+### Authority Registry + Revocations
+- `02-schemas/authority-registry.schema.json` + `10-examples/authority-registry.example.json`
+  - Ensure pinned/versioned policy data is self-consistent
+- `02-schemas/revocations.schema.json` + `10-examples/revocations.example.json`
+  - Standardize revocation artifact format (optional but recommended for offline verification)
 
 ---
 
@@ -144,3 +187,4 @@ Implementations MAY accept legacy spellings during a transition window, but:
 
 ## Change log
 - 2026-02-26: initial alignment decisions captured (canonicalization, hash exclusions, alg/algo, timestamps, signature placement, schema $id namespace).
+- 2026-02-26: added federation/sharding alignment rules (schema/example swap, federation schema fields, registry ID pattern acceptance).

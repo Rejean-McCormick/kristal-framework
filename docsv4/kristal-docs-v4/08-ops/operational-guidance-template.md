@@ -1,4 +1,3 @@
-````md
 # Operational guidance template (concept → problem → solution → when → pitfalls)
 
 ## Status
@@ -171,5 +170,4 @@ Use it to document failure paths, resilience, observability, and “least-worst�
 
 * YYYY-MM-DD: …
 
-```
-```
+

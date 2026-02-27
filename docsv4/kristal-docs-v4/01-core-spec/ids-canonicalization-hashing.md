@@ -99,7 +99,7 @@ Kristal Exchange uses content-addressing:
 
 Where `hash_target(E)` is defined in Section 3.
 
-### 4.2 Algorithm (normative)
+### 4.2 algrithm (normative)
 
 Given an Exchange JSON object `E`:
 

@@ -83,7 +83,7 @@ To compute IDs, implementations MUST derive a hash target object `T` from the Ex
 
 **Relationship to Exchange Manifest (mandatory when manifest present):**
 If an Exchange Manifest is present:
-- `content_hash.algo` MUST be `"sha256"`.
+- `content_hash.alg` MUST be `"sha256"`.
 - `content_hash.value` MUST equal `hex(H)` computed from the Exchange hash target.
 - `kristal_id` MUST equal `"sha256:" + content_hash.value`.
 
@@ -173,7 +173,7 @@ At minimum, the Exchange Manifest MUST include the schema-required fields:
 - `kristal_id`
 - `canonicalization_profile`
 - `canonicalization_version`
-- `content_hash` (object with `algo`, `value`)
+- `content_hash` (object with `alg`, `value`)
 - `build` (must include `build_id`, `compiler_name`, `compiler_version`, `config_hash`)
 - `inputs` (must include `source_snapshot_id`)
 

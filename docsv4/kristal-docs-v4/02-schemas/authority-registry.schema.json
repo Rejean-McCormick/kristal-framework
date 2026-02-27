@@ -6,19 +6,27 @@
   "additionalProperties": false,
   "required": [
     "schema_version",
+    "artifact_type",
     "registry_id",
     "created_at",
     "canonicalization_profile",
     "canonicalization_version",
     "content_hash",
     "trust_roots",
-    "rules"
+    "rules",
+    "signatures"
   ],
   "properties": {
     "schema_version": {
       "type": "string",
       "const": "3.0",
       "description": "Schema version for this registry format."
+    },
+
+    "artifact_type": {
+      "type": "string",
+      "const": "authority_registry",
+      "description": "Artifact discriminator."
     },
 
     "registry_id": {
@@ -57,6 +65,7 @@
       "properties": {
         "active_roots": {
           "type": "array",
+          "minItems": 1,
           "description": "Pinned trust roots accepted for verification.",
           "items": { "$ref": "#/$defs/trust_root" }
         },
@@ -100,8 +109,15 @@
 
     "signatures": {
       "type": "array",
-      "description": "Optional signatures over declared hashed material (verification is fail-closed when signatures are declared).",
+      "minItems": 1,
+      "description": "Signatures over the registry signing target (verification is fail-closed when signatures are declared).",
       "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Must not change core identity/hashing semantics.",
+      "additionalProperties": true
     }
   },
 
@@ -112,26 +128,29 @@
       "required": ["alg", "value"],
       "properties": {
         "alg": { "type": "string", "enum": ["sha256"] },
-        "value": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+        "value": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
       }
     },
 
     "signature": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["key_id", "alg", "signature"],
+      "required": ["key_id", "alg", "payload_hash", "signature"],
       "properties": {
+        "sig_id": { "type": "string", "minLength": 1 },
         "key_id": { "type": "string", "minLength": 1 },
         "alg": {
           "type": "string",
-          "enum": ["ed25519", "rsa-pss-sha256", "ecdsa-p256-sha256"]
+          "enum": ["ed25519", "rsa-pss-sha256"]
         },
+        "payload_hash": { "$ref": "#/$defs/hash" },
         "signature": {
           "type": "string",
           "minLength": 16,
-          "description": "Base64-encoded signature bytes."
+          "description": "Signature bytes (base64/base64url/multibase as defined by signing profile)."
         },
-        "created_at": { "type": "string", "format": "date-time" }
+        "created_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" }
       }
     },
 

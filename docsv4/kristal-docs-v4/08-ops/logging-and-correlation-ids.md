@@ -1,4 +1,3 @@
-````md
 # Logging and correlation IDs (non-normative)
 
 ## Status
@@ -216,5 +215,3 @@ Do not embed operational meta-structures into Exchange/Pack schemas as first-cla
 * Pack publish success + rollback events
 * DLQ depth and age
 
-```
-```

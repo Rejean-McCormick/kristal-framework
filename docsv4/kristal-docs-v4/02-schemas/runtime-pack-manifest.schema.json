@@ -22,9 +22,8 @@
     },
 
     "runtime_pack_id": {
-      "type": "string",
-      "description": "Content-addressed ID for this runtime pack (sha256 hex).",
-      "pattern": "^[a-f0-9]{64}$"
+      "$ref": "#/$defs/sha256_hex",
+      "description": "Content-addressed ID for this runtime pack (sha256 hex)."
     },
 
     "created_at": {
@@ -49,14 +48,12 @@
       "required": ["exchange_id"],
       "properties": {
         "exchange_id": {
-          "type": "string",
-          "description": "Content-addressed ID of the Kristal Exchange this pack was compiled from (sha256 hex).",
-          "pattern": "^[a-f0-9]{64}$"
+          "$ref": "#/$defs/sha256_id",
+          "description": "Content-addressed ID of the Kristal Exchange this pack was compiled from (preferred: sha256:<hex>; legacy: <hex>)."
         },
         "exchange_manifest_hash": {
-          "type": "string",
-          "description": "Optional hash of the Exchange manifest referenced by this pack (sha256 hex).",
-          "pattern": "^[a-f0-9]{64}$"
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Optional hash of the Exchange manifest referenced by this pack (sha256 hex)."
         },
         "exchange_version": {
           "type": "string",
@@ -118,9 +115,8 @@
           "const": "1"
         },
         "config_hash": {
-          "type": "string",
-          "description": "Content hash of the compiler configuration that affects outputs (sha256 hex).",
-          "pattern": "^[a-f0-9]{64}$"
+          "$ref": "#/$defs/sha256_id",
+          "description": "Content hash of the compiler configuration that affects outputs (preferred: sha256:<hex>; legacy: <hex>)."
         }
       }
     },
@@ -231,9 +227,20 @@
             },
             "run_optimize": {
               "type": "boolean",
-              "description": "Whether run optimization was applied (must be recorded for reproducibility)."
+              "description": "Whether run optimization was applied (canonical field name)."
+            },
+            "run_opt": {
+              "type": "boolean",
+              "description": "Legacy alias for run_optimize."
             },
             "notes": { "type": "string" }
+          },
+          "anyOf": [
+            { "required": ["run_optimize"] },
+            { "required": ["run_opt"] }
+          ],
+          "not": {
+            "required": ["run_opt", "run_optimize"]
           }
         },
 
@@ -313,8 +320,7 @@
             ]
           },
           "sha256": {
-            "type": "string",
-            "pattern": "^[a-f0-9]{64}$"
+            "$ref": "#/$defs/sha256_hex"
           },
           "size_bytes": {
             "type": "integer",
@@ -332,14 +338,12 @@
       "properties": {
         "hash_alg": { "type": "string", "const": "sha256" },
         "pack_sha256": {
-          "type": "string",
-          "description": "Optional hash of the full pack container (sha256 hex).",
-          "pattern": "^[a-f0-9]{64}$"
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Optional hash of the full pack container (sha256 hex)."
         },
         "manifest_sha256": {
-          "type": "string",
-          "description": "Optional hash of this manifest content excluding signatures (sha256 hex).",
-          "pattern": "^[a-f0-9]{64}$"
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Optional hash of this manifest content excluding signatures (sha256 hex)."
         }
       }
     },
@@ -366,6 +370,23 @@
           "created_at": { "type": "string", "format": "date-time" }
         }
       }
+    }
+  },
+
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sha256_prefixed": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "sha256_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/sha256_prefixed" },
+        { "$ref": "#/$defs/sha256_hex" }
+      ]
     }
   }
 }

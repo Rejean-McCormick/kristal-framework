@@ -7,7 +7,7 @@
     "profile-jsonld-export@1"
   ],
   "exchange_ref": {
-    "exchange_id": "sha256:9f3e6e5d2c1a4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
+    "exchange_id": "9f3e6e5d2c1a4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
     "exchange_manifest_hash": "0b1c2d3e4f5061728394a5b6c7d8e9f00112233445566778899aabbccddeeff0",
     "exchange_version": "exchange-2026-01-07"
   },
@@ -22,7 +22,7 @@
     "deterministic": true,
     "canonicalization_profile": "kristal.v3:jcs-rfc8785",
     "canonicalization_version": "1",
-    "config_hash": "sha256:7a1f9c2d3e4b5a6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7"
+    "config_hash": "7a1f9c2d3e4b5a6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7"
   },
   "policies": {
     "data_ordering": {
@@ -42,7 +42,7 @@
     },
     "bitmap": {
       "format": "roaring",
-      "run_opt": true,
+      "run_optimize": true,
       "notes": "Roaring bitmaps with run optimization applied deterministically."
     },
     "parquet": {
