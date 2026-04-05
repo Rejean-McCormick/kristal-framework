@@ -1,86 +1,232 @@
-# Kristal docs (v4 / v3 core)
+# Kristal docs (v5)
 
-This repository contains the documentation set for **Kristal v4**, defining the **v3 core artifact model** (Kristal Exchange + Runtime Pack) plus optional, standardized **profiles**.
+This repository contains the documentation set for **Kristal v5**, a normative framework for **collaborative epistemic compilation**.
 
-Kristal is a portable, verifiable, **offline-executable** unit of encyclopedic knowledge, designed to be **Wikidata/Wikibase-aligned** and reproducible across toolchains.
+Kristal v5 defines how **structured epistemic states** are compiled into immutable, portable, queryable, verifiable artifacts, while separating:
+
+- **compilation** from **canonization**
+- **working artifacts** from **canonical artifacts**
+- **review/promotion** from **trusted distribution and activation**
+
+Kristal remains designed for **portable**, **verifiable**, **offline-capable** knowledge operation across toolchains and environments.
+
+---
 
 ## Start here
 
-1) `00-overview/vision-and-scope.md`  
-2) `00-overview/v2-to-v3-summary.md`  
-3) `01-core-spec/` (normative core specification; start with the core “overview/spec” doc in this folder)
+1. `00-overview/what-is-kristal-v5.md`  
+2. `00-overview/vision-and-scope.md`  
+3. `00-overview/v4-to-v5-summary.md`  
+4. `01-core-spec/` (normative core specification; start with the core overview/spec document in this folder)
 
 If you are implementing specific surfaces:
+
+- Artifact model / lifecycle / trust classes → `01-core-spec/`
 - IDs / canonicalization / hashing → `01-core-spec/ids-canonicalization-hashing.md`
-- Signatures / trust / fail-closed rules → `01-core-spec/signatures-trust.md`
+- Promotion / signatures / trust / fail-closed rules → `01-core-spec/signatures-trust.md`
 - Schemas (normative JSON Schemas) → `02-schemas/`
-- Pack reproducibility + allowed policies → `03-reproducibility/`
+- Reproducibility + build surfaces → `03-reproducibility/`
 - Offline query surface → `04-query/query-contract.md`
 - Optional features (profiles) → `05-profiles/`
-- Ecosystem contracts (Orgo/SenTient/Architect/Konnaxion) → `06-integration/`
+- Ecosystem contracts (Orgo / SenTient / Architect / Konnaxion) → `06-integration/`
 - Security and multi-tenancy → `07-security/`
 - Ops guidance (non-normative patterns) → `08-ops/`
 - Golden vectors / fixtures → `09-test-vectors/`
 - Worked examples → `10-examples/`
 
-## What Kristal is (in one page)
+---
 
-Kristal is a compiled knowledge artifact (not free text), produced through a deterministic pipeline:
+## What Kristal v5 is
 
-- **Claim-IR**: extractor output (schema-constrained; uncertainty + evidence)
-- **SenTient**: resolution contract (ranked QID/PID candidates; preserve ambiguity)
-- **Validation**: deterministic acceptance gate (“no compile on fail”)
-- **Kristal Exchange**: canonical, content-addressed source of truth
-- **Runtime Pack**: derived offline-executable index (no SPARQL; constrained query model)
-- **Architect**: deterministic renderer (must trace outputs to claims/evidence)
-- **Orgo**: operational control plane (workflow, auditing, distribution status)
-- **Konnaxion**: distribution + offline UX (signed packs, caching, rollback rules)
+Kristal v5 is a deterministic artifact system for **compiling structured epistemic work**.
+
+It is built around the following model:
+
+- **Structured Epistemic State**: the normative input unit for compilation
+- **Working Exchange**: compiled, immutable, queryable, non-canonical truth artifact
+- **Review / Promotion Bundle**: validation, attestation, policy, quorum, and promotion decision surface
+- **Canonical Exchange**: promoted truth artifact accepted for strong trust surfaces
+- **Runtime Pack**: derived offline-capable query/runtime artifact
+- **Architect**: deterministic rendering surface; outputs must remain traceable to compiled knowledge
+- **Orgo**: control plane for workflow, approvals, audit, routing, and operational governance
+- **Konnaxion**: distribution, verification, activation, caching, rollback, and trust-surface enforcement
+
+---
+
+## Core architectural change in v5
+
+Kristal v5 replaces the v4 assumption that only fully validated inputs may be compiled.
+
+### v4 model
+- `Claim-IR` was the universal proposal boundary
+- validation acted as a hard acceptance gate
+- compilation stopped on validation failure
+
+### v5 model
+- `Claim-IR` is no longer the mandatory universal input artifact
+- structured epistemic states may be compiled before canonization
+- validation no longer universally blocks compilation
+- **promotion** is the hard gate for canonical status
+- trusted publication and activation remain fail-closed where policy requires it
+
+In short:
+
+> **Kristal v5 compiles early and promotes later.**
+
+This allows drafts, review states, objections, partial certainty, and collaborative refinement to exist as first-class artifacts without being confused with canonical truth.
+
+---
+
+## Artifact classes
+
+Kristal v5 distinguishes at least the following artifact classes:
+
+### 1. Structured Epistemic State
+A schema-constrained, versioned, provenance-bearing assertional state suitable for compilation.
+
+Typical contents:
+- identity / revision
+- scope / tenant metadata where applicable
+- assertions
+- certainty / uncertainty metadata
+- provenance references
+- lineage (`derived_from`, `merged_from`, `supersedes`)
+- review / objection / attestation references
+
+### 2. Working Exchange
+A compiled artifact representing a **non-canonical** epistemic state.
+
+Properties:
+- immutable
+- content-addressed
+- queryable
+- portable
+- reproducible within its declared surface
+- explicitly marked as `working`
+
+### 3. Review / Promotion Bundle
+The artifact family that records validation, policy, attestation, quorum, and promotion decisions.
+
+### 4. Canonical Exchange
+A promoted artifact recognized as canonical for one or more trust surfaces.
+
+### 5. Runtime Pack
+The offline-capable runtime/query representation derived from a Working Exchange or Canonical Exchange.
+
+A Runtime Pack MUST declare its source trust tier.
+
+---
+
+## Trust model
+
+Kristal v5 separates **artifact existence** from **artifact trust level**.
+
+### Working trust surfaces
+These may accept non-canonical compiled artifacts for:
+- collaborative review
+- merge / deduplication
+- internal drafting
+- semantic discovery
+- sandbox / staging workflows
+
+### Canonical trust surfaces
+These accept only promoted artifacts and retain strict verification requirements:
+- schema verification
+- hash verification
+- signature verification
+- trust-root enforcement
+- compatibility checks
+- downgrade prevention
+- atomic activation
+- deterministic rollback
+
+Kristal v5 relaxes compilation. It does **not** relax trust enforcement on trusted surfaces.
+
+---
 
 ## Conformance model
 
-### v3 Core (required)
+### v5 Core (required)
 
-Implementations claiming **v3 core** conformance MUST (at minimum):
+Implementations claiming **Kristal v5 core** conformance MUST, at minimum:
 
-- Use **RFC 8785 (JCS)** for canonical JSON used in hashing.
-- Define and implement the **exact hashed material** (including exclusions such as signatures).
-- Enforce **fail-closed** behavior when hashes/signatures are declared but do not verify.
-- Produce **reproducible Exchange/Runtime artifacts**: manifests record all build-affecting policies/parameters.
-- Pass the **core test vectors** in `09-test-vectors/`.
+- define a valid **Structured Epistemic State** input surface
+- distinguish **working** and **canonical** artifact classes explicitly
+- support deterministic compilation within the declared reproducibility surface
+- use the declared canonicalization and hashing rules for identity-bearing artifacts
+- enforce **fail-closed** behavior where hashes, signatures, trust roots, or promotion requirements are declared as mandatory
+- treat **promotion** as distinct from **compilation**
+- preserve traceability from compiled artifacts back to provenance-bearing source state(s)
+- produce reproducible manifests recording build-affecting configuration, policy, and compiler identity
+- pass the **core test vectors** in `09-test-vectors/`
 
 ### Profiles (optional)
 
 Advanced capabilities are expressed as explicit profiles in `05-profiles/`.
-Implementations MAY claim profile conformance individually (e.g., JSON-LD export, RDF/WDQS export, RDF integrity (RDFC), nanopub/PROV-O packaging, SHACL, ShEx, TPF-like pagination).
+
+Implementations MAY claim profile conformance individually, including profiles such as:
+- export formats
+- provenance packaging
+- integrity extensions
+- review / attestation models
+- pagination / query extensions
+- validation frameworks
 
 Profiles MUST:
-- state requirements and limits,
-- state what is hashed (if relevant),
-- include conformance tests/fixtures.
+- state requirements and limits
+- state what is hashed, signed, or identity-bearing
+- state whether they affect reproducibility surfaces
+- include conformance tests or fixtures
+
+---
 
 ## Repository structure
 
-- `00-overview/` — scope, non-goals, deltas, ecosystem placement
-- `01-core-spec/` — **normative core** (keep surface area small; strong defaults)
-- `02-schemas/` — normative JSON Schemas (Claim-IR, Resolved Claim-IR, Validation Report, Exchange/Runtime manifests)
-- `03-reproducibility/` — deterministic compilation rules + allowed portable policies + acceptance tests
-- `04-query/` — offline query contract (constrained semantics; optional pagination profile)
-- `05-profiles/` — optional standardized profiles (exports, integrity, provenance, validation, pagination, etc.)
+- `00-overview/` — scope, non-goals, version deltas, ecosystem placement, migration notes
+- `01-core-spec/` — **normative core** (artifact model, lifecycle, trust model, promotion semantics, determinism)
+- `02-schemas/` — normative JSON Schemas for v5 artifacts
+- `03-reproducibility/` — deterministic compilation rules, identity surfaces, acceptance tests
+- `04-query/` — offline query contract and related constraints
+- `05-profiles/` — optional standardized profiles
 - `06-integration/` — inter-system contracts (Orgo × SenTient × Architect × Konnaxion)
-- `07-security/` — trust roots, verification, downgrade/rollback policy, multi-tenancy boundaries
-- `08-ops/` — non-normative operational guidance (“senior architecture patterns” framing)
-- `09-test-vectors/` — golden vectors for canonicalization/hashing (+ optional RDF integrity fixtures)
+- `07-security/` — trust roots, verification, promotion trust rules, downgrade/rollback policy, multi-tenancy boundaries
+- `08-ops/` — non-normative operational guidance
+- `09-test-vectors/` — golden vectors for canonicalization, hashing, manifests, and other identity-bearing surfaces
 - `10-examples/` — worked examples for implementers
+
+---
 
 ## Editing rules
 
 - Normative language uses **MUST / SHOULD / MAY**.
-- Keep the **core small**; push tunability into profiles or non-normative guidance.
-- Any optional behavior MUST be expressed as a **profile**, not an undocumented extension.
+- Keep the **core small and explicit**.
+- Do not hide optional behavior inside undocumented extensions.
+- Any optional behavior that affects identity, trust, reproducibility, query semantics, or distribution MUST be expressed as a **profile** or an explicitly versioned core rule.
+- Do not conflate:
+  - compile with promote
+  - working with canonical
+  - workflow policy with truth-plane identity rules
+
+---
 
 ## Versioning
 
-Any change that affects hashes/IDs or deterministic build outputs requires:
-- updated test vectors in `09-test-vectors/`,
-- an explicit version bump in the relevant canonicalization/profile identifiers,
-- and clear migration notes (when applicable).
+Any change that affects hashes, IDs, deterministic outputs, promotion semantics, or trust-surface behavior requires:
+
+- updated test vectors in `09-test-vectors/`
+- an explicit version bump in the relevant canonicalization, schema, profile, or artifact identifiers
+- clear migration notes
+- compatibility guidance where applicable
+
+Major-version changes are required for changes that alter:
+- core artifact classes
+- identity-bearing canonicalization or hashing rules
+- compile vs promote semantics
+- trust-class semantics
+- runtime compatibility guarantees
+
+---
+
+## One-sentence definition
+
+> Kristal v5 is a deterministic truth-artifact framework that compiles structured epistemic states into portable and verifiable artifacts, while moving the hard trust boundary from compile-time validation to governed promotion and trusted activation.
