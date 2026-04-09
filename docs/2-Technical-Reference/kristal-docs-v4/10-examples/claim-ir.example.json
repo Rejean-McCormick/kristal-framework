@@ -1,0 +1,164 @@
+{
+  "schema_version": "3.0",
+
+  "document": {
+    "doc_id": "doc:example:2026-01-07:001",
+    "title": "Example source document for Claim-IR",
+    "lang": "en",
+    "source_url": "https://example.org/source/example-article",
+    "retrieved_at": "2026-01-07T13:20:00Z",
+    "published_at": "2026-01-05T09:00:00Z",
+    "content_hash": { "alg": "sha256", "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" }
+  },
+
+  "extraction": {
+    "run_id": "extract:run:001",
+    "created_at": "2026-01-07T13:25:00Z",
+    "producer": { "kind": "llm", "name": "ExampleExtractor", "version": "0.9.0" },
+    "model": { "provider": "ExampleAI", "name": "example-model", "version": "2026-01" },
+    "prompt_ref": { "prompt_id": "prompt:claim-ir:v3:en:001", "prompt_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+    "notes": "Example extraction run; values include ambiguity and evidence pointers."
+  },
+
+  "subject": {
+    "surface": "Ada Lovelace",
+    "lang": "en",
+    "candidates": [
+      { "id": "Q7259", "score": 0.97, "label": "Ada Lovelace", "source": "alias_match" },
+      { "id": "Q999999", "score": 0.12, "label": "Ada (disambiguation)", "source": "embedding_rank" }
+    ]
+  },
+
+  "claims": [
+    {
+      "claim_id": "c:0001",
+      "predicate": {
+        "surface": "date of birth",
+        "lang": "en",
+        "candidates": [
+          { "id": "P569", "score": 0.99, "label": "date of birth", "source": "exact_match" }
+        ]
+      },
+      "object": {
+        "kind": "time",
+        "value": { "iso8601": "1815-12-10", "precision": "day", "calendar": "gregorian", "timezone": "UTC" }
+      },
+      "evidence": [
+        {
+          "source": {
+            "source_url": "https://example.org/source/example-article",
+            "title": "Example source document for Claim-IR",
+            "retrieved_at": "2026-01-07T13:20:00Z"
+          },
+          "quote": "Ada Lovelace was born on 10 December 1815.",
+          "page": 1,
+          "offsets": { "start_char": 128, "end_char": 168 }
+        }
+      ],
+      "confidence": 0.93,
+      "uncertainty": { "confidence": 0.93, "method": "extractor_self_score", "notes": "High confidence; direct quote present." }
+    },
+
+    {
+      "claim_id": "c:0002",
+      "predicate": {
+        "surface": "place of birth",
+        "lang": "en",
+        "candidates": [
+          { "id": "P19", "score": 0.98, "label": "place of birth", "source": "alias_match" }
+        ]
+      },
+      "object": {
+        "kind": "item",
+        "value": {
+          "surface": "London",
+          "lang": "en",
+          "candidates": [
+            { "id": "Q84", "score": 0.96, "label": "London", "source": "embedding_rank" },
+            { "id": "Q92561", "score": 0.22, "label": "City of London", "source": "embedding_rank" }
+          ]
+        }
+      },
+      "evidence": [
+        {
+          "source": {
+            "source_url": "https://example.org/source/example-article",
+            "title": "Example source document for Claim-IR",
+            "retrieved_at": "2026-01-07T13:20:00Z"
+          },
+          "quote": "She was born in London.",
+          "page": 1,
+          "offsets": { "start_char": 170, "end_char": 192 }
+        }
+      ],
+      "confidence": 0.74,
+      "uncertainty": {
+        "confidence": 0.74,
+        "method": "candidate_margin",
+        "notes": "Ambiguity between London (Q84) and City of London (Q92561) remains explicit."
+      }
+    },
+
+    {
+      "claim_id": "c:0003",
+      "predicate": {
+        "surface": "occupation",
+        "lang": "en",
+        "candidates": [
+          { "id": "P106", "score": 0.99, "label": "occupation", "source": "exact_match" }
+        ]
+      },
+      "object": {
+        "kind": "item",
+        "value": {
+          "surface": "mathematician",
+          "lang": "en",
+          "candidates": [
+            { "id": "Q170790", "score": 0.88, "label": "mathematician", "source": "embedding_rank" },
+            { "id": "Q1622272", "score": 0.31, "label": "scientist", "source": "embedding_rank" }
+          ]
+        }
+      },
+      "qualifiers": [
+        {
+          "predicate": {
+            "surface": "start time",
+            "lang": "en",
+            "candidates": [{ "id": "P580", "score": 0.92, "label": "start time", "source": "alias_match" }]
+          },
+          "object": {
+            "kind": "time",
+            "value": { "iso8601": "1833-01-01", "precision": "year", "calendar": "gregorian", "timezone": "UTC" }
+          }
+        }
+      ],
+      "evidence": [
+        {
+          "source": {
+            "source_url": "https://example.org/source/example-article",
+            "title": "Example source document for Claim-IR",
+            "retrieved_at": "2026-01-07T13:20:00Z"
+          },
+          "quote": "She was an English mathematician and writer.",
+          "page": 1,
+          "offsets": { "start_char": 10, "end_char": 55 }
+        }
+      ],
+      "confidence": 0.67,
+      "uncertainty": { "confidence": 0.67, "method": "weak_evidence", "notes": "Occupation inference; acceptable but should be reviewed." }
+    }
+  ],
+
+  "warnings": [
+    {
+      "code": "AMBIGUOUS_SUBJECT",
+      "message": "Subject has multiple plausible candidates; resolution required.",
+      "path": "$.subject"
+    },
+    {
+      "code": "VALUE_NORMALIZATION_NEEDED",
+      "message": "Some values may require normalization during resolution (e.g., coordinate/time precision).",
+      "path": "$.claims[2]"
+    }
+  ]
+}

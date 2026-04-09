@@ -1,0 +1,502 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/exchange-shard-manifest.schema.json",
+  "title": "Kristal v3 Exchange Shard Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "created_at",
+    "shard_id",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "producer",
+    "build",
+    "inputs",
+    "policies",
+    "scope",
+    "validation_refs",
+    "integrity",
+    "authority",
+    "signatures"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "3.0",
+      "description": "Manifest schema version."
+    },
+
+    "artifact_type": {
+      "type": "string",
+      "const": "exchange_shard_manifest",
+      "description": "Artifact discriminator."
+    },
+
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique ID for this manifest (UUID or similar)."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the manifest was produced (not part of shard hash target)."
+    },
+
+    "shard_id": {
+      "$ref": "#/$defs/kristal_id",
+      "description": "Content-addressed ID of the shard Exchange payload (sha256:<hex>)."
+    },
+
+    "kristal_id": {
+      "$ref": "#/$defs/kristal_id",
+      "description": "Alias for shard_id (the shard is itself an Exchange payload)."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v3:jcs-rfc8785",
+      "description": "Canonicalization profile identifier for hashing/signing."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1",
+      "description": "Canonicalization version for hashing/signing."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized shard Exchange payload hash_target (signatures/attestations excluded)."
+    },
+
+    "producer": {
+      "$ref": "#/$defs/producer",
+      "description": "Producer identity for this shard (compiler identity surface)."
+    },
+
+    "build": {
+      "$ref": "#/$defs/build",
+      "description": "Deterministic build correlation and compiler identity."
+    },
+
+    "inputs": {
+      "$ref": "#/$defs/inputs",
+      "description": "Input snapshot identifiers and upstream artifact references."
+    },
+
+    "policies": {
+      "$ref": "#/$defs/policies",
+      "description": "Portable policy selections that affect shard derivation and reproducibility."
+    },
+
+    "scope": {
+      "$ref": "#/$defs/scope",
+      "description": "Shard scope declaration (domain/subdomain/time/dataset/tenant/visibility)."
+    },
+
+    "validation_refs": {
+      "type": "array",
+      "minItems": 1,
+      "description": "References to deterministic validation reports relevant to this shard.",
+      "items": { "$ref": "#/$defs/validation_ref" }
+    },
+
+    "integrity": {
+      "$ref": "#/$defs/integrity",
+      "description": "Integrity hashes for offline verification of this manifest and (optionally) shard bytes."
+    },
+
+    "authority": {
+      "$ref": "#/$defs/authority",
+      "description": "Authority/tenant context for this shard and expected signer identity."
+    },
+
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Authority seal(s) over declared hashed material (verification is fail-closed when signatures are declared).",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "references": {
+      "type": "object",
+      "description": "Optional references to specs/docs for traceability.",
+      "additionalProperties": false,
+      "properties": {
+        "spec_version": { "type": "string", "minLength": 1 },
+        "docs_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Must not change core identity/hashing semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+
+    "sha256_prefixed": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+
+    "kristal_id": {
+      "$ref": "#/$defs/sha256_prefixed"
+    },
+
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "description": "Hash algorithm identifier.",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Lowercase hex-encoded hash digest."
+        }
+      }
+    },
+
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["compiler", "pipeline", "service", "human", "hybrid"],
+          "description": "Producer kind."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["build_id", "compiler_name", "compiler_version", "config_hash"],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Correlation ID for end-to-end tracing (shared across pipeline stages)."
+        },
+        "compiler_name": { "type": "string", "minLength": 1 },
+        "compiler_version": { "type": "string", "minLength": 1 },
+        "config_hash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Digest of compilation configuration. Recommended form: <alg>:<hex> (e.g., sha256:<hex>)."
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional SCM commit identifier for the compiler/runtime."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Optional build environment metadata (non-normative).",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_snapshot_id"],
+      "properties": {
+        "source_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the source snapshot (documents/datasets) used to build the shard."
+        },
+        "recipe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional subset/build recipe identifier."
+        },
+        "blueprint_hash": {
+          "$ref": "#/$defs/hash",
+          "description": "Optional hash of the blueprint/spec bundle that defined the shard plan."
+        },
+        "claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Claim-IR artifact identifiers used.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "resolved_claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Resolved Claim-IR artifact identifiers used.",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "previous_exchange_ids": {
+          "type": "array",
+          "description": "Optional parent Exchange IDs (for incremental builds / merges).",
+          "items": { "$ref": "#/$defs/kristal_id" }
+        }
+      }
+    },
+
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Primary domain (e.g., 'geo', 'medical', 'finance')."
+        },
+        "subdomain": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional subdomain (e.g., 'geo.ca.qc')."
+        },
+        "dataset": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional dataset identifier/label."
+        },
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional tenant scope; required in multi-tenant deployments."
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public", "tenant", "restricted", "private"],
+          "description": "Visibility class for distribution/policy."
+        },
+        "time_window": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": { "type": "string", "format": "date-time" },
+            "end": { "type": "string", "format": "date-time" }
+          }
+        },
+        "shard_seq": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional stable shard sequence number within a partition plan."
+        },
+        "partition_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional declared partition key (e.g., 'qid_prefix', 'time_bucket')."
+        }
+      }
+    },
+
+    "validation_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_id", "report_hash", "validation_status"],
+      "properties": {
+        "report_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Validator-produced report identifier."
+        },
+        "report_hash": {
+          "$ref": "#/$defs/hash",
+          "description": "Hash of the validation report JSON bytes after canonicalization rules for that report format."
+        },
+        "validation_status": {
+          "type": "string",
+          "enum": ["passed", "partial", "failed"],
+          "description": "Cached overall outcome (should match the referenced report)."
+        },
+        "created_at": { "type": "string", "format": "date-time" },
+        "profiles": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "manifest_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "const": "sha256" },
+        "manifest_sha256": {
+          "type": "string",
+          "description": "Hash of this manifest content excluding signatures (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "shard_bytes_sha256": {
+          "type": "string",
+          "description": "Optional hash of the shard payload bytes as distributed/stored (sha256 hex).",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tenant_id", "key_id"],
+      "properties": {
+        "tenant_id": { "type": "string", "minLength": 1 },
+        "environment": { "type": "string", "minLength": 1, "description": "Optional environment scope (e.g., prod/staging)." },
+        "key_id": { "type": "string", "minLength": 1, "description": "Expected signing key id (KID) for the authority signature." },
+        "policy_id": { "type": "string", "minLength": 1, "description": "Optional policy identifier governing acceptance." }
+      }
+    },
+
+    "policies": {
+      "type": "object",
+      "description": "Portable policy selections. Shard manifests record these for reproducibility and auditing.",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "ordering_policies": {
+          "type": "array",
+          "description": "Selected triple-table orderings (portable enum set).",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["SPO", "SOP", "PSO", "POS", "OSP", "OPS"]
+          }
+        },
+        "row_group_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string", "enum": ["FIXED_ROWS", "FIXED_BYTES", "ADAPTIVE"] },
+            "rows": { "type": "integer", "minimum": 1 },
+            "bytes": { "type": "integer", "minimum": 1 },
+            "target_rows": { "type": "integer", "minimum": 1 },
+            "target_bytes": { "type": "integer", "minimum": 1 }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "type": { "const": "FIXED_ROWS" } }, "required": ["type"] },
+              "then": { "required": ["rows"] }
+            },
+            {
+              "if": { "properties": { "type": { "const": "FIXED_BYTES" } }, "required": ["type"] },
+              "then": { "required": ["bytes"] }
+            },
+            {
+              "if": { "properties": { "type": { "const": "ADAPTIVE" } }, "required": ["type"] },
+              "then": { "required": ["target_rows", "target_bytes"] }
+            }
+          ]
+        },
+        "membership_filter_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["family", "key_space", "target_fpr"],
+          "properties": {
+            "family": { "type": "string", "enum": ["binary_fuse", "xor"] },
+            "variant": { "type": "string", "enum": ["3wise", "4wise"] },
+            "key_space": {
+              "type": "string",
+              "description": "What keys are filtered for membership checks.",
+              "enum": ["claim_id", "spo_hash", "entity_id", "custom"]
+            },
+            "target_fpr": { "type": "number", "minimum": 0, "maximum": 1 },
+            "bits_per_key": { "type": "number", "minimum": 0 },
+            "seed": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "bitmap_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format"],
+          "properties": {
+            "format": { "type": "string", "enum": ["roaring"] },
+            "run_opt": { "type": "boolean" }
+          }
+        },
+        "join1_cap_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cap", "strict_mode"],
+          "properties": {
+            "cap": { "type": "integer", "minimum": 1 },
+            "strict_mode": { "type": "boolean" },
+            "on_exceed": {
+              "type": "string",
+              "enum": ["error", "truncate"],
+              "description": "Deterministic behavior when strict_mode is true and cap is exceeded."
+            }
+          }
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "payload_hash", "signature"],
+      "properties": {
+        "sig_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique signature id."
+        },
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key identifier (KID) used to verify this signature."
+        },
+        "alg": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature algorithm identifier (e.g., ed25519, rsa-pss-sha256)."
+        },
+        "payload_hash": {
+          "$ref": "#/$defs/hash",
+          "description": "Hash of the signing target bytes (as defined by the signing target rules)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature value (encoding as specified by the signing profile; commonly base64url)."
+        },
+        "created_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional signature purpose label (e.g., publisher/auditor/distributor)."
+        },
+        "signer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "org": { "type": "string", "minLength": 1 }
+          }
+        },
+        "certificate_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional pointer to a certificate chain or public key material."
+        }
+      }
+    }
+  }
+}

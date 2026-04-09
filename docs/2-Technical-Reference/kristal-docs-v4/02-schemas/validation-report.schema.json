@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v3/validation-report.schema.json",
+  "title": "Kristal v3 Validation Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "validation_status", "issues"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "Schema version for this report format.",
+      "const": "3.0"
+    },
+
+    "report_id": {
+      "type": "string",
+      "description": "Unique identifier for this validation report (UUID or similar).",
+      "minLength": 1
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the report was produced."
+    },
+
+    "kristal_id": {
+      "type": "string",
+      "description": "Content-addressed ID of the Exchange artifact being validated.",
+      "minLength": 1
+    },
+
+    "build_id": {
+      "type": "string",
+      "description": "Compiler/build correlation ID for end-to-end traceability.",
+      "minLength": 1
+    },
+
+    "validation_status": {
+      "type": "string",
+      "description": "Overall deterministic outcome for compilation gating.",
+      "enum": ["passed", "partial", "failed"]
+    },
+
+    "profiles": {
+      "type": "array",
+      "description": "Profiles enabled during validation (core is implicit).",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+
+    "tooling": { "$ref": "#/$defs/tooling" },
+
+    "inputs": {
+      "type": "object",
+      "description": "Optional identifiers for the validated artifacts and snapshots.",
+      "additionalProperties": false,
+      "properties": {
+        "exchange_uri": { "type": "string", "format": "uri" },
+        "runtime_pack_uri": { "type": "string", "format": "uri" },
+        "source_snapshot_id": { "type": "string", "minLength": 1 },
+        "recipe_id": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "stats": {
+      "type": "object",
+      "description": "Summary counts for quick gating and dashboards.",
+      "additionalProperties": false,
+      "properties": {
+        "error_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "info_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "limits": {
+      "type": "object",
+      "description": "Resource limits applied during validation (especially for expensive profiles).",
+      "additionalProperties": false,
+      "properties": {
+        "timeout_ms": { "type": "integer", "minimum": 0 },
+        "iteration_cap": { "type": "integer", "minimum": 0 },
+        "memory_cap_bytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "issues": {
+      "type": "array",
+      "description": "Deterministic issues emitted by validation (codes + locations).",
+      "items": { "$ref": "#/$defs/issue" }
+    },
+
+    "shacl": {
+      "type": "object",
+      "description": "Optional SHACL validation output (profile extension).",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "report_uri": { "type": "string", "format": "uri" },
+        "report_format": {
+          "type": "string",
+          "description": "Serialization format of the report if report_uri is provided.",
+          "enum": ["text/turtle", "application/n-triples", "application/n-quads", "application/ld+json", "application/rdf+xml"]
+        }
+      }
+    },
+
+    "shex": {
+      "type": "object",
+      "description": "Optional ShEx validation output (profile extension).",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "report_uri": { "type": "string", "format": "uri" },
+        "report_format": {
+          "type": "string",
+          "enum": ["application/json", "text/plain"]
+        }
+      }
+    },
+
+    "export_validation": {
+      "type": "object",
+      "description": "Optional results for validating deterministic exports (JSON-LD/RDF/WDQS profile checks).",
+      "additionalProperties": false,
+      "properties": {
+        "jsonld_profile": { "type": "string", "minLength": 1 },
+        "rdf_profile": { "type": "string", "minLength": 1 },
+        "wdqs_compat": { "type": "boolean" },
+        "rdf_hash": {
+          "type": "string",
+          "description": "Optional rdf_hash when RDFC integrity profile is enabled.",
+          "minLength": 1
+        }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific additional fields. Must not affect core conformance semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "tooling": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "validator_name": { "type": "string", "minLength": 1 },
+        "validator_version": { "type": "string", "minLength": 1 },
+        "compiler_name": { "type": "string", "minLength": 1 },
+        "compiler_version": { "type": "string", "minLength": 1 },
+        "canonicalization_profile": { "type": "string", "minLength": 1 },
+        "canonicalization_version": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "severity": {
+      "type": "string",
+      "enum": ["ERROR", "WARNING", "INFO"]
+    },
+
+    "entity_id": {
+      "type": "string",
+      "description": "Wikidata/Wikibase entity identifiers (item/property/lexeme/form/sense) or local placeholders.",
+      "pattern": "^(Q[1-9][0-9]*|P[1-9][0-9]*|L[1-9][0-9]*|L[1-9][0-9]*-[FS][1-9][0-9]*|[A-Za-z][A-Za-z0-9._:-]{0,127})$"
+    },
+
+    "json_pointer": {
+      "type": "string",
+      "description": "RFC 6901 JSON Pointer into Exchange / manifest / report objects.",
+      "pattern": "^/.*"
+    },
+
+    "issue_location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "json_pointer": { "$ref": "#/$defs/json_pointer" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "statement_id": { "type": "string", "minLength": 1 },
+        "claim_id": { "type": "string", "minLength": 1 },
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "source_uri": { "type": "string", "format": "uri" }
+      }
+    },
+
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["severity", "code", "message"],
+      "properties": {
+        "severity": { "$ref": "#/$defs/severity" },
+
+        "code": {
+          "type": "string",
+          "description": "Stable machine-readable code (used for gating, dashboards, and mappings to SHACL/ShEx).",
+          "minLength": 1,
+          "pattern": "^[A-Z0-9_]+$"
+        },
+
+        "message": {
+          "type": "string",
+          "description": "Human-readable explanation of the issue.",
+          "minLength": 1
+        },
+
+        "location": { "$ref": "#/$defs/issue_location" },
+
+        "rule": {
+          "type": "object",
+          "description": "Optional rule metadata for deterministic debugging and traceability.",
+          "additionalProperties": false,
+          "properties": {
+            "rule_id": { "type": "string", "minLength": 1 },
+            "rule_version": { "type": "string", "minLength": 1 },
+            "profile": { "type": "string", "minLength": 1 }
+          }
+        },
+
+        "details": {
+          "type": "object",
+          "description": "Optional structured details (must remain deterministic for the same inputs).",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}

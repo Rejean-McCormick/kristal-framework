@@ -1,0 +1,112 @@
+{
+  "schema_version": "kristal.v3.validation-report@1.0",
+  "report_id": "vrpt_example_0001",
+  "generated_at": "2026-01-07T00:00:00Z",
+  "build_id": "build_example_0001",
+  "tenant_id": "tenant_example",
+  "input_refs": {
+    "claim_ir_batch_ref": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "resolved_claim_ir_batch_ref": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "status": "FAIL",
+  "summary": {
+    "errors": 2,
+    "warnings": 2,
+    "infos": 1
+  },
+  "results": [
+    {
+      "severity": "ERROR",
+      "code": "VAL.ENTITY.UNRESOLVED",
+      "message": "Entity surface could not be resolved to a unique QID and the rule requires a unique binding.",
+      "claim_id": "claim_00042",
+      "path": "/claims/42/subject",
+      "details": {
+        "surface": "Springfield",
+        "resolution_state": "RESOLVED_MULTI",
+        "top_candidates": [
+          { "id": "Q18094", "score": 0.63 },
+          { "id": "Q23055", "score": 0.61 },
+          { "id": "Q45761", "score": 0.59 }
+        ],
+        "required": "RESOLVED_SINGLE"
+      }
+    },
+    {
+      "severity": "ERROR",
+      "code": "VAL.EVIDENCE.MISSING",
+      "message": "Claim requires at least one evidence pointer, but none were provided.",
+      "claim_id": "claim_00077",
+      "path": "/claims/77/evidence",
+      "details": {
+        "min_evidence": 1,
+        "provided_evidence": 0
+      }
+    },
+    {
+      "severity": "WARNING",
+      "code": "VAL.LITERAL.NORMALIZATION.LOSSY",
+      "message": "Quantity normalization required unit coercion; precision may be reduced.",
+      "claim_id": "claim_00103",
+      "path": "/claims/103/value",
+      "details": {
+        "original": { "raw": "3.2 tons", "unit": "ton" },
+        "normalized": { "value": 3200, "unit": "kg", "precision": "approx" },
+        "lossy": true
+      }
+    },
+    {
+      "severity": "WARNING",
+      "code": "VAL.POLICY.NON_PORTABLE",
+      "message": "Runtime policy selection is not in the v3 portable policy set; pack will not be comparable across implementations.",
+      "path": "/runtime_pack/policy_selections/ordering",
+      "details": {
+        "provided": "CUSTOM_ORDERING_XYZ",
+        "allowed": ["SPO", "SOP", "PSO", "POS", "OSP", "OPS", "ORDER_SET([...])"]
+      }
+    },
+    {
+      "severity": "INFO",
+      "code": "VAL.EXPORT.RDF_INTEGRITY.DISABLED",
+      "message": "RDF integrity profile (RDFC) is not enabled; rdf_hash was not computed.",
+      "details": {
+        "profile": "export-integrity-rdfc",
+        "enabled": false
+      }
+    }
+  ],
+  "policy_context": {
+    "policy_selections_version": "v3.0",
+    "ordering": "ORDER_SET([\"SPO\"])",
+    "row_groups": "FIXED_ROWS(500000)",
+    "membership_filters": {
+      "family": "BINARY_FUSE",
+      "variant": "4_WISE",
+      "seed": 1337,
+      "bits_per_key": 9.5,
+      "target_false_positive_rate": 0.01,
+      "key_spaces": ["SPO_KEY"]
+    },
+    "bitmaps": {
+      "format": "ROARING",
+      "run_optimization": "ENABLED"
+    },
+    "query_limits": {
+      "join1_cap": { "default": 100000, "mode": "STRICT" },
+      "paging": "CURSOR"
+    }
+  },
+  "integrity": {
+    "report_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "canonicalization_profile": "jcs-rfc8785",
+    "canonicalization_version": "1.0",
+    "signatures": [
+      {
+        "key_id": "ed25519:example_key_01",
+        "algorithm": "ed25519",
+        "signature": "base64:ZmFrZV9zaWduYXR1cmU=",
+        "signed_at": "2026-01-07T00:00:00Z"
+      }
+    ]
+  }
+}
