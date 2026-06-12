@@ -1,0 +1,563 @@
+{
+"schema_version": "5.0",
+"artifact_type": "reference_exchange",
+"exchange_version": "5.0",
+"created_at": "2026-01-07T16:10:00Z",
+
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+
+"kristal_id": "sha256:6e8a2f9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e",
+"content_hash": {
+"alg": "sha256",
+"value": "6e8a2f9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e"
+},
+
+"artifact_status": "reference",
+
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed",
+"jurisdiction": null,
+"time_window": "2026-01",
+"tenant_id": null,
+"environment": "global-reference",
+"language": "multilingual"
+},
+
+"seed_profile": {
+"seed_name": "Wikidata Seed Kristal",
+"source_corpus": "Wikidata",
+"source_mode": "full_statements",
+"source_license": "CC0",
+"packaging_mode": "kristal-compatible-alignment",
+"semantic_transformation": false,
+"preserves_source_structure": true,
+"preserved_structures": [
+"entities",
+"properties",
+"statements",
+"qualifiers",
+"references",
+"ranks",
+"labels",
+"aliases",
+"descriptions",
+"source_statement_ids"
+]
+},
+
+"build": {
+"build_id": "build-2026-01-07T161000Z-wikidata-seed-0001",
+"schema_version": "5.0",
+"compiler_name": "kristal-compiler",
+"compiler_version": "5.0.0",
+"compile_status": "succeeded",
+"validation_status": "validated",
+"review_status": "completed",
+"recognition_status": "recognized",
+"publication_status": "published",
+"activation_status": "not_applicable",
+"config_hash": {
+"alg": "sha256",
+"value": "b8a1d63f4c2e5a709183b6c5d4e3f2019a8b7c6d5e4f3012a9b8c7d6e5f40312"
+},
+"working_outputs": [],
+"reference_outputs": [
+{
+"ref": "exchange/wikidata-seed-reference.exchange.json",
+"content_hash": {
+"alg": "sha256",
+"value": "6e8a2f9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e"
+}
+}
+],
+"reason_codes": [
+"schema_valid",
+"hash_valid",
+"signature_valid",
+"provenance_sufficient",
+"policy_satisfied",
+"authority_recognized"
+],
+"created_at": "2026-01-07T16:10:00Z"
+},
+
+"inputs": {
+"source_snapshot_id": "wikidata-json-dump-2026-01-06",
+"recipe_id": "recipe-wikidata-seed-full-statements-v1",
+"source_state_refs": [
+{
+"ref": "states/wikidata-seed-2026-01.state.json",
+"content_hash": {
+"alg": "sha256",
+"value": "2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2"
+}
+}
+],
+"dataset_refs": [
+{
+"ref": "datasets/wikidata-json-dump-2026-01-06.json.bz2",
+"uri": "https://dumps.wikimedia.org/wikidatawiki/entities/20260106/wikidata-20260106-all.json.bz2",
+"media_type": "application/x-bzip2",
+"content_hash": {
+"alg": "sha256",
+"value": "91a4b7c0d3e6f90215384b6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2"
+}
+}
+],
+"previous_exchange_refs": []
+},
+
+"profiles_enabled": [
+"kristal.v5:jsonld-1.1@1",
+"kristal.v5:rdf-wdqs-export@1",
+"kristal.v5:provenance-nanopub-provo@1"
+],
+
+"authority_registry_ref": {
+"ref": "authority/authority-registry.json",
+"content_hash": {
+"alg": "sha256",
+"value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
+}
+},
+
+"validation_refs": [
+{
+"ref": "validation/wikidata-seed.validation-report.json",
+"content_hash": {
+"alg": "sha256",
+"value": "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff"
+}
+}
+],
+
+"authority_recognition_refs": [
+{
+"ref": "recognition/wikidata-seed.global-reference.authority-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "11223344556677889900aabbccddeeff00112233445566778899aabbccddeeff"
+}
+}
+],
+
+"certainty_summary": {
+"overall": "mixed",
+"counts": {
+"unknown": 0,
+"speculative": 0,
+"low": 0,
+"medium": 1,
+"high": 2,
+"established": 0,
+"not_applicable": 0,
+"mixed": 0
+}
+},
+
+"validation_summary": {
+"overall": "validated",
+"validated_as": "institutional_reference",
+"authority_channel": "authority:wikidata-seed",
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed",
+"jurisdiction": null,
+"time_window": "2026-01",
+"tenant_id": null,
+"environment": "global-reference",
+"language": "multilingual"
+},
+"counts": {
+"validated": 3,
+"conditionally_validated": 0,
+"in_review": 0,
+"disputed": 0,
+"rejected": 0,
+"not_evaluated": 0
+}
+},
+
+"reader_policy_refs": [
+{
+"ref": "reader-policies/wikidata-seed-full-with-labels.json",
+"content_hash": {
+"alg": "sha256",
+"value": "7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f"
+}
+},
+{
+"ref": "reader-policies/wikidata-seed-reference-only.json",
+"content_hash": {
+"alg": "sha256",
+"value": "8f7e6d5c4b3a29180716253445566778899aabbccddeeff0011223344556677"
+}
+}
+],
+
+"policies": {
+"ordering_policies": [
+"entity_id_asc",
+"property_id_asc",
+"assertion_id_asc"
+],
+"statement_projection_policy": {
+"default_projection": "full",
+"available_projections": [
+"full",
+"best_rank"
+],
+"preserve_omitted_statement_metadata": true
+},
+"row_group_policy": {
+"type": "FIXED_ROWS",
+"rows": 100000
+},
+"membership_filter_policy": {
+"family": "binary_fuse",
+"variant": "3wise",
+"key_space": "spo_hash",
+"target_fpr": 0.001,
+"bits_per_key": 9.5,
+"seed": 42
+},
+"bitmap_policy": {
+"format": "roaring",
+"run_opt": true
+},
+"join1_cap_policy": {
+"cap": 5000,
+"strict_mode": true,
+"on_exceed": "error"
+}
+},
+
+"evidence_index": [
+{
+"evidence_id": "ev-wd-dump-2026-01-06",
+"source_uri": "https://dumps.wikimedia.org/wikidatawiki/entities/20260106/wikidata-20260106-all.json.bz2",
+"retrieved_at": "2026-01-06T09:12:43Z",
+"locator": {
+"type": "dataset_snapshot",
+"value": "wikidata-json-dump-2026-01-06"
+},
+"excerpt_hash": {
+"alg": "sha256",
+"value": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
+}
+},
+{
+"evidence_id": "ev-wd-q42-statement",
+"source_uri": "https://www.wikidata.org/wiki/Q42",
+"retrieved_at": "2026-01-06T09:30:00Z",
+"locator": {
+"type": "wikidata_entity",
+"value": "Q42"
+},
+"excerpt_hash": {
+"alg": "sha256",
+"value": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
+}
+},
+{
+"evidence_id": "ev-wd-q90-statement",
+"source_uri": "https://www.wikidata.org/wiki/Q90",
+"retrieved_at": "2026-01-06T09:31:00Z",
+"locator": {
+"type": "wikidata_entity",
+"value": "Q90"
+},
+"excerpt_hash": {
+"alg": "sha256",
+"value": "f3e2d1c0b9a8f7e6c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a"
+}
+}
+],
+
+"exchange": {
+"items": [
+{
+"entity_id": "Q42",
+"type": "item",
+"labels": {
+"en": "Douglas Adams",
+"fr": "Douglas Adams"
+},
+"descriptions": {
+"en": "English writer and humorist",
+"fr": "écrivain et humoriste anglais"
+},
+"aliases": {
+"en": [
+"Douglas Noel Adams"
+],
+"fr": []
+},
+
+```
+    "assertions": [
+      {
+        "assertion_id": "sha256:4200000000000000000000000000000000000000000000000000000000000569",
+        "statement_id": "Q42$D8404CDA-25E4-4334-AF13-A3290BCD9C0F",
+        "source_statement_id": "Q42$D8404CDA-25E4-4334-AF13-A3290BCD9C0F",
+        "claim_id": null,
+
+        "property_id": "P569",
+        "snaktype": "value",
+        "datatype": "time",
+        "datavalue": {
+          "type": "time",
+          "value": {
+            "time": "+1952-03-11T00:00:00Z",
+            "timezone": 0,
+            "before": 0,
+            "after": 0,
+            "precision": 11,
+            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+          }
+        },
+
+        "rank": "normal",
+
+        "assertion_status": "validated",
+        "certainty_level": "high",
+        "validated_as": "sourced_claim",
+
+        "scope": {
+          "domain": "wikidata",
+          "subdomain": "biographical-data",
+          "jurisdiction": null,
+          "time_window": "2026-01",
+          "tenant_id": null,
+          "environment": "global-reference",
+          "language": "multilingual"
+        },
+
+        "authority_channel": "authority:wikidata-seed",
+
+        "validation_refs": [
+          {
+            "ref": "validation/assertions/Q42-P569.validation-report.json"
+          }
+        ],
+
+        "authority_recognition_refs": [
+          {
+            "ref": "recognition/assertions/Q42-P569.authority-recognition.json"
+          }
+        ],
+
+        "qualifiers": [],
+
+        "references": [
+          {
+            "reference_id": "ref-wd-Q42-P569-0001",
+            "evidence_ids": [
+              "ev-wd-q42-statement"
+            ],
+            "snaks": [
+              {
+                "property_id": "P248",
+                "snaktype": "value",
+                "datatype": "wikibase-item",
+                "datavalue": {
+                  "type": "wikibase-entityid",
+                  "value": {
+                    "entity-type": "item",
+                    "numeric-id": 2013,
+                    "id": "Q2013"
+                  }
+                }
+              },
+              {
+                "property_id": "P813",
+                "snaktype": "value",
+                "datatype": "time",
+                "datavalue": {
+                  "type": "time",
+                  "value": {
+                    "time": "+2026-01-06T00:00:00Z",
+                    "timezone": 0,
+                    "before": 0,
+                    "after": 0,
+                    "precision": 11,
+                    "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "assertion_id": "sha256:4200000000000000000000000000000000000000000000000000000000000031",
+        "statement_id": "Q42$A1B2C3D4-0000-0000-0000-000000000031",
+        "source_statement_id": "Q42$A1B2C3D4-0000-0000-0000-000000000031",
+        "claim_id": null,
+
+        "property_id": "P31",
+        "snaktype": "value",
+        "datatype": "wikibase-item",
+        "datavalue": {
+          "type": "wikibase-entityid",
+          "value": {
+            "entity-type": "item",
+            "numeric-id": 5,
+            "id": "Q5"
+          }
+        },
+
+        "rank": "normal",
+
+        "assertion_status": "validated",
+        "certainty_level": "high",
+        "validated_as": "sourced_claim",
+
+        "scope": {
+          "domain": "wikidata",
+          "subdomain": "entity-type",
+          "jurisdiction": null,
+          "time_window": "2026-01",
+          "tenant_id": null,
+          "environment": "global-reference",
+          "language": "multilingual"
+        },
+
+        "authority_channel": "authority:wikidata-seed",
+
+        "validation_refs": [
+          {
+            "ref": "validation/assertions/Q42-P31.validation-report.json"
+          }
+        ],
+
+        "authority_recognition_refs": [
+          {
+            "ref": "recognition/assertions/Q42-P31.authority-recognition.json"
+          }
+        ],
+
+        "qualifiers": [],
+
+        "references": [
+          {
+            "reference_id": "ref-wd-Q42-P31-0001",
+            "evidence_ids": [
+              "ev-wd-q42-statement"
+            ],
+            "snaks": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "entity_id": "Q90",
+    "type": "item",
+    "labels": {
+      "en": "Paris",
+      "fr": "Paris"
+    },
+    "descriptions": {
+      "en": "capital and most populous city of France",
+      "fr": "capitale de la France"
+    },
+    "aliases": {
+      "en": [],
+      "fr": []
+    },
+
+    "assertions": [
+      {
+        "assertion_id": "sha256:9000000000000000000000000000000000000000000000000000000000000017",
+        "statement_id": "Q90$B1C2D3E4-0000-0000-0000-000000000017",
+        "source_statement_id": "Q90$B1C2D3E4-0000-0000-0000-000000000017",
+        "claim_id": null,
+
+        "property_id": "P17",
+        "snaktype": "value",
+        "datatype": "wikibase-item",
+        "datavalue": {
+          "type": "wikibase-entityid",
+          "value": {
+            "entity-type": "item",
+            "numeric-id": 142,
+            "id": "Q142"
+          }
+        },
+
+        "rank": "normal",
+
+        "assertion_status": "validated",
+        "certainty_level": "medium",
+        "validated_as": "sourced_claim",
+
+        "scope": {
+          "domain": "wikidata",
+          "subdomain": "geographic-data",
+          "jurisdiction": null,
+          "time_window": "2026-01",
+          "tenant_id": null,
+          "environment": "global-reference",
+          "language": "multilingual"
+        },
+
+        "authority_channel": "authority:wikidata-seed",
+
+        "validation_refs": [
+          {
+            "ref": "validation/assertions/Q90-P17.validation-report.json"
+          }
+        ],
+
+        "authority_recognition_refs": [
+          {
+            "ref": "recognition/assertions/Q90-P17.authority-recognition.json"
+          }
+        ],
+
+        "qualifiers": [],
+
+        "references": [
+          {
+            "reference_id": "ref-wd-Q90-P17-0001",
+            "evidence_ids": [
+              "ev-wd-q90-statement"
+            ],
+            "snaks": []
+          }
+        ],
+
+        "notes": [
+          {
+            "code": "seed_statement_imported",
+            "message": "Statement is imported from the Wikidata seed corpus and validated as a sourced claim within the seed authority channel. This does not imply maximum certainty or independent expert review."
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+},
+
+"signatures": [
+{
+"key_id": "wikidata-seed-ed25519-2026-01",
+"alg": "ed25519",
+"signature": "U0lHTkFUVVJFX1dJS0lEQVRBX1NFRURfRVhBTVBMRV9OT1RfUkVBTA",
+"created_at": "2026-01-07T16:10:05Z",
+"signer": {
+"name": "Kristal Seed Build Service",
+"org": "kristal-framework"
+}
+}
+],
+
+"extensions": {}
+}

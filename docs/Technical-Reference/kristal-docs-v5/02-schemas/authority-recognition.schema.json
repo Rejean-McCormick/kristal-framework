@@ -1,0 +1,691 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://kristal.org/schemas/v5/authority-recognition.schema.json",
+"title": "Kristal v5 Authority Recognition",
+"description": "Schema for scoped authority recognition decisions in Kristal v5. Recognition records declare who recognizes what, under which policy, for which scope, and with which status.",
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"artifact_type",
+"recognition_id",
+"created_at",
+"issuer_authority_channel",
+"target_ref",
+"target_level",
+"recognition_status",
+"recognized_as",
+"scope",
+"recognition_policy_ref",
+"content_hash"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"const": "5.0",
+"description": "Kristal schema version."
+},
+
+```
+"artifact_type": {
+  "type": "string",
+  "const": "authority_recognition",
+  "description": "Artifact type discriminator."
+},
+
+"recognition_id": {
+  "$ref": "#/$defs/sha256_id",
+  "description": "Content-addressed identifier for this authority recognition record."
+},
+
+"created_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "RFC 3339 timestamp when this recognition record was created. This timestamp MUST NOT affect content-addressed IDs unless a profile explicitly includes it in the identity surface."
+},
+
+"updated_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "Optional RFC 3339 timestamp for the latest update to this recognition record."
+},
+
+"expires_at": {
+  "type": [
+    "string",
+    "null"
+  ],
+  "format": "date-time",
+  "description": "Optional expiration timestamp. Null means no declared expiration."
+},
+
+"issuer_authority_channel": {
+  "$ref": "#/$defs/authority_channel_ref",
+  "description": "Authority channel issuing this recognition."
+},
+
+"issuer_actor": {
+  "$ref": "#/$defs/actor_ref",
+  "description": "Optional actor, institution, service, validator, or representative that issued the recognition on behalf of the authority channel."
+},
+
+"target_ref": {
+  "$ref": "#/$defs/target_ref",
+  "description": "Target recognized, rejected, disputed, deprecated, or revoked by this authority recognition record."
+},
+
+"target_level": {
+  "type": "string",
+  "description": "Level at which recognition is applied.",
+  "enum": [
+    "artifact",
+    "shard",
+    "assertion",
+    "authority_channel",
+    "dataset",
+    "exchange",
+    "runtime_pack",
+    "federation",
+    "validation_policy",
+    "reader_policy",
+    "release"
+  ]
+},
+
+"recognition_status": {
+  "$ref": "#/$defs/recognition_status",
+  "description": "Recognition decision status."
+},
+
+"recognized_as": {
+  "$ref": "#/$defs/recognized_as",
+  "description": "Epistemic or institutional mode under which the target is recognized."
+},
+
+"certainty_level": {
+  "$ref": "#/$defs/certainty_level",
+  "description": "Optional certainty level associated with the recognition. Use not_applicable where physical-world certainty is not the relevant measure."
+},
+
+"scope": {
+  "$ref": "#/$defs/scope",
+  "description": "Scope for which this recognition applies."
+},
+
+"recognition_policy_ref": {
+  "$ref": "#/$defs/artifact_ref",
+  "description": "Reference to the policy under which this authority recognition was issued."
+},
+
+"validation_policy_ref": {
+  "$ref": "#/$defs/artifact_ref",
+  "description": "Optional reference to a validation policy if recognition depends on, delegates to, or incorporates a validation policy."
+},
+
+"validation_decision_refs": {
+  "type": "array",
+  "description": "Optional validation decisions supporting or related to this recognition.",
+  "items": {
+    "$ref": "#/$defs/artifact_ref"
+  },
+  "uniqueItems": true
+},
+
+"authority_registry_ref": {
+  "$ref": "#/$defs/artifact_ref",
+  "description": "Optional Authority Registry reference used to resolve trust roots, delegated authority, or policy bindings."
+},
+
+"recognized_by": {
+  "type": "array",
+  "description": "Optional higher-level authority channels that recognize this recognition record or recognize the issuer authority channel for the declared scope.",
+  "items": {
+    "$ref": "#/$defs/authority_channel_ref"
+  },
+  "uniqueItems": true
+},
+
+"delegates_to": {
+  "type": "array",
+  "description": "Optional authority channels to which the issuer delegates authority for the declared scope.",
+  "items": {
+    "$ref": "#/$defs/authority_channel_ref"
+  },
+  "uniqueItems": true
+},
+
+"applies_to_reader_policies": {
+  "type": "array",
+  "description": "Optional reader policies for which this recognition is intended or approved.",
+  "items": {
+    "$ref": "#/$defs/artifact_ref"
+  },
+  "uniqueItems": true
+},
+
+"reason_codes": {
+  "type": "array",
+  "description": "Stable machine-readable reason codes supporting the recognition decision.",
+  "items": {
+    "$ref": "#/$defs/reason_code"
+  },
+  "uniqueItems": true
+},
+
+"findings": {
+  "type": "array",
+  "description": "Structured findings, notes, or determinations supporting the recognition decision.",
+  "items": {
+    "$ref": "#/$defs/finding"
+  }
+},
+
+"evidence_refs": {
+  "type": "array",
+  "description": "Evidence references supporting this recognition.",
+  "items": {
+    "$ref": "#/$defs/artifact_ref"
+  },
+  "uniqueItems": true
+},
+
+"provenance_refs": {
+  "type": "array",
+  "description": "Provenance references for this recognition decision.",
+  "items": {
+    "$ref": "#/$defs/artifact_ref"
+  },
+  "uniqueItems": true
+},
+
+"lineage": {
+  "type": "object",
+  "description": "Lineage metadata for supersession, derivation, correction, revocation, or fork-aware recognition.",
+  "additionalProperties": false,
+  "properties": {
+    "derived_from": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "uniqueItems": true
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "uniqueItems": true
+    },
+    "replaces": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "uniqueItems": true
+    },
+    "revokes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "uniqueItems": true
+    },
+    "related_to": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "uniqueItems": true
+    }
+  }
+},
+
+"revocation_policy_ref": {
+  "$ref": "#/$defs/artifact_ref",
+  "description": "Optional policy describing how this recognition may be revoked."
+},
+
+"content_hash": {
+  "$ref": "#/$defs/hash_object",
+  "description": "Hash of this recognition record excluding signatures and any fields excluded by the applicable canonicalization profile."
+},
+
+"canonicalization_profile": {
+  "type": "string",
+  "const": "kristal.v5:jcs-rfc8785",
+  "description": "Canonicalization profile used for hashing JSON objects."
+},
+
+"canonicalization_version": {
+  "type": "string",
+  "const": "1",
+  "description": "Canonicalization profile version."
+},
+
+"signatures": {
+  "type": "array",
+  "description": "Optional signatures over declared hashed material.",
+  "items": {
+    "$ref": "#/$defs/signature"
+  }
+},
+
+"extensions": {
+  "type": "object",
+  "description": "Profile-specific extension object.",
+  "additionalProperties": true
+}
+```
+
+},
+
+"$defs": {
+"sha256_hex": {
+"type": "string",
+"pattern": "^[a-f0-9]{64}$"
+},
+
+```
+"sha256_prefixed": {
+  "type": "string",
+  "pattern": "^sha256:[a-f0-9]{64}$"
+},
+
+"sha256_id": {
+  "oneOf": [
+    {
+      "$ref": "#/$defs/sha256_prefixed"
+    },
+    {
+      "$ref": "#/$defs/sha256_hex"
+    }
+  ]
+},
+
+"hash_object": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "alg",
+    "value"
+  ],
+  "properties": {
+    "alg": {
+      "type": "string",
+      "const": "sha256"
+    },
+    "value": {
+      "$ref": "#/$defs/sha256_hex"
+    }
+  }
+},
+
+"artifact_ref": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hash": {
+      "$ref": "#/$defs/hash_object"
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    }
+  }
+},
+
+"target_ref": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Target identifier. May be a sha256 ID, authority ID, policy ID, dataset ID, release ID, or other stable target ID."
+    },
+    "artifact_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hash": {
+      "$ref": "#/$defs/hash_object"
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+},
+
+"authority_channel_ref": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "authority_channel_id"
+  ],
+  "properties": {
+    "authority_channel_id": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._-]*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_type": {
+      "$ref": "#/$defs/authority_type"
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    }
+  }
+},
+
+"actor_ref": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "service",
+        "institution",
+        "committee",
+        "ai_validator",
+        "hybrid_collective",
+        "system"
+      ]
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+},
+
+"scope": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain"
+  ],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "enum": [
+        "general",
+        "wikidata",
+        "science",
+        "health",
+        "education",
+        "heritage",
+        "law",
+        "policy",
+        "technology",
+        "environment",
+        "culture",
+        "mythology",
+        "fiction",
+        "research",
+        "operations",
+        "civic",
+        "local_notes"
+      ]
+    },
+    "subdomain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "time_window": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Optional time window, preferably expressed as an interval string such as 2020-01-01T00:00:00Z/2025-12-31T23:59:59Z."
+    },
+    "tenant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+},
+
+"authority_type": {
+  "type": "string",
+  "enum": [
+    "individual",
+    "community",
+    "association",
+    "research_collective",
+    "academic_institution",
+    "standards_body",
+    "company",
+    "government",
+    "intergovernmental_organization",
+    "ai_validator",
+    "hybrid_collective"
+  ]
+},
+
+"recognition_status": {
+  "type": "string",
+  "enum": [
+    "recognized",
+    "conditionally_recognized",
+    "under_review",
+    "disputed",
+    "rejected",
+    "deprecated",
+    "revoked"
+  ]
+},
+
+"recognized_as": {
+  "type": "string",
+  "enum": [
+    "hypothesis",
+    "claim",
+    "sourced_claim",
+    "reviewed_claim",
+    "high_confidence_fact",
+    "institutional_reference",
+    "publisher_declaration",
+    "technical_specification",
+    "legal_or_policy_position",
+    "mythological_corpus",
+    "fictional_corpus",
+    "symbolic_model",
+    "disputed_position",
+    "rejected_claim",
+    "authority_channel",
+    "delegated_authority",
+    "reference_artifact",
+    "reference_dataset",
+    "reference_policy",
+    "reference_runtime_pack"
+  ]
+},
+
+"certainty_level": {
+  "type": "string",
+  "enum": [
+    "unknown",
+    "speculative",
+    "low",
+    "medium",
+    "high",
+    "established",
+    "not_applicable"
+  ]
+},
+
+"reason_code": {
+  "type": "string",
+  "enum": [
+    "schema_valid",
+    "schema_invalid",
+    "provenance_sufficient",
+    "provenance_insufficient",
+    "evidence_sufficient",
+    "evidence_insufficient",
+    "authority_recognized",
+    "authority_not_recognized",
+    "authority_delegated",
+    "authority_revoked",
+    "scope_match",
+    "scope_mismatch",
+    "policy_satisfied",
+    "policy_failed",
+    "signature_valid",
+    "signature_invalid",
+    "hash_valid",
+    "hash_invalid",
+    "conflict_detected",
+    "disagreement_preserved",
+    "certainty_too_low_for_policy",
+    "rejected_by_authority_channel",
+    "revoked_by_authority_channel",
+    "recognized_by_parent_authority",
+    "not_recognized_by_parent_authority",
+    "manual_attestation",
+    "automated_attestation",
+    "hybrid_review_completed"
+  ]
+},
+
+"finding": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "code",
+    "severity",
+    "message"
+  ],
+  "properties": {
+    "code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "info",
+        "warning",
+        "error",
+        "blocking"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_path": {
+      "type": "string",
+      "description": "Optional JSON Pointer or implementation-specific path to the target of the finding."
+    }
+  }
+},
+
+"signature": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key_id",
+    "alg",
+    "signature"
+  ],
+  "properties": {
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alg": {
+      "type": "string",
+      "description": "Signature algorithm identifier.",
+      "enum": [
+        "ed25519",
+        "rsa-pss-sha256",
+        "ecdsa-p256-sha256"
+      ]
+    },
+    "payload_hash": {
+      "$ref": "#/$defs/hash_object"
+    },
+    "signature": {
+      "type": "string",
+      "description": "Base64-encoded signature bytes.",
+      "minLength": 16
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+```
+
+}
+}

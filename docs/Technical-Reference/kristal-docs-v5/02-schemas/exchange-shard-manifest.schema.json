@@ -1,0 +1,1084 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://kristal.org/schemas/v5/exchange-shard-manifest.schema.json",
+"title": "Kristal v5 Exchange Shard Manifest",
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"artifact_type",
+"manifest_id",
+"created_at",
+"shard_id",
+"canonicalization_profile",
+"canonicalization_version",
+"content_hash",
+"producer",
+"build",
+"inputs",
+"policies",
+"scope",
+"artifact_status",
+"assertion_status_summary",
+"certainty_summary",
+"validation_refs",
+"authority_recognition_refs",
+"reader_policy_refs",
+"integrity",
+"signatures"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"const": "5.0",
+"description": "Manifest schema version."
+},
+"artifact_type": {
+"type": "string",
+"const": "exchange_shard_manifest",
+"description": "Artifact discriminator."
+},
+"manifest_id": {
+"$ref": "#/$defs/kristal_id",
+"description": "Content-addressed ID of this manifest. The manifest_id field itself is excluded from the manifest hash target."
+},
+"created_at": {
+"type": "string",
+"format": "date-time",
+"description": "UTC timestamp when the manifest was produced. Timestamps are not part of content-addressed shard IDs unless a profile explicitly includes them."
+},
+"shard_id": {
+"$ref": "#/$defs/kristal_id",
+"description": "Content-addressed ID of the shard Exchange payload."
+},
+"kristal_id": {
+"$ref": "#/$defs/kristal_id",
+"description": "Alias for shard_id when the shard is addressed as a Kristal artifact."
+},
+"source_exchange_ref": {
+"$ref": "#/$defs/artifact_ref",
+"description": "Optional reference to the source Exchange artifact from which this shard manifest was derived."
+},
+"artifact_status": {
+"$ref": "#/$defs/artifact_status",
+"description": "Lifecycle status of the shard artifact. This status describes the artifact, not the universal truth of its assertions."
+},
+"canonicalization_profile": {
+"type": "string",
+"const": "kristal.v5:jcs-rfc8785",
+"description": "Canonicalization profile identifier for hashing/signing. The word canonicalization here means stable byte representation, not truth authority."
+},
+"canonicalization_version": {
+"type": "string",
+"const": "1",
+"description": "Canonicalization version for hashing/signing."
+},
+"content_hash": {
+"$ref": "#/$defs/hash",
+"description": "Hash of the canonicalized shard Exchange payload hash target. Signatures, attestations, and output ID fields are excluded from the hash target."
+},
+"producer": {
+"$ref": "#/$defs/producer",
+"description": "Producer identity for this shard manifest."
+},
+"build": {
+"$ref": "#/$defs/build",
+"description": "Build record for deterministic compilation, validation status, recognition status, publication status, and activation status."
+},
+"inputs": {
+"$ref": "#/$defs/inputs",
+"description": "Input snapshot identifiers and upstream artifact references."
+},
+"policies": {
+"$ref": "#/$defs/policies",
+"description": "Policies used for compilation, validation, recognition, composition, reader filtering, runtime packaging, and distribution."
+},
+"scope": {
+"$ref": "#/$defs/scope",
+"description": "Declared scope of this shard."
+},
+"assertion_status_summary": {
+"$ref": "#/$defs/assertion_status_summary",
+"description": "Summary of assertion statuses present in the shard."
+},
+"certainty_summary": {
+"$ref": "#/$defs/certainty_summary",
+"description": "Summary of certainty levels present in the shard."
+},
+"validation_refs": {
+"type": "array",
+"description": "Validation decisions that apply to this shard, to assertions within it, or to related authority channels. A validation ref does not imply universal truth.",
+"items": {
+"$ref": "#/$defs/validation_ref"
+},
+"default": []
+},
+"authority_recognition_refs": {
+"type": "array",
+"description": "Authority recognitions that apply to this shard, to assertions within it, or to related authority channels.",
+"items": {
+"$ref": "#/$defs/authority_recognition_ref"
+},
+"default": []
+},
+"reader_policy_refs": {
+"type": "array",
+"description": "Reader policies known to be compatible with this shard. Readers may use these to expose reference-only, validated-only, research, creative, or custom views.",
+"items": {
+"$ref": "#/$defs/reader_policy_ref"
+},
+"default": []
+},
+"integrity": {
+"$ref": "#/$defs/integrity",
+"description": "Integrity and verification requirements for this shard manifest."
+},
+"lineage": {
+"$ref": "#/$defs/lineage",
+"description": "Lineage metadata preserving source artifacts, transforms, merges, and supersession relationships."
+},
+"extensions": {
+"type": "object",
+"description": "Namespaced extension data. Extension keys SHOULD use reverse-DNS or URI-like names.",
+"additionalProperties": true
+},
+"signatures": {
+"type": "array",
+"description": "Signatures over the canonicalized manifest hash target. Signatures are excluded from the signed hash target.",
+"items": {
+"$ref": "#/$defs/signature"
+},
+"default": []
+}
+},
+"$defs": {
+"kristal_id": {
+"type": "string",
+"pattern": "^sha256:[a-f0-9]{64}$",
+"description": "Content-addressed identifier using sha256:<hex>."
+},
+"artifact_status": {
+"type": "string",
+"enum": [
+"draft",
+"working",
+"under_review",
+"recognized",
+"reference",
+"deprecated",
+"superseded",
+"revoked"
+],
+"description": "Artifact lifecycle status."
+},
+"assertion_status": {
+"type": "string",
+"enum": [
+"hypothesis",
+"claimed",
+"sourced",
+"disputed",
+"reviewed",
+"validated",
+"rejected",
+"retracted",
+"superseded"
+],
+"description": "Status of an assertion."
+},
+"certainty_level": {
+"type": "string",
+"enum": [
+"unknown",
+"speculative",
+"low",
+"medium",
+"high",
+"established",
+"not_applicable"
+],
+"description": "Certainty level within the declared scope."
+},
+"validated_as": {
+"type": "string",
+"enum": [
+"hypothesis",
+"claim",
+"sourced_claim",
+"reviewed_claim",
+"high_confidence_fact",
+"institutional_reference",
+"publisher_declaration",
+"technical_specification",
+"legal_or_policy_position",
+"mythological_corpus",
+"fictional_corpus",
+"symbolic_model",
+"disputed_position",
+"rejected_claim"
+],
+"description": "What the assertion, shard, or artifact was validated as."
+},
+"validation_status": {
+"type": "string",
+"enum": [
+"not_evaluated",
+"in_review",
+"validated",
+"conditionally_validated",
+"disputed",
+"rejected",
+"revoked"
+],
+"description": "Validation status under a declared authority channel and policy."
+},
+"recognition_status": {
+"type": "string",
+"enum": [
+"none",
+"recognized",
+"conditionally_recognized",
+"under_review",
+"disputed",
+"rejected",
+"deprecated",
+"revoked"
+],
+"description": "Recognition status under an authority channel."
+},
+"reader_mode": {
+"type": "string",
+"enum": [
+"reference_only",
+"validated_only",
+"high_certainty_only",
+"research",
+"creative",
+"all_with_labels",
+"custom"
+],
+"description": "Reader policy mode."
+},
+"domain": {
+"type": "string",
+"enum": [
+"general",
+"wikidata",
+"science",
+"health",
+"education",
+"heritage",
+"law",
+"policy",
+"technology",
+"environment",
+"culture",
+"mythology",
+"fiction",
+"research",
+"operations",
+"civic",
+"local_notes"
+],
+"description": "Controlled top-level scope domain."
+},
+"hash": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"alg",
+"value"
+],
+"properties": {
+"alg": {
+"type": "string",
+"const": "sha256",
+"description": "Hash algorithm. Use alg, not algo."
+},
+"value": {
+"type": "string",
+"pattern": "^[a-f0-9]{64}$",
+"description": "Lowercase hexadecimal SHA-256 digest."
+}
+}
+},
+"artifact_ref": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"artifact_type",
+"artifact_id"
+],
+"properties": {
+"artifact_type": {
+"type": "string",
+"minLength": 1
+},
+"artifact_id": {
+"$ref": "#/$defs/kristal_id"
+},
+"content_hash": {
+"$ref": "#/$defs/hash"
+},
+"uri": {
+"type": "string",
+"format": "uri"
+},
+"version": {
+"type": "string",
+"minLength": 1
+}
+}
+},
+"producer": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"producer_id",
+"name"
+],
+"properties": {
+"producer_id": {
+"type": "string",
+"minLength": 1,
+"description": "Stable producer identifier."
+},
+"name": {
+"type": "string",
+"minLength": 1
+},
+"org": {
+"type": "string",
+"minLength": 1
+},
+"authority_channel": {
+"type": "string",
+"pattern": "^authority:[a-z0-9][a-z0-9.*:-]*$",
+"description": "Authority channel under which the producer publishes, if applicable."
+},
+"software": {
+"type": "object",
+"additionalProperties": false,
+"properties": {
+"name": {
+"type": "string",
+"minLength": 1
+},
+"version": {
+"type": "string",
+"minLength": 1
+},
+"source_uri": {
+"type": "string",
+"format": "uri"
+},
+"build_hash": {
+"$ref": "#/$defs/hash"
+}
+}
+}
+}
+},
+"build": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"build_id",
+"schema_version",
+"compile_status",
+"validation_status",
+"review_status",
+"recognition_status",
+"publication_status",
+"activation_status",
+"working_outputs",
+"reference_outputs",
+"reason_codes",
+"created_at"
+],
+"properties": {
+"build_id": {
+"type": "string",
+"minLength": 1
+},
+"schema_version": {
+"type": "string",
+"const": "5.0"
+},
+"compile_status": {
+"type": "string",
+"enum": [
+"succeeded",
+"failed",
+"partial"
+]
+},
+"validation_status": {
+"$ref": "#/$defs/validation_status"
+},
+"review_status": {
+"type": "string",
+"enum": [
+"not_required",
+"pending",
+"completed",
+"blocked"
+]
+},
+"recognition_status": {
+"$ref": "#/$defs/recognition_status"
+},
+"publication_status": {
+"type": "string",
+"enum": [
+"not_published",
+"published",
+"blocked"
+]
+},
+"activation_status": {
+"type": "string",
+"enum": [
+"not_applicable",
+"activated",
+"blocked",
+"revoked"
+]
+},
+"working_outputs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"reference_outputs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"reason_codes": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/reason_code"
+},
+"default": []
+},
+"created_at": {
+"type": "string",
+"format": "date-time"
+},
+"compiler": {
+"type": "object",
+"additionalProperties": false,
+"properties": {
+"name": {
+"type": "string",
+"minLength": 1
+},
+"version": {
+"type": "string",
+"minLength": 1
+},
+"profile": {
+"type": "string",
+"minLength": 1
+}
+}
+}
+}
+},
+"reason_code": {
+"type": "string",
+"enum": [
+"schema_valid",
+"schema_invalid",
+"provenance_sufficient",
+"provenance_insufficient",
+"evidence_sufficient",
+"evidence_insufficient",
+"authority_recognized",
+"authority_not_recognized",
+"scope_mismatch",
+"policy_satisfied",
+"policy_failed",
+"signature_valid",
+"signature_invalid",
+"hash_valid",
+"hash_invalid",
+"conflict_detected",
+"disagreement_preserved",
+"certainty_too_low_for_policy",
+"rejected_by_authority_channel",
+"revoked_by_authority_channel"
+]
+},
+"inputs": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"source_refs",
+"derived_from",
+"merged_from",
+"supersedes"
+],
+"properties": {
+"source_refs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"derived_from": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"merged_from": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"supersedes": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"input_hashes": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/hash"
+},
+"default": []
+}
+}
+},
+"policies": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"compilation_policy_ref",
+"validation_policy_refs",
+"recognition_policy_refs",
+"composition_policy_ref",
+"reader_policy_refs",
+"runtime_policy_refs"
+],
+"properties": {
+"compilation_policy_ref": {
+"$ref": "#/$defs/policy_ref"
+},
+"validation_policy_refs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/policy_ref"
+},
+"default": []
+},
+"recognition_policy_refs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/policy_ref"
+},
+"default": []
+},
+"composition_policy_ref": {
+"$ref": "#/$defs/policy_ref"
+},
+"reader_policy_refs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/reader_policy_ref"
+},
+"default": []
+},
+"runtime_policy_refs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/policy_ref"
+},
+"default": []
+}
+}
+},
+"policy_ref": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"policy_id"
+],
+"properties": {
+"policy_id": {
+"type": "string",
+"minLength": 1
+},
+"policy_version": {
+"type": "string",
+"minLength": 1
+},
+"uri": {
+"type": "string",
+"format": "uri"
+},
+"content_hash": {
+"$ref": "#/$defs/hash"
+}
+}
+},
+"reader_policy_ref": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"reader_policy_id",
+"mode"
+],
+"properties": {
+"reader_policy_id": {
+"type": "string",
+"pattern": "^reader_policy:[a-z0-9][a-z0-9.*:-]*$"
+},
+"mode": {
+"$ref": "#/$defs/reader_mode"
+},
+"uri": {
+"type": "string",
+"format": "uri"
+},
+"content_hash": {
+"$ref": "#/$defs/hash"
+}
+}
+},
+"scope": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"domain"
+],
+"properties": {
+"domain": {
+"$ref": "#/$defs/domain"
+},
+"subdomain": {
+"type": [
+"string",
+"null"
+],
+"minLength": 1
+},
+"jurisdiction": {
+"type": [
+"string",
+"null"
+],
+"minLength": 1
+},
+"time_window": {
+"type": [
+"string",
+"null"
+],
+"minLength": 1
+},
+"tenant_id": {
+"type": [
+"string",
+"null"
+],
+"minLength": 1
+},
+"environment": {
+"type": [
+"string",
+"null"
+],
+"minLength": 1
+},
+"language": {
+"type": [
+"string",
+"null"
+],
+"minLength": 1
+}
+}
+},
+"assertion_status_summary": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"counts"
+],
+"properties": {
+"counts": {
+"type": "object",
+"additionalProperties": {
+"type": "integer",
+"minimum": 0
+},
+"description": "Map of assertion_status to count."
+},
+"dominant_status": {
+"$ref": "#/$defs/assertion_status"
+},
+"contains_disputed": {
+"type": "boolean",
+"default": false
+},
+"contains_rejected": {
+"type": "boolean",
+"default": false
+}
+}
+},
+"certainty_summary": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"counts"
+],
+"properties": {
+"counts": {
+"type": "object",
+"additionalProperties": {
+"type": "integer",
+"minimum": 0
+},
+"description": "Map of certainty_level to count."
+},
+"lowest_certainty_level": {
+"$ref": "#/$defs/certainty_level"
+},
+"highest_certainty_level": {
+"$ref": "#/$defs/certainty_level"
+},
+"mixed_certainty": {
+"type": "boolean",
+"default": true
+}
+}
+},
+"validation_ref": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"validation_decision_id",
+"target_level",
+"validation_status",
+"validated_as",
+"certainty_level",
+"authority_channel",
+"scope"
+],
+"properties": {
+"validation_decision_id": {
+"$ref": "#/$defs/kristal_id"
+},
+"target_ref": {
+"$ref": "#/$defs/artifact_ref"
+},
+"target_level": {
+"type": "string",
+"enum": [
+"artifact",
+"shard",
+"assertion",
+"authority_channel",
+"runtime_pack"
+]
+},
+"validation_status": {
+"$ref": "#/$defs/validation_status"
+},
+"validated_as": {
+"$ref": "#/$defs/validated_as"
+},
+"certainty_level": {
+"$ref": "#/$defs/certainty_level"
+},
+"authority_channel": {
+"type": "string",
+"pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+},
+"validation_policy_ref": {
+"$ref": "#/$defs/policy_ref"
+},
+"scope": {
+"$ref": "#/$defs/scope"
+},
+"reason_codes": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/reason_code"
+},
+"default": []
+}
+}
+},
+"authority_recognition_ref": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"recognition_id",
+"issuer_authority_channel",
+"target_level",
+"recognition_status",
+"recognized_as",
+"scope"
+],
+"properties": {
+"recognition_id": {
+"$ref": "#/$defs/kristal_id"
+},
+"issuer_authority_channel": {
+"type": "string",
+"pattern": "^authority:[a-z0-9][a-z0-9.*:-]*$"
+},
+"target_ref": {
+"$ref": "#/$defs/artifact_ref"
+},
+"target_level": {
+"type": "string",
+"enum": [
+"artifact",
+"shard",
+"assertion",
+"authority_channel",
+"dataset",
+"runtime_pack"
+]
+},
+"recognition_status": {
+"$ref": "#/$defs/recognition_status"
+},
+"recognized_as": {
+"$ref": "#/$defs/validated_as"
+},
+"scope": {
+"$ref": "#/$defs/scope"
+},
+"validation_policy_ref": {
+"$ref": "#/$defs/policy_ref"
+},
+"reason_codes": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/reason_code"
+},
+"default": []
+}
+}
+},
+"integrity": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"hash_alg",
+"signature_required",
+"trust_root_required",
+"verification_requirements"
+],
+"properties": {
+"hash_alg": {
+"type": "string",
+"const": "sha256"
+},
+"signature_required": {
+"type": "boolean"
+},
+"trust_root_required": {
+"type": "boolean"
+},
+"verification_requirements": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"schema_validation",
+"hash_verification",
+"signature_verification",
+"trust_root_verification",
+"policy_check",
+"scope_check",
+"authority_recognition_check",
+"reader_policy_check"
+]
+},
+"default": []
+},
+"trust_roots": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/trust_root"
+},
+"default": []
+}
+}
+},
+"trust_root": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"trust_root_id",
+"type"
+],
+"properties": {
+"trust_root_id": {
+"type": "string",
+"minLength": 1
+},
+"type": {
+"type": "string",
+"enum": [
+"public_key",
+"certificate",
+"authority_registry",
+"transparency_log"
+]
+},
+"uri": {
+"type": "string",
+"format": "uri"
+},
+"content_hash": {
+"$ref": "#/$defs/hash"
+}
+}
+},
+"lineage": {
+"type": "object",
+"additionalProperties": false,
+"properties": {
+"source_artifacts": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/artifact_ref"
+},
+"default": []
+},
+"transforms": {
+"type": "array",
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"transform_id",
+"name"
+],
+"properties": {
+"transform_id": {
+"type": "string",
+"minLength": 1
+},
+"name": {
+"type": "string",
+"minLength": 1
+},
+"version": {
+"type": "string",
+"minLength": 1
+},
+"policy_ref": {
+"$ref": "#/$defs/policy_ref"
+}
+}
+},
+"default": []
+},
+"compiler": {
+"type": "object",
+"additionalProperties": false,
+"properties": {
+"name": {
+"type": "string",
+"minLength": 1
+},
+"version": {
+"type": "string",
+"minLength": 1
+}
+}
+},
+"policy_refs": {
+"type": "array",
+"items": {
+"$ref": "#/$defs/policy_ref"
+},
+"default": []
+}
+}
+},
+"signature": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"key_id",
+"alg",
+"signature",
+"created_at"
+],
+"properties": {
+"key_id": {
+"type": "string",
+"minLength": 1,
+"description": "Signing key identifier."
+},
+"alg": {
+"type": "string",
+"const": "ed25519",
+"description": "Signature algorithm. Use alg, not algo."
+},
+"signature": {
+"type": "string",
+"minLength": 1,
+"description": "Signature value, encoded as specified by the signing profile."
+},
+"created_at": {
+"type": "string",
+"format": "date-time"
+},
+"expires_at": {
+"type": "string",
+"format": "date-time"
+},
+"purpose": {
+"type": "string",
+"minLength": 1,
+"description": "Optional signature purpose label."
+},
+"signer": {
+"type": "object",
+"additionalProperties": false,
+"properties": {
+"name": {
+"type": "string",
+"minLength": 1
+},
+"org": {
+"type": "string",
+"minLength": 1
+},
+"authority_channel": {
+"type": "string",
+"pattern": "^authority:[a-z0-9][a-z0-9.*:-]*$"
+}
+}
+},
+"certificate_uri": {
+"type": "string",
+"format": "uri",
+"description": "Optional pointer to a certificate chain or public key material."
+}
+}
+}
+}
+}

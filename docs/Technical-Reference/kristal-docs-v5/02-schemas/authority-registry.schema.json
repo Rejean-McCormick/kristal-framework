@@ -1,0 +1,748 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v5/authority-registry.schema.json",
+  "title": "Kristal v5 Authority Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "registry_id",
+    "created_at",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "authority_channels",
+    "trust_roots",
+    "rules",
+    "signatures"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "5.0",
+      "description": "Schema version for this registry format."
+    },
+
+    "artifact_type": {
+      "type": "string",
+      "const": "authority_registry",
+      "description": "Artifact discriminator."
+    },
+
+    "registry_id": {
+      "type": "string",
+      "pattern": "^(sha256:[a-f0-9]{64}|kristal:authority-registry:sha256:[a-f0-9]{64})$",
+      "description": "Content-addressed ID of this registry artifact."
+    },
+
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when this registry was produced."
+    },
+
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v5:jcs-rfc8785",
+      "description": "Canonicalization profile identifier used for stable hashing."
+    },
+
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1",
+      "description": "Canonicalization profile version."
+    },
+
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized registry content with signatures excluded."
+    },
+
+    "registry_scope": {
+      "$ref": "#/$defs/scope",
+      "description": "Optional declared scope for this registry. If omitted, rules define scope boundaries."
+    },
+
+    "authority_channels": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Authority channels declared by this registry. Authority is scoped and plural; recognition by one channel does not imply recognition by another.",
+      "items": { "$ref": "#/$defs/authority_channel" }
+    },
+
+    "trust_roots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["active_roots", "deprecated_roots", "blocked_roots"],
+      "properties": {
+        "active_roots": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Pinned trust roots accepted for verification under registry rules.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        },
+        "deprecated_roots": {
+          "type": "array",
+          "description": "Pinned trust roots accepted only if the applicable policy allows a grace period.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        },
+        "blocked_roots": {
+          "type": "array",
+          "description": "Pinned trust roots explicitly rejected.",
+          "items": { "$ref": "#/$defs/trust_root" }
+        }
+      }
+    },
+
+    "validation_policies": {
+      "type": "array",
+      "description": "Validation policies declared or referenced by this registry.",
+      "items": { "$ref": "#/$defs/validation_policy" }
+    },
+
+    "recognition_policies": {
+      "type": "array",
+      "description": "Recognition policies used to decide whether an artifact, shard, assertion, runtime pack, dataset, or authority channel is recognized within a scope.",
+      "items": { "$ref": "#/$defs/recognition_policy" }
+    },
+
+    "revocation_list": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional offline-friendly revocation list reference, content-addressed and signed.",
+      "properties": {
+        "artifact_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative or absolute path/URI to the revocation list artifact, for example 'revocations.json'."
+        },
+        "content_hash": { "$ref": "#/$defs/hash" },
+        "signatures": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/signature" }
+        }
+      }
+    },
+
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Scope-based acceptance, validation, and recognition rules for authority channels, shards, federations, runtime packs, and assertions.",
+      "items": { "$ref": "#/$defs/rule" }
+    },
+
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Signatures over the registry signing target. Signatures are excluded from the registry content hash.",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+
+    "extensions": {
+      "type": "object",
+      "description": "Implementation-specific fields. Extensions must not change core identity, hashing, authority, validation, or recognition semantics.",
+      "additionalProperties": true
+    }
+  },
+
+  "$defs": {
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "enum": ["sha256"]
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "payload_hash", "signature"],
+      "properties": {
+        "sig_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alg": {
+          "type": "string",
+          "enum": ["ed25519", "rsa-pss-sha256"]
+        },
+        "payload_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 16,
+          "description": "Signature bytes encoded as base64, base64url, or multibase according to the applicable signing profile."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": [
+            "general",
+            "wikidata",
+            "science",
+            "health",
+            "education",
+            "heritage",
+            "law",
+            "policy",
+            "technology",
+            "environment",
+            "culture",
+            "mythology",
+            "fiction",
+            "research",
+            "operations",
+            "civic",
+            "local_notes"
+          ]
+        },
+        "subdomain": {
+          "type": "string",
+          "minLength": 1
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "time_window": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+
+    "authority_channel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_channel_id",
+        "name",
+        "authority_type",
+        "scope",
+        "trust_roots",
+        "validation_policies"
+      ],
+      "properties": {
+        "authority_channel_id": {
+          "type": "string",
+          "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$",
+          "description": "Stable identifier for this authority channel."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority_type": {
+          "$ref": "#/$defs/authority_type"
+        },
+        "description": {
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "recognized_by": {
+          "type": "array",
+          "description": "Authority channels that recognize this authority channel, if any. Recognition is scoped and does not imply universal authority.",
+          "items": {
+            "type": "string",
+            "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+          }
+        },
+        "recognizes": {
+          "type": "array",
+          "description": "Authority channels recognized by this authority channel, if any.",
+          "items": {
+            "type": "string",
+            "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+          }
+        },
+        "trust_roots": {
+          "type": "array",
+          "minItems": 1,
+          "description": "root_id values authorized to sign for this authority channel.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "validation_policies": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Validation policy IDs applicable to this authority channel.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "recognition_policies": {
+          "type": "array",
+          "description": "Recognition policy IDs applicable to this authority channel.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "revocation_policy_ref": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "authority_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "community",
+        "association",
+        "research_collective",
+        "academic_institution",
+        "standards_body",
+        "company",
+        "government",
+        "intergovernmental_organization",
+        "ai_validator",
+        "hybrid_collective"
+      ]
+    },
+
+    "trust_root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_id", "category"],
+      "properties": {
+        "root_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "personal",
+            "community",
+            "association",
+            "research_collective",
+            "academic_institution",
+            "standards_body",
+            "company",
+            "government",
+            "intergovernmental_organization",
+            "ai_validator",
+            "hybrid_collective",
+            "recognized"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "authority_channel_ids": {
+          "type": "array",
+          "description": "Authority channels this trust root may sign for.",
+          "items": {
+            "type": "string",
+            "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+          }
+        },
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional identifier for the root key."
+        },
+        "did": {
+          "type": "string",
+          "minLength": 1
+        },
+        "public_key_jwk": {
+          "type": "object",
+          "description": "Optional JWK for offline verification.",
+          "additionalProperties": true
+        },
+        "x5c": {
+          "type": "array",
+          "description": "Optional X.509 certificate chain, base64 DER.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "not_before": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "not_after": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "anyOf": [
+        { "required": ["public_key_jwk"] },
+        { "required": ["did"] },
+        { "required": ["x5c"] },
+        { "required": ["key_id"] }
+      ]
+    },
+
+    "validation_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "policy_version",
+        "scope",
+        "allowed_validation_statuses",
+        "allowed_validated_as"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "allowed_validation_statuses": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/validation_status" }
+        },
+        "allowed_validated_as": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/validated_as" }
+        },
+        "allowed_certainty_levels": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/certainty_level" }
+        },
+        "required_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required_profiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "min_signatures": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        }
+      }
+    },
+
+    "recognition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "policy_version",
+        "scope",
+        "target_levels",
+        "allowed_recognition_statuses"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "target_levels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/target_level" }
+        },
+        "allowed_recognition_statuses": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/recognition_status" }
+        },
+        "allowed_validated_as": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/validated_as" }
+        },
+        "allowed_certainty_levels": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/certainty_level" }
+        },
+        "required_authority_channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+          }
+        },
+        "allow_delegated_authority": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id", "scope"],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+
+        "target_levels": {
+          "type": "array",
+          "description": "Artifact levels to which this rule applies. If omitted, the rule applies to all target levels in its scope.",
+          "items": { "$ref": "#/$defs/target_level" }
+        },
+
+        "allowed_authority_channel_ids": {
+          "type": "array",
+          "description": "Optional allow-list of authority_channel_id values accepted under this rule.",
+          "items": {
+            "type": "string",
+            "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+          }
+        },
+
+        "allowed_authority_types": {
+          "type": "array",
+          "description": "Optional allow-list of authority types accepted under this rule.",
+          "items": { "$ref": "#/$defs/authority_type" }
+        },
+
+        "allowed_root_categories": {
+          "type": "array",
+          "description": "Optional allow-list of trust root categories accepted under this rule.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "personal",
+              "community",
+              "association",
+              "research_collective",
+              "academic_institution",
+              "standards_body",
+              "company",
+              "government",
+              "intergovernmental_organization",
+              "ai_validator",
+              "hybrid_collective",
+              "recognized"
+            ]
+          }
+        },
+
+        "allowed_root_ids": {
+          "type": "array",
+          "description": "Optional allow-list of specific root_id values. If omitted, trust roots are selected by authority channel, root category, validation policy, recognition policy, and deployment policy.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+
+        "required_validation_policies": {
+          "type": "array",
+          "description": "Validation policy IDs required for artifacts or assertions in this scope.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+
+        "required_recognition_policies": {
+          "type": "array",
+          "description": "Recognition policy IDs required for artifacts, shards, datasets, authority channels, runtime packs, or assertions in this scope.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+
+        "allowed_validation_statuses": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/validation_status" }
+        },
+
+        "allowed_recognition_statuses": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/recognition_status" }
+        },
+
+        "allowed_validated_as": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/validated_as" }
+        },
+
+        "allowed_certainty_levels": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/certainty_level" }
+        },
+
+        "min_signatures": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Minimum number of valid signatures required for acceptance under this rule."
+        },
+
+        "revocation_policy": {
+          "type": "string",
+          "enum": ["ignore", "require_if_present", "require_strict"],
+          "default": "require_if_present",
+          "description": "How revocation list presence affects acceptance."
+        },
+
+        "delegation_policy": {
+          "type": "string",
+          "enum": ["none", "explicit_only", "allow_recognized_authorities"],
+          "default": "explicit_only",
+          "description": "Whether authority channels may rely on recognition or delegation from other authority channels."
+        },
+
+        "disagreement_policy": {
+          "type": "string",
+          "enum": ["preserve_disagreement", "authority_precedence", "mark_disputed", "exclude_conflict", "require_reader_choice"],
+          "default": "preserve_disagreement",
+          "description": "How conflicting claims or recognitions are handled in this scope."
+        }
+      }
+    },
+
+    "target_level": {
+      "type": "string",
+      "enum": [
+        "artifact",
+        "shard",
+        "assertion",
+        "authority_channel",
+        "dataset",
+        "runtime_pack"
+      ]
+    },
+
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "not_evaluated",
+        "in_review",
+        "validated",
+        "conditionally_validated",
+        "disputed",
+        "rejected",
+        "revoked"
+      ]
+    },
+
+    "recognition_status": {
+      "type": "string",
+      "enum": [
+        "recognized",
+        "conditionally_recognized",
+        "under_review",
+        "disputed",
+        "rejected",
+        "deprecated",
+        "revoked"
+      ]
+    },
+
+    "certainty_level": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "speculative",
+        "low",
+        "medium",
+        "high",
+        "established",
+        "not_applicable"
+      ]
+    },
+
+    "validated_as": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "claim",
+        "sourced_claim",
+        "reviewed_claim",
+        "high_confidence_fact",
+        "institutional_reference",
+        "publisher_declaration",
+        "technical_specification",
+        "legal_or_policy_position",
+        "mythological_corpus",
+        "fictional_corpus",
+        "symbolic_model",
+        "disputed_position",
+        "rejected_claim"
+      ]
+    }
+  }
+}

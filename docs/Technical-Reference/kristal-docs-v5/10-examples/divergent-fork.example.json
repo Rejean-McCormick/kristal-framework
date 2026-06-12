@@ -1,0 +1,756 @@
+{
+  "schema_version": "5.0",
+  "artifact_type": "structured_epistemic_state",
+  "state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "artifact_status": "working",
+  "created_at": "2026-06-12T16:30:00Z",
+  "created_by": {
+    "agent_id": "agent:flat-earth-collective-example",
+    "name": "Flat Earth Collective Example",
+    "agent_type": "community",
+    "authority_channel": {
+      "authority_channel_id": "authority:flat-earth-collective-example",
+      "name": "Flat Earth Collective Example"
+    }
+  },
+  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
+  "canonicalization_version": "1",
+  "content_hash": {
+    "alg": "sha256",
+    "value": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "hash_target_policy": {
+    "exclude_fields": ["state_id", "content_hash", "signatures"],
+    "notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned Structured Epistemic State, excluding state_id, content_hash, and signatures."
+  },
+  "scope": {
+    "domain": "research",
+    "subdomain": "divergent-world-model",
+    "jurisdiction": null,
+    "time_window": null,
+    "tenant_id": null,
+    "environment": "example",
+    "language": "en"
+  },
+  "source_refs": [
+    {
+      "source_id": "source:flat-earth-collective-example-brief",
+      "source_type": "human_submission",
+      "title": "Example divergent position brief",
+      "publisher": "Flat Earth Collective Example",
+      "retrieved_at": "2026-06-12T16:20:00Z",
+      "license": "example-only",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "authority_channel": {
+        "authority_channel_id": "authority:flat-earth-collective-example",
+        "name": "Flat Earth Collective Example"
+      }
+    },
+    {
+      "source_id": "source:global-science-reference-earth-shape",
+      "source_type": "institutional_record",
+      "title": "Global science reference position on Earth shape",
+      "publisher": "Global Science Reference Example",
+      "retrieved_at": "2026-06-12T16:21:00Z",
+      "license": "example-only",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "authority_channel": {
+        "authority_channel_id": "authority:global-science-reference-example",
+        "name": "Global Science Reference Example"
+      }
+    }
+  ],
+  "derived_from": [
+    {
+      "artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "artifact_type": "reference_exchange",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "6666666666666666666666666666666666666666666666666666666666666666"
+      },
+      "created_at": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "merged_from": [],
+  "supersedes": [],
+  "assertions": [
+    {
+      "assertion_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "source_assertion_id": "flat-earth-claim-0001",
+      "statement": {
+        "subject": {
+          "label": "Earth",
+          "description": "The planet Earth",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:global-science-reference-example",
+            "name": "Global Science Reference Example"
+          }
+        },
+        "predicate": {
+          "label": "has asserted shape",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:flat-earth-collective-example",
+            "name": "Flat Earth Collective Example"
+          }
+        },
+        "object": {
+          "kind": "string",
+          "value": "flat"
+        },
+        "qualifiers": [
+          {
+            "predicate": {
+              "label": "epistemic mode",
+              "language": "en"
+            },
+            "object": {
+              "kind": "string",
+              "value": "divergent physical-world claim"
+            },
+            "scope": {
+              "domain": "research",
+              "subdomain": "divergent-world-model",
+              "jurisdiction": null,
+              "time_window": null,
+              "tenant_id": null,
+              "environment": "example",
+              "language": "en"
+            },
+            "notes": "This qualifier marks the assertion as a divergent physical-world claim, not as a reference scientific claim."
+          }
+        ],
+        "rank": "normal",
+        "statement_hash": {
+          "alg": "sha256",
+          "value": "8888888888888888888888888888888888888888888888888888888888888888"
+        }
+      },
+      "natural_language_statement": {
+        "text": "Earth is flat.",
+        "lang": "en"
+      },
+      "assertion_status": "disputed",
+      "certainty_level": "low",
+      "validated_as": "disputed_position",
+      "scope": {
+        "domain": "research",
+        "subdomain": "divergent-world-model",
+        "jurisdiction": null,
+        "time_window": null,
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "evidence_refs": [
+        {
+          "evidence_id": "evidence:flat-earth-brief-0001",
+          "source_ref": {
+            "source_id": "source:flat-earth-collective-example-brief",
+            "source_type": "human_submission",
+            "title": "Example divergent position brief",
+            "publisher": "Flat Earth Collective Example",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "authority_channel": {
+              "authority_channel_id": "authority:flat-earth-collective-example",
+              "name": "Flat Earth Collective Example"
+            }
+          },
+          "quote": "The collective asserts that Earth should be modeled as flat within this divergent research fork.",
+          "section": "Position statement",
+          "evidence_status": "provided",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "9999999999999999999999999999999999999999999999999999999999999999"
+          }
+        }
+      ],
+      "provenance_refs": [
+        {
+          "artifact_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "artifact_type": "human_submission",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "created_at": "2026-06-12T16:10:00Z"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "recognition_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "recognition_status": "recognized",
+          "recognized_as": "disputed_position",
+          "authority_channel": {
+            "authority_channel_id": "authority:flat-earth-collective-example",
+            "name": "Flat Earth Collective Example"
+          },
+          "scope": {
+            "domain": "research",
+            "subdomain": "divergent-world-model",
+            "jurisdiction": null,
+            "time_window": null,
+            "tenant_id": null,
+            "environment": "example",
+            "language": "en"
+          },
+          "validation_policy_ref": {
+            "policy_id": "kristal.v5:validation-policy:divergent-position-self-declared",
+            "policy_version": "1"
+          }
+        },
+        {
+          "recognition_id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "recognition_status": "rejected",
+          "recognized_as": "rejected_claim",
+          "authority_channel": {
+            "authority_channel_id": "authority:global-science-reference-example",
+            "name": "Global Science Reference Example"
+          },
+          "scope": {
+            "domain": "science",
+            "subdomain": "planetary-science",
+            "jurisdiction": null,
+            "time_window": null,
+            "tenant_id": null,
+            "environment": "example",
+            "language": "en"
+          },
+          "validation_policy_ref": {
+            "policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+            "policy_version": "1"
+          }
+        }
+      ],
+      "validation": {
+        "validation_status": "validated",
+        "validated_as": "disputed_position",
+        "certainty_level": "low",
+        "authority_channel": {
+          "authority_channel_id": "authority:flat-earth-collective-example",
+          "name": "Flat Earth Collective Example"
+        },
+        "validation_policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:divergent-position-self-declared",
+          "policy_version": "1"
+        },
+        "scope": {
+          "domain": "research",
+          "subdomain": "divergent-world-model",
+          "jurisdiction": null,
+          "time_window": null,
+          "tenant_id": null,
+          "environment": "example",
+          "language": "en"
+        },
+        "reason_codes": ["authority_recognized", "disagreement_preserved"],
+        "validation_refs": [],
+        "notes": "Validated only as a self-declared disputed position within the divergent fork authority channel. This does not imply scientific recognition."
+      },
+      "uncertainty": {
+        "confidence": 0.1,
+        "method": "authority-scoped example confidence",
+        "notes": "Low certainty outside the self-declared divergent authority channel."
+      },
+      "lineage": {
+        "source_assertions": [],
+        "source_artifacts": [
+          {
+            "artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+            "artifact_type": "reference_exchange",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "6666666666666666666666666666666666666666666666666666666666666666"
+            }
+          }
+        ],
+        "transforms": [
+          {
+            "transform_id": "transform:fork-creation-0001",
+            "transform_type": "manual_edit",
+            "tool": "example-editor",
+            "policy_ref": {
+              "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+              "policy_version": "1"
+            },
+            "created_at": "2026-06-12T16:15:00Z",
+            "notes": "Created as an explicit divergent fork. Recognition from the source reference artifact is not inherited."
+          }
+        ]
+      },
+      "conflicts_with": [
+        "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      ],
+      "supersedes": [],
+      "notes": "This assertion may be rendered only with labels that preserve its disputed status, low certainty, and authority scope."
+    },
+    {
+      "assertion_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_assertion_id": "science-reference-claim-0001",
+      "statement": {
+        "subject": {
+          "label": "Earth",
+          "description": "The planet Earth",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:global-science-reference-example",
+            "name": "Global Science Reference Example"
+          }
+        },
+        "predicate": {
+          "label": "has asserted shape",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:global-science-reference-example",
+            "name": "Global Science Reference Example"
+          }
+        },
+        "object": {
+          "kind": "string",
+          "value": "approximately spherical"
+        },
+        "qualifiers": [
+          {
+            "predicate": {
+              "label": "epistemic mode",
+              "language": "en"
+            },
+            "object": {
+              "kind": "string",
+              "value": "scientific reference claim"
+            },
+            "scope": {
+              "domain": "science",
+              "subdomain": "planetary-science",
+              "jurisdiction": null,
+              "time_window": null,
+              "tenant_id": null,
+              "environment": "example",
+              "language": "en"
+            }
+          }
+        ],
+        "rank": "preferred",
+        "statement_hash": {
+          "alg": "sha256",
+          "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        }
+      },
+      "natural_language_statement": {
+        "text": "Earth is approximately spherical.",
+        "lang": "en"
+      },
+      "assertion_status": "validated",
+      "certainty_level": "established",
+      "validated_as": "high_confidence_fact",
+      "scope": {
+        "domain": "science",
+        "subdomain": "planetary-science",
+        "jurisdiction": null,
+        "time_window": null,
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "evidence_refs": [
+        {
+          "evidence_id": "evidence:science-reference-0001",
+          "source_ref": {
+            "source_id": "source:global-science-reference-earth-shape",
+            "source_type": "institutional_record",
+            "title": "Global science reference position on Earth shape",
+            "publisher": "Global Science Reference Example",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "4444444444444444444444444444444444444444444444444444444444444444"
+            },
+            "authority_channel": {
+              "authority_channel_id": "authority:global-science-reference-example",
+              "name": "Global Science Reference Example"
+            }
+          },
+          "quote": "The reference model describes Earth as approximately spherical for general scientific and educational use.",
+          "section": "Reference position",
+          "evidence_status": "sufficient",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "abababababababababababababababababababababababababababababababab"
+          }
+        }
+      ],
+      "provenance_refs": [
+        {
+          "artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+          "artifact_type": "reference_exchange",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "6666666666666666666666666666666666666666666666666666666666666666"
+          },
+          "created_at": "2026-06-01T00:00:00Z"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "recognition_id": "sha256:babababababababababababababababababababababababababababababababa",
+          "recognition_status": "recognized",
+          "recognized_as": "high_confidence_fact",
+          "authority_channel": {
+            "authority_channel_id": "authority:global-science-reference-example",
+            "name": "Global Science Reference Example"
+          },
+          "scope": {
+            "domain": "science",
+            "subdomain": "planetary-science",
+            "jurisdiction": null,
+            "time_window": null,
+            "tenant_id": null,
+            "environment": "example",
+            "language": "en"
+          },
+          "validation_policy_ref": {
+            "policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+            "policy_version": "1"
+          }
+        }
+      ],
+      "validation": {
+        "validation_status": "validated",
+        "validated_as": "high_confidence_fact",
+        "certainty_level": "established",
+        "authority_channel": {
+          "authority_channel_id": "authority:global-science-reference-example",
+          "name": "Global Science Reference Example"
+        },
+        "validation_policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+          "policy_version": "1"
+        },
+        "scope": {
+          "domain": "science",
+          "subdomain": "planetary-science",
+          "jurisdiction": null,
+          "time_window": null,
+          "tenant_id": null,
+          "environment": "example",
+          "language": "en"
+        },
+        "reason_codes": ["authority_recognized", "evidence_sufficient", "policy_satisfied"],
+        "validation_refs": [],
+        "notes": "Included to preserve the source reference position that the divergent fork disputes."
+      },
+      "uncertainty": {
+        "confidence": 0.99,
+        "method": "authority-scoped example confidence",
+        "notes": "Established within the global science reference example channel."
+      },
+      "lineage": {
+        "source_assertions": [],
+        "source_artifacts": [
+          {
+            "artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+            "artifact_type": "reference_exchange",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "6666666666666666666666666666666666666666666666666666666666666666"
+            }
+          }
+        ],
+        "transforms": [
+          {
+            "transform_id": "transform:reference-preservation-0001",
+            "transform_type": "import",
+            "tool": "example-importer",
+            "policy_ref": {
+              "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+              "policy_version": "1"
+            },
+            "created_at": "2026-06-12T16:16:00Z",
+            "notes": "Preserved as the source reference claim against which the divergent assertion is positioned."
+          }
+        ]
+      },
+      "conflicts_with": [
+        "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+      ],
+      "supersedes": [],
+      "notes": "This assertion remains recognized by its own authority channel. The divergent fork does not revoke or overwrite it."
+    }
+  ],
+  "provenance": [
+    {
+      "provenance_id": "prov:fork-created-0001",
+      "event_type": "created",
+      "created_at": "2026-06-12T16:15:00Z",
+      "agent": {
+        "agent_id": "agent:flat-earth-collective-example",
+        "name": "Flat Earth Collective Example",
+        "agent_type": "community",
+        "authority_channel": {
+          "authority_channel_id": "authority:flat-earth-collective-example",
+          "name": "Flat Earth Collective Example"
+        }
+      },
+      "source_ref": {
+        "source_id": "source:flat-earth-collective-example-brief",
+        "source_type": "human_submission",
+        "title": "Example divergent position brief",
+        "publisher": "Flat Earth Collective Example",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "authority_channel": {
+          "authority_channel_id": "authority:flat-earth-collective-example",
+          "name": "Flat Earth Collective Example"
+        }
+      },
+      "policy_refs": [
+        {
+          "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+          "policy_version": "1"
+        }
+      ],
+      "notes": "The divergent fork was created without inheriting recognition from the source reference artifact."
+    },
+    {
+      "provenance_id": "prov:reference-imported-0001",
+      "event_type": "imported",
+      "created_at": "2026-06-12T16:16:00Z",
+      "agent": {
+        "agent_id": "agent:example-importer",
+        "name": "Example Importer",
+        "agent_type": "system"
+      },
+      "artifact_ref": {
+        "artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "artifact_type": "reference_exchange",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        "created_at": "2026-06-01T00:00:00Z"
+      },
+      "policy_refs": [
+        {
+          "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+          "policy_version": "1"
+        }
+      ],
+      "notes": "The source reference assertion is preserved so readers can inspect the disagreement."
+    }
+  ],
+  "review_refs": [],
+  "policy_refs": [
+    {
+      "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+      "policy_version": "1"
+    },
+    {
+      "policy_id": "kristal.v5:validation-policy:divergent-position-self-declared",
+      "policy_version": "1"
+    },
+    {
+      "policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+      "policy_version": "1"
+    }
+  ],
+  "authority_recognition_refs": [
+    {
+      "recognition_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "recognition_status": "recognized",
+      "recognized_as": "disputed_position",
+      "authority_channel": {
+        "authority_channel_id": "authority:flat-earth-collective-example",
+        "name": "Flat Earth Collective Example"
+      },
+      "scope": {
+        "domain": "research",
+        "subdomain": "divergent-world-model",
+        "jurisdiction": null,
+        "time_window": null,
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "validation_policy_ref": {
+        "policy_id": "kristal.v5:validation-policy:divergent-position-self-declared",
+        "policy_version": "1"
+      }
+    },
+    {
+      "recognition_id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "recognition_status": "rejected",
+      "recognized_as": "rejected_claim",
+      "authority_channel": {
+        "authority_channel_id": "authority:global-science-reference-example",
+        "name": "Global Science Reference Example"
+      },
+      "scope": {
+        "domain": "science",
+        "subdomain": "planetary-science",
+        "jurisdiction": null,
+        "time_window": null,
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "validation_policy_ref": {
+        "policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+        "policy_version": "1"
+      }
+    }
+  ],
+  "reader_policy_refs": [
+    {
+      "reader_policy_id": "reader_policy:research-all-with-labels",
+      "mode": "all_with_labels"
+    },
+    {
+      "reader_policy_id": "reader_policy:validated-only-selected-authorities",
+      "mode": "validated_only"
+    }
+  ],
+  "certainty_summary": {
+    "counts_by_certainty_level": {
+      "low": 1,
+      "established": 1
+    },
+    "counts_by_assertion_status": {
+      "disputed": 1,
+      "validated": 1
+    },
+    "counts_by_validated_as": {
+      "disputed_position": 1,
+      "high_confidence_fact": 1
+    },
+    "notes": "This example intentionally contains conflicting assertions to demonstrate divergent fork behavior."
+  },
+  "validation_summary": {
+    "validation_status": "disputed",
+    "recognition_status": "disputed",
+    "authority_channels": [
+      {
+        "authority_channel_id": "authority:flat-earth-collective-example",
+        "name": "Flat Earth Collective Example"
+      },
+      {
+        "authority_channel_id": "authority:global-science-reference-example",
+        "name": "Global Science Reference Example"
+      }
+    ],
+    "validation_refs": [],
+    "recognition_refs": [
+      {
+        "recognition_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "recognition_status": "recognized",
+        "recognized_as": "disputed_position",
+        "authority_channel": {
+          "authority_channel_id": "authority:flat-earth-collective-example",
+          "name": "Flat Earth Collective Example"
+        }
+      },
+      {
+        "recognition_id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "recognition_status": "rejected",
+        "recognized_as": "rejected_claim",
+        "authority_channel": {
+          "authority_channel_id": "authority:global-science-reference-example",
+          "name": "Global Science Reference Example"
+        }
+      }
+    ],
+    "reason_codes": ["conflict_detected", "disagreement_preserved"],
+    "notes": "The state is valid as a divergent fork example. It is not a reference artifact and should not be rendered as a universal factual reference."
+  },
+  "lineage": {
+    "source_artifacts": [
+      {
+        "artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "artifact_type": "reference_exchange",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "6666666666666666666666666666666666666666666666666666666666666666"
+        },
+        "created_at": "2026-06-01T00:00:00Z"
+      }
+    ],
+    "source_states": [],
+    "transforms": [
+      {
+        "transform_id": "transform:divergent-fork-0001",
+        "transform_type": "manual_edit",
+        "tool": "example-editor",
+        "policy_ref": {
+          "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+          "policy_version": "1"
+        },
+        "created_at": "2026-06-12T16:15:00Z",
+        "notes": "A divergent fork may disagree with a source reference artifact while preserving source identity, conflict metadata, and authority scope."
+      }
+    ],
+    "compiler": {
+      "agent_id": "agent:example-compiler",
+      "name": "Example Compiler",
+      "agent_type": "system"
+    },
+    "policy_refs": [
+      {
+        "policy_id": "kristal.v5:fork-policy:preserve-lineage-and-scope",
+        "policy_version": "1"
+      }
+    ]
+  },
+  "build": {
+    "build_id": "build:20260612T163000Z:divergent-fork-example",
+    "schema_version": "5.0",
+    "compile_status": "succeeded",
+    "validation_status": "disputed",
+    "review_status": "completed",
+    "recognition_status": "none",
+    "publication_status": "not_published",
+    "activation_status": "not_applicable",
+    "working_outputs": [],
+    "reference_outputs": [],
+    "reason_codes": ["conflict_detected", "disagreement_preserved"],
+    "created_at": "2026-06-12T16:30:00Z"
+  },
+  "warnings": [
+    {
+      "code": "CONFLICT_DETECTED",
+      "message": "This Structured Epistemic State contains assertions that conflict across authority channels.",
+      "path": "/assertions",
+      "reason_code": "conflict_detected"
+    },
+    {
+      "code": "LOW_CERTAINTY",
+      "message": "The divergent fork assertion has low certainty outside its declaring authority channel.",
+      "path": "/assertions/0",
+      "reason_code": "certainty_too_low_for_policy"
+    }
+  ],
+  "extensions": {
+    "example_purpose": "Demonstrates that divergent forks may exist, preserve lineage, declare authority scope, and remain filterable by reader policy without inheriting reference recognition."
+  },
+  "signatures": [
+    {
+      "key_id": "flat_earth_collective_example_ed25519_v1",
+      "alg": "ed25519",
+      "signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+      "created_at": "2026-06-12T16:30:10Z",
+      "authority_channel": {
+        "authority_channel_id": "authority:flat-earth-collective-example",
+        "name": "Flat Earth Collective Example"
+      }
+    }
+  ]
+}

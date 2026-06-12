@@ -1,0 +1,533 @@
+```json
+{
+  "schema_version": "5.0",
+  "artifact_type": "reference_exchange",
+  "exchange_version": "5.0",
+  "kristal_id": "sha256:6b6f3d4a2c9e1f807a6b5c4d3e2f1a0987654321abcdef0123456789abcdef01",
+  "artifact_status": "reference",
+  "title": "Greek Mythology Corpus — Reference Example",
+  "description": "Example Kristal v5 reference artifact for a mythology corpus. The artifact is valid as mythology and cultural heritage, not as physical-world factual truth.",
+  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
+  "canonicalization_version": "1",
+  "content_hash": {
+    "alg": "sha256",
+    "value": "0f1e2d3c4b5a69788796a5b4c3d2e1f0123456789abcdef0123456789abcdef"
+  },
+  "created_at": "2026-06-12T00:00:00Z",
+  "updated_at": "2026-06-12T00:00:00Z",
+  "publisher": {
+    "authority_channel": "authority:example-cultural-heritage-curator",
+    "name": "Example Cultural Heritage Curator",
+    "key_id": "example-cultural-heritage-curator-ed25519-2026"
+  },
+  "scope": {
+    "domain": "mythology",
+    "subdomain": "greek",
+    "jurisdiction": null,
+    "time_window": "classical_antiquity",
+    "tenant_id": null,
+    "environment": "example",
+    "language": "en"
+  },
+  "source_state_refs": [
+    {
+      "ref": "structured-epistemic-states/greek-mythology-source-state.example.json",
+      "kind": "artifact",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "a1b2c3d4e5f60718293a4b5c6d7e8f900f1e2d3c4b5a69788796a5b4c3d2e1f0"
+      }
+    }
+  ],
+  "derived_from": [
+    {
+      "ref": "source:hesiod-theogony",
+      "kind": "source"
+    },
+    {
+      "ref": "source:homer-iliad",
+      "kind": "source"
+    },
+    {
+      "ref": "source:apollodorus-library",
+      "kind": "source"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion_id": "sha256:1000000000000000000000000000000000000000000000000000000000000001",
+      "statement": {
+        "subject": {
+          "surface": "Zeus",
+          "kind": "mythological_entity"
+        },
+        "predicate": {
+          "surface": "is described as"
+        },
+        "object": {
+          "kind": "string",
+          "value": "king of the Olympian gods in Greek mythology"
+        }
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "mythological_corpus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "provenance_refs": [
+        {
+          "ref": "source:hesiod-theogony",
+          "kind": "source"
+        },
+        {
+          "ref": "source:apollodorus-library",
+          "kind": "source"
+        }
+      ],
+      "evidence_refs": [
+        {
+          "ref": "evidence:zeus-olympian-role",
+          "kind": "evidence"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "ref": "authority-recognition:example-cultural-heritage-greek-mythology",
+          "kind": "authority_recognition"
+        }
+      ],
+      "validation_refs": [
+        {
+          "ref": "validation-decision:greek-mythology-valid-as-mythology",
+          "kind": "validation_decision"
+        }
+      ],
+      "lineage": {
+        "source_artifacts": [
+          "source:hesiod-theogony",
+          "source:apollodorus-library"
+        ],
+        "transforms": [
+          "transform:mythological-entity-normalization-v1"
+        ],
+        "compiler": {
+          "name": "kristal-example-compiler",
+          "version": "5.0.0"
+        },
+        "policy_refs": [
+          "validation-policy:mythological-corpus-cultural-reference"
+        ]
+      }
+    },
+    {
+      "assertion_id": "sha256:1000000000000000000000000000000000000000000000000000000000000002",
+      "statement": {
+        "subject": {
+          "surface": "Athena",
+          "kind": "mythological_entity"
+        },
+        "predicate": {
+          "surface": "is associated with"
+        },
+        "object": {
+          "kind": "string",
+          "value": "wisdom, strategy, crafts, and civic protection in Greek mythology"
+        }
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "mythological_corpus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "provenance_refs": [
+        {
+          "ref": "source:homer-iliad",
+          "kind": "source"
+        },
+        {
+          "ref": "source:apollodorus-library",
+          "kind": "source"
+        }
+      ],
+      "evidence_refs": [
+        {
+          "ref": "evidence:athena-domains",
+          "kind": "evidence"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "ref": "authority-recognition:example-cultural-heritage-greek-mythology",
+          "kind": "authority_recognition"
+        }
+      ],
+      "validation_refs": [
+        {
+          "ref": "validation-decision:greek-mythology-valid-as-mythology",
+          "kind": "validation_decision"
+        }
+      ],
+      "lineage": {
+        "source_artifacts": [
+          "source:homer-iliad",
+          "source:apollodorus-library"
+        ],
+        "transforms": [
+          "transform:mythological-entity-normalization-v1"
+        ],
+        "compiler": {
+          "name": "kristal-example-compiler",
+          "version": "5.0.0"
+        },
+        "policy_refs": [
+          "validation-policy:mythological-corpus-cultural-reference"
+        ]
+      }
+    },
+    {
+      "assertion_id": "sha256:1000000000000000000000000000000000000000000000000000000000000003",
+      "statement": {
+        "subject": {
+          "surface": "The Minotaur",
+          "kind": "mythological_entity"
+        },
+        "predicate": {
+          "surface": "is described as"
+        },
+        "object": {
+          "kind": "string",
+          "value": "a hybrid creature associated with the Labyrinth of Crete in Greek mythology"
+        }
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "mythological_corpus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "provenance_refs": [
+        {
+          "ref": "source:apollodorus-library",
+          "kind": "source"
+        }
+      ],
+      "evidence_refs": [
+        {
+          "ref": "evidence:minotaur-labyrinth",
+          "kind": "evidence"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "ref": "authority-recognition:example-cultural-heritage-greek-mythology",
+          "kind": "authority_recognition"
+        }
+      ],
+      "validation_refs": [
+        {
+          "ref": "validation-decision:greek-mythology-valid-as-mythology",
+          "kind": "validation_decision"
+        }
+      ],
+      "lineage": {
+        "source_artifacts": [
+          "source:apollodorus-library"
+        ],
+        "transforms": [
+          "transform:mythological-entity-normalization-v1"
+        ],
+        "compiler": {
+          "name": "kristal-example-compiler",
+          "version": "5.0.0"
+        },
+        "policy_refs": [
+          "validation-policy:mythological-corpus-cultural-reference"
+        ]
+      }
+    }
+  ],
+  "provenance": [
+    {
+      "provenance_id": "provenance:hesiod-theogony",
+      "source_ref": "source:hesiod-theogony",
+      "source_type": "textual_tradition",
+      "title": "Theogony",
+      "attribution": "Hesiod",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      }
+    },
+    {
+      "provenance_id": "provenance:homer-iliad",
+      "source_ref": "source:homer-iliad",
+      "source_type": "textual_tradition",
+      "title": "Iliad",
+      "attribution": "Homeric tradition",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      }
+    },
+    {
+      "provenance_id": "provenance:apollodorus-library",
+      "source_ref": "source:apollodorus-library",
+      "source_type": "textual_tradition",
+      "title": "Library",
+      "attribution": "Pseudo-Apollodorus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      }
+    }
+  ],
+  "validation_refs": [
+    {
+      "ref": "validation-decision:greek-mythology-valid-as-mythology",
+      "kind": "validation_decision"
+    }
+  ],
+  "validation_decisions": [
+    {
+      "validation_decision_id": "validation-decision:greek-mythology-valid-as-mythology",
+      "artifact_type": "validation_decision",
+      "target_ref": {
+        "ref": "sha256:6b6f3d4a2c9e1f807a6b5c4d3e2f1a0987654321abcdef0123456789abcdef01",
+        "kind": "artifact"
+      },
+      "target_level": "artifact",
+      "validation_status": "validated",
+      "validated_as": "mythological_corpus",
+      "certainty_level": "not_applicable",
+      "authority_channel": "authority:example-cultural-heritage-curator",
+      "validation_policy_ref": {
+        "ref": "validation-policy:mythological-corpus-cultural-reference",
+        "kind": "policy"
+      },
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "findings": [
+        {
+          "code": "VALID_AS_MYTHOLOGICAL_CORPUS",
+          "severity": "info",
+          "message": "The corpus is accepted as a structured mythological and cultural reference."
+        },
+        {
+          "code": "NOT_PHYSICAL_WORLD_TRUTH_CLAIM",
+          "severity": "info",
+          "message": "Validation as mythology does not validate supernatural or mythic events as physical-world facts."
+        }
+      ],
+      "reason_codes": [
+        "scope_satisfied",
+        "provenance_sufficient",
+        "validated_as_mythological_corpus",
+        "certainty_not_applicable"
+      ],
+      "created_at": "2026-06-12T00:00:00Z",
+      "signatures": [
+        {
+          "key_id": "example-cultural-heritage-curator-ed25519-2026",
+          "alg": "ed25519",
+          "signature": "example-signature-validation-decision",
+          "created_at": "2026-06-12T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "authority_recognition_refs": [
+    {
+      "ref": "authority-recognition:example-cultural-heritage-greek-mythology",
+      "kind": "authority_recognition"
+    }
+  ],
+  "authority_recognitions": [
+    {
+      "recognition_id": "authority-recognition:example-cultural-heritage-greek-mythology",
+      "artifact_type": "authority_recognition",
+      "issuer_authority_channel": "authority:example-cultural-heritage-curator",
+      "target_ref": {
+        "ref": "sha256:6b6f3d4a2c9e1f807a6b5c4d3e2f1a0987654321abcdef0123456789abcdef01",
+        "kind": "artifact"
+      },
+      "target_level": "artifact",
+      "recognition_status": "recognized",
+      "recognized_as": "mythological_corpus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek",
+        "jurisdiction": null,
+        "time_window": "classical_antiquity",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "validation_policy_ref": {
+        "ref": "validation-policy:mythological-corpus-cultural-reference",
+        "kind": "policy"
+      },
+      "reason_codes": [
+        "authority_recognized",
+        "scope_satisfied",
+        "reference_for_mythology",
+        "not_physical_world_claim"
+      ],
+      "evidence_refs": [
+        {
+          "ref": "source:hesiod-theogony",
+          "kind": "source"
+        },
+        {
+          "ref": "source:homer-iliad",
+          "kind": "source"
+        },
+        {
+          "ref": "source:apollodorus-library",
+          "kind": "source"
+        }
+      ],
+      "created_at": "2026-06-12T00:00:00Z",
+      "expires_at": null,
+      "signatures": [
+        {
+          "key_id": "example-cultural-heritage-curator-ed25519-2026",
+          "alg": "ed25519",
+          "signature": "example-signature-authority-recognition",
+          "created_at": "2026-06-12T00:00:00Z"
+        }
+      ]
+    }
+  ],
+  "certainty_summary": {
+    "default_certainty_level": "not_applicable",
+    "certainty_model": "mythological_corpus",
+    "notes": "Certainty is not expressed as physical-world factual confidence for this artifact. Assertions are validated as part of a mythological and cultural corpus."
+  },
+  "validation_summary": {
+    "validation_status": "validated",
+    "validated_as": "mythological_corpus",
+    "authority_channel": "authority:example-cultural-heritage-curator",
+    "scope": {
+      "domain": "mythology",
+      "subdomain": "greek",
+      "jurisdiction": null,
+      "time_window": "classical_antiquity",
+      "tenant_id": null,
+      "environment": "example",
+      "language": "en"
+    },
+    "physical_world_truth_claim": false
+  },
+  "reader_policy_refs": [
+    {
+      "ref": "reader_policy:creative",
+      "kind": "policy"
+    },
+    {
+      "ref": "reader_policy:all_with_labels",
+      "kind": "policy"
+    },
+    {
+      "ref": "reader_policy:mythology_reference",
+      "kind": "policy"
+    }
+  ],
+  "lineage": {
+    "source_artifacts": [
+      "source:hesiod-theogony",
+      "source:homer-iliad",
+      "source:apollodorus-library"
+    ],
+    "transforms": [
+      "transform:mythological-entity-normalization-v1",
+      "transform:source-attribution-normalization-v1"
+    ],
+    "compiler": {
+      "name": "kristal-example-compiler",
+      "version": "5.0.0"
+    },
+    "policy_refs": [
+      "validation-policy:mythological-corpus-cultural-reference",
+      "reader_policy:mythology_reference"
+    ]
+  },
+  "build": {
+    "build_id": "build:2026-06-12:mythology-corpus-example",
+    "schema_version": "5.0",
+    "compile_status": "succeeded",
+    "validation_status": "validated",
+    "review_status": "completed",
+    "recognition_status": "recognized",
+    "publication_status": "published",
+    "activation_status": "not_applicable",
+    "working_outputs": [],
+    "reference_outputs": [
+      {
+        "ref": "sha256:6b6f3d4a2c9e1f807a6b5c4d3e2f1a0987654321abcdef0123456789abcdef01",
+        "kind": "artifact"
+      }
+    ],
+    "reason_codes": [
+      "schema_valid",
+      "provenance_sufficient",
+      "authority_recognized",
+      "policy_satisfied",
+      "validated_as_mythological_corpus"
+    ],
+    "created_at": "2026-06-12T00:00:00Z"
+  },
+  "signatures": [
+    {
+      "key_id": "example-cultural-heritage-curator-ed25519-2026",
+      "alg": "ed25519",
+      "signature": "example-signature-reference-exchange",
+      "created_at": "2026-06-12T00:00:00Z"
+    }
+  ],
+  "extensions": {
+    "example_notice": "This file is an illustrative Kristal v5 example. Hashes and signatures are placeholders."
+  }
+}
+```

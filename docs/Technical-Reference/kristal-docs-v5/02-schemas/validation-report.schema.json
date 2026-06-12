@@ -1,0 +1,988 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://kristal.org/schemas/v5/validation-report.schema.json",
+"title": "Kristal v5 Validation Report",
+"description": "A scoped validation report for Kristal v5 artifacts, assertions, shards, runtime packs, authority channels, or reader policies. A validation report records what was checked, by which tooling or authority context, under which policy, and with which deterministic findings. It does not imply universal truth or compilation gating.",
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"artifact_type",
+"validation_report_id",
+"created_at",
+"target",
+"validation_status",
+"issues"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"description": "Schema version for this report format.",
+"const": "5.0"
+},
+
+```
+"artifact_type": {
+  "type": "string",
+  "description": "Kristal artifact type.",
+  "const": "validation_report"
+},
+
+"validation_report_id": {
+  "type": "string",
+  "description": "Content-addressed identifier or stable identifier for this validation report.",
+  "minLength": 1,
+  "pattern": "^(sha256:[a-f0-9]{64}|[A-Za-z][A-Za-z0-9._:-]{0,255})$"
+},
+
+"content_hash": {
+  "$ref": "#/$defs/content_hash"
+},
+
+"created_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "UTC timestamp when the report was produced."
+},
+
+"created_by": {
+  "$ref": "#/$defs/actor"
+},
+
+"canonicalization_profile": {
+  "type": "string",
+  "description": "Canonicalization profile used when this report is content-addressed or signed.",
+  "const": "kristal.v5:jcs-rfc8785"
+},
+
+"canonicalization_version": {
+  "type": "string",
+  "description": "Canonicalization profile version.",
+  "const": "1"
+},
+
+"target": {
+  "$ref": "#/$defs/target_ref"
+},
+
+"target_level": {
+  "type": "string",
+  "description": "Granularity of the validated target.",
+  "enum": [
+    "artifact",
+    "state",
+    "exchange",
+    "shard",
+    "federation",
+    "assertion",
+    "authority_channel",
+    "authority_registry",
+    "runtime_pack",
+    "reader_policy",
+    "dataset",
+    "export"
+  ]
+},
+
+"build_id": {
+  "type": "string",
+  "description": "Optional compiler/build correlation ID for end-to-end traceability.",
+  "minLength": 1
+},
+
+"run_id": {
+  "type": "string",
+  "description": "Optional validation run identifier. This may be operational rather than content-addressed.",
+  "minLength": 1
+},
+
+"report_status": {
+  "type": "string",
+  "description": "Execution status of the validation run. This describes whether the report generation completed, not whether the target is accepted.",
+  "enum": [
+    "completed",
+    "partial",
+    "failed",
+    "aborted"
+  ]
+},
+
+"validation_status": {
+  "type": "string",
+  "description": "Scoped validation outcome for the target under the declared validation policy. This is not a universal truth status.",
+  "enum": [
+    "not_evaluated",
+    "in_review",
+    "validated",
+    "conditionally_validated",
+    "disputed",
+    "rejected",
+    "revoked"
+  ]
+},
+
+"validated_as": {
+  "type": "string",
+  "description": "The epistemic mode or role in which the target is validated, rejected, disputed, or reviewed.",
+  "enum": [
+    "hypothesis",
+    "claim",
+    "sourced_claim",
+    "reviewed_claim",
+    "high_confidence_fact",
+    "institutional_reference",
+    "publisher_declaration",
+    "technical_specification",
+    "legal_or_policy_position",
+    "mythological_corpus",
+    "fictional_corpus",
+    "symbolic_model",
+    "disputed_position",
+    "rejected_claim"
+  ]
+},
+
+"certainty_level": {
+  "type": "string",
+  "description": "Overall certainty level assigned by this report, if applicable. Validation does not always imply high certainty.",
+  "enum": [
+    "unknown",
+    "speculative",
+    "low",
+    "medium",
+    "high",
+    "established",
+    "not_applicable",
+    "mixed"
+  ]
+},
+
+"scope": {
+  "$ref": "#/$defs/scope"
+},
+
+"authority_channel": {
+  "type": "string",
+  "description": "Authority channel under which this report is issued or evaluated.",
+  "minLength": 1,
+  "pattern": "^authority:[A-Za-z0-9._:-]+$"
+},
+
+"authority_registry_ref": {
+  "$ref": "#/$defs/reference"
+},
+
+"validation_policy_ref": {
+  "$ref": "#/$defs/reference"
+},
+
+"recognition_refs": {
+  "type": "array",
+  "description": "Authority recognition records relevant to this validation report.",
+  "items": {
+    "$ref": "#/$defs/reference"
+  }
+},
+
+"profiles": {
+  "type": "array",
+  "description": "Profiles enabled during validation. The v5 core profile is implicit.",
+  "items": {
+    "type": "string",
+    "minLength": 1
+  }
+},
+
+"tooling": {
+  "$ref": "#/$defs/tooling"
+},
+
+"inputs": {
+  "type": "object",
+  "description": "Identifiers for validated artifacts, snapshots, profiles, or input corpora.",
+  "additionalProperties": false,
+  "properties": {
+    "structured_epistemic_state_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "exchange_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "runtime_pack_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "shard_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "federation_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "authority_registry_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "source_snapshot_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "recipe_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reader_policy_ref": {
+      "$ref": "#/$defs/reference"
+    }
+  }
+},
+
+"stats": {
+  "type": "object",
+  "description": "Summary counts for dashboards, review, policy decisions, and operational monitoring.",
+  "additionalProperties": false,
+  "properties": {
+    "error_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "warning_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "info_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "validated_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "conditionally_validated_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "disputed_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "rejected_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "not_evaluated_count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+},
+
+"limits": {
+  "type": "object",
+  "description": "Resource limits applied during validation, especially for expensive profiles.",
+  "additionalProperties": false,
+  "properties": {
+    "timeout_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "iteration_cap": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "memory_cap_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_issue_count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+},
+
+"findings": {
+  "type": "array",
+  "description": "Structured validation findings. Findings may apply to artifacts, shards, assertions, authority channels, runtime packs, exports, or reader policies.",
+  "items": {
+    "$ref": "#/$defs/finding"
+  }
+},
+
+"issues": {
+  "type": "array",
+  "description": "Deterministic issues emitted by validation.",
+  "items": {
+    "$ref": "#/$defs/issue"
+  }
+},
+
+"shacl": {
+  "type": "object",
+  "description": "Optional SHACL validation output.",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "report_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "report_hash": {
+      "$ref": "#/$defs/content_hash"
+    },
+    "report_format": {
+      "type": "string",
+      "description": "Serialization format of the report if report_uri is provided.",
+      "enum": [
+        "text/turtle",
+        "application/n-triples",
+        "application/n-quads",
+        "application/ld+json",
+        "application/rdf+xml"
+      ]
+    }
+  }
+},
+
+"shex": {
+  "type": "object",
+  "description": "Optional ShEx validation output.",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "report_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "report_hash": {
+      "$ref": "#/$defs/content_hash"
+    },
+    "report_format": {
+      "type": "string",
+      "enum": [
+        "application/json",
+        "text/plain"
+      ]
+    }
+  }
+},
+
+"export_validation": {
+  "type": "object",
+  "description": "Optional results for validating deterministic exports such as JSON-LD, RDF, WDQS-compatible output, or RDFC integrity.",
+  "additionalProperties": false,
+  "properties": {
+    "jsonld_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rdf_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "wdqs_compat": {
+      "type": "boolean"
+    },
+    "rdf_hash": {
+      "type": "string",
+      "description": "Optional rdf_hash when RDFC integrity profile is enabled.",
+      "minLength": 1
+    },
+    "export_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    }
+  }
+},
+
+"lineage": {
+  "$ref": "#/$defs/lineage"
+},
+
+"signatures": {
+  "type": "array",
+  "description": "Signatures over this validation report according to the active signature profile.",
+  "items": {
+    "$ref": "#/$defs/signature"
+  }
+},
+
+"attestations": {
+  "type": "array",
+  "description": "Optional attestations attached to this report. Separate referenced attestations are preferred when they may change independently.",
+  "items": {
+    "$ref": "#/$defs/reference"
+  }
+},
+
+"extensions": {
+  "type": "object",
+  "description": "Implementation-specific additional fields. Extensions must not change v5 core conformance semantics.",
+  "additionalProperties": true
+}
+```
+
+},
+
+"$defs": {
+"content_hash": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"alg",
+"value"
+],
+"properties": {
+"alg": {
+"type": "string",
+"const": "sha256"
+},
+"value": {
+"type": "string",
+"pattern": "^[a-f0-9]{64}$"
+}
+}
+},
+
+```
+"reference": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ref"
+  ],
+  "properties": {
+    "ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/content_hash"
+    },
+    "media_type": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+},
+
+"target_ref": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "target_type",
+    "target_id"
+  ],
+  "properties": {
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "structured_epistemic_state",
+        "working_exchange",
+        "reference_exchange",
+        "exchange",
+        "exchange_shard_manifest",
+        "exchange_federation_manifest",
+        "runtime_pack_manifest",
+        "authority_registry",
+        "authority_channel",
+        "authority_recognition",
+        "validation_decision",
+        "validation_report",
+        "reader_policy",
+        "revocation_record",
+        "assertion",
+        "dataset",
+        "export"
+      ]
+    },
+    "target_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/content_hash"
+    }
+  }
+},
+
+"actor": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "community",
+        "association",
+        "research_collective",
+        "academic_institution",
+        "standards_body",
+        "company",
+        "government",
+        "intergovernmental_organization",
+        "ai_validator",
+        "hybrid_collective",
+        "tool",
+        "system"
+      ]
+    },
+    "authority_channel": {
+      "type": "string",
+      "pattern": "^authority:[A-Za-z0-9._:-]+$"
+    }
+  }
+},
+
+"scope": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain"
+  ],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "enum": [
+        "general",
+        "wikidata",
+        "science",
+        "health",
+        "education",
+        "heritage",
+        "law",
+        "policy",
+        "technology",
+        "environment",
+        "culture",
+        "mythology",
+        "fiction",
+        "research",
+        "operations",
+        "civic",
+        "local_notes"
+      ]
+    },
+    "subdomain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "time_window": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tenant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+},
+
+"tooling": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "validator_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "validator_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compiler_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compiler_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonicalization_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_version": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+},
+
+"severity": {
+  "type": "string",
+  "enum": [
+    "error",
+    "warning",
+    "info"
+  ]
+},
+
+"validation_status": {
+  "type": "string",
+  "enum": [
+    "not_evaluated",
+    "in_review",
+    "validated",
+    "conditionally_validated",
+    "disputed",
+    "rejected",
+    "revoked"
+  ]
+},
+
+"certainty_level": {
+  "type": "string",
+  "enum": [
+    "unknown",
+    "speculative",
+    "low",
+    "medium",
+    "high",
+    "established",
+    "not_applicable",
+    "mixed"
+  ]
+},
+
+"validated_as": {
+  "type": "string",
+  "enum": [
+    "hypothesis",
+    "claim",
+    "sourced_claim",
+    "reviewed_claim",
+    "high_confidence_fact",
+    "institutional_reference",
+    "publisher_declaration",
+    "technical_specification",
+    "legal_or_policy_position",
+    "mythological_corpus",
+    "fictional_corpus",
+    "symbolic_model",
+    "disputed_position",
+    "rejected_claim"
+  ]
+},
+
+"reason_code": {
+  "type": "string",
+  "enum": [
+    "schema_valid",
+    "schema_invalid",
+    "provenance_sufficient",
+    "provenance_insufficient",
+    "evidence_sufficient",
+    "evidence_insufficient",
+    "authority_recognized",
+    "authority_not_recognized",
+    "scope_mismatch",
+    "policy_satisfied",
+    "policy_failed",
+    "signature_valid",
+    "signature_invalid",
+    "hash_valid",
+    "hash_invalid",
+    "conflict_detected",
+    "disagreement_preserved",
+    "certainty_too_low_for_policy",
+    "rejected_by_authority_channel",
+    "revoked_by_authority_channel",
+    "export_valid",
+    "export_invalid",
+    "profile_valid",
+    "profile_invalid"
+  ]
+},
+
+"entity_id": {
+  "type": "string",
+  "description": "Wikidata/Wikibase entity identifiers or local placeholders.",
+  "pattern": "^(Q[1-9][0-9]*|P[1-9][0-9]*|L[1-9][0-9]*|L[1-9][0-9]*-[FS][1-9][0-9]*|[A-Za-z][A-Za-z0-9._:-]{0,127})$"
+},
+
+"json_pointer": {
+  "type": "string",
+  "description": "RFC 6901 JSON Pointer into Kristal objects.",
+  "pattern": "^/.*"
+},
+
+"issue_location": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "json_pointer": {
+      "$ref": "#/$defs/json_pointer"
+    },
+    "target_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "entity_id": {
+      "$ref": "#/$defs/entity_id"
+    },
+    "assertion_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "statement_id": {
+      "type": "string",
+      "description": "Optional source-system statement identifier, for example a Wikidata-compatible statement ID.",
+      "minLength": 1
+    },
+    "claim_id": {
+      "type": "string",
+      "description": "Optional Claim-IR identifier when the finding relates to an extractor proposal profile.",
+      "minLength": 1
+    },
+    "evidence_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_uri": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+},
+
+"finding": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "target",
+    "validation_status"
+  ],
+  "properties": {
+    "target": {
+      "$ref": "#/$defs/target_ref"
+    },
+    "location": {
+      "$ref": "#/$defs/issue_location"
+    },
+    "validation_status": {
+      "$ref": "#/$defs/validation_status"
+    },
+    "validated_as": {
+      "$ref": "#/$defs/validated_as"
+    },
+    "certainty_level": {
+      "$ref": "#/$defs/certainty_level"
+    },
+    "authority_channel": {
+      "type": "string",
+      "pattern": "^authority:[A-Za-z0-9._:-]+$"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "validation_policy_ref": {
+      "$ref": "#/$defs/reference"
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+},
+
+"issue": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "severity",
+    "code",
+    "message"
+  ],
+  "properties": {
+    "severity": {
+      "$ref": "#/$defs/severity"
+    },
+
+    "code": {
+      "type": "string",
+      "description": "Stable machine-readable issue code.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9_]+$"
+    },
+
+    "message": {
+      "type": "string",
+      "description": "Human-readable explanation of the issue.",
+      "minLength": 1
+    },
+
+    "location": {
+      "$ref": "#/$defs/issue_location"
+    },
+
+    "reason_codes": {
+      "type": "array",
+      "description": "Optional normalized reason codes for policy mapping and dashboards.",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      }
+    },
+
+    "rule": {
+      "type": "object",
+      "description": "Optional rule metadata for deterministic debugging and traceability.",
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rule_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validation_policy_ref": {
+          "$ref": "#/$defs/reference"
+        }
+      }
+    },
+
+    "details": {
+      "type": "object",
+      "description": "Optional structured details. Details must remain deterministic for the same inputs.",
+      "additionalProperties": true
+    }
+  }
+},
+
+"lineage": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "source_artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "derived_from": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "merged_from": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "transforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    }
+  }
+},
+
+"signature": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key_id",
+    "alg",
+    "signature"
+  ],
+  "properties": {
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alg": {
+      "type": "string",
+      "const": "ed25519"
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+```
+
+}
+}

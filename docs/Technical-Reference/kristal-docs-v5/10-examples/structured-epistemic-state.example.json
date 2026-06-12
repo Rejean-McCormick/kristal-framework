@@ -1,0 +1,436 @@
+```json
+{
+  "schema_version": "5.0",
+  "artifact_type": "structured_epistemic_state",
+  "artifact_status": "working",
+  "state_id": "sha256:7a2f3df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
+  "created_at": "2026-01-07T15:20:00Z",
+
+  "tenant_id": "tenant_demo",
+  "build_id": "build-2026-01-07T152000Z-0001",
+
+  "scope": {
+    "domain": "wikidata",
+    "subdomain": "encyclopedia-core",
+    "jurisdiction": null,
+    "time_window": "2026-01-06/2026-01-07",
+    "tenant_id": "tenant_demo",
+    "environment": "demo",
+    "language": "en"
+  },
+
+  "created_by": {
+    "name": "SenTient",
+    "role": "resolver",
+    "version": "0.9.0"
+  },
+
+  "source_refs": [
+    {
+      "source_ref_id": "source:wikipedia-dump-en:2026-01-06",
+      "source_snapshot_id": "snap-2026-01-06-wikipedia-dump-en",
+      "source_type": "web_snapshot",
+      "label": "Wikipedia English dump snapshot",
+      "retrieved_at": "2026-01-06T09:12:43Z"
+    },
+    {
+      "source_ref_id": "source:travel-briefing:example",
+      "source_uri": "https://example.org/notes/travel-briefing.txt",
+      "source_type": "text_note",
+      "retrieved_at": "2026-01-06T10:00:00Z"
+    }
+  ],
+
+  "derived_from": [
+    {
+      "artifact_type": "claim_ir",
+      "role": "extractor_proposal_profile",
+      "claim_ir_id": "ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4",
+      "recipe_id": "recipe-demo-encyclopedia-core"
+    }
+  ],
+
+  "resolver": {
+    "name": "SenTient",
+    "version": "0.9.0",
+    "config_hash": {
+      "alg": "sha256",
+      "value": "7d3d5b7a2b6f4d6d2c3fbb65d36d7b6c3a2f8f7f8c9a0b1c2d3e4f5a6b7c8d9e"
+    },
+    "scoring_model": "funnel-v1",
+    "max_candidates": 5,
+    "preserve_ambiguity": true,
+    "min_confidence_accept": 0.92
+  },
+
+  "evidence": [
+    {
+      "evidence_id": "ev-0001",
+      "source_ref_id": "source:wikipedia-dump-en:2026-01-06",
+      "source_uri": "https://en.wikipedia.org/wiki/Douglas_Adams",
+      "retrieved_at": "2026-01-06T09:12:43Z",
+      "locator": {
+        "type": "html_xpath",
+        "value": "//*[@id='mw-content-text']"
+      },
+      "excerpt": "Douglas Noel Adams (11 March 1952 – 11 May 2001) was an English author...",
+      "excerpt_hash": {
+        "alg": "sha256",
+        "value": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
+      }
+    },
+    {
+      "evidence_id": "ev-0002",
+      "source_ref_id": "source:travel-briefing:example",
+      "source_uri": "https://example.org/notes/travel-briefing.txt",
+      "retrieved_at": "2026-01-06T10:00:00Z",
+      "locator": {
+        "type": "line_range",
+        "value": "L10-L25"
+      },
+      "excerpt": "Paris is the capital of France. Paris has many museums.",
+      "excerpt_hash": {
+        "alg": "sha256",
+        "value": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
+      }
+    }
+  ],
+
+  "assertions": [
+    {
+      "assertion_id": "sha256:0001df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
+      "legacy_claim_id": "clm-0001",
+
+      "assertion_status": "sourced",
+      "validation_status": "not_evaluated",
+      "validated_as": "sourced_claim",
+      "certainty_level": "high",
+      "needs_human_review": false,
+
+      "scope": {
+        "domain": "wikidata",
+        "subdomain": "biographical-data",
+        "jurisdiction": null,
+        "time_window": "2026-01-06/2026-01-07",
+        "tenant_id": "tenant_demo",
+        "environment": "demo",
+        "language": "en"
+      },
+
+      "statement": {
+        "subject": {
+          "kind": "entity",
+          "entity_id": "Q42",
+          "label": "Douglas Adams",
+          "surface": "Douglas Adams",
+          "language": "en"
+        },
+        "predicate": {
+          "kind": "property",
+          "property_id": "P569",
+          "label": "date of birth",
+          "surface": "date of birth",
+          "language": "en"
+        },
+        "object": {
+          "kind": "literal",
+          "datatype": "xsd:date",
+          "value": "1952-03-11",
+          "surface": "11 March 1952",
+          "language": "en"
+        }
+      },
+
+      "original_statement": {
+        "subject": {
+          "surface": "Douglas Adams",
+          "language": "en"
+        },
+        "predicate": {
+          "surface": "date of birth",
+          "language": "en"
+        },
+        "object": {
+          "surface": "11 March 1952",
+          "language": "en"
+        },
+        "extractor_confidence": 0.74
+      },
+
+      "resolution": {
+        "resolution_status": "resolved",
+        "subject": {
+          "chosen": {
+            "entity_id": "Q42",
+            "label": "Douglas Adams",
+            "match_type": "exact_alias",
+            "confidence": 0.997
+          },
+          "candidates": [
+            {
+              "entity_id": "Q42",
+              "label": "Douglas Adams",
+              "confidence": 0.997
+            },
+            {
+              "entity_id": "Q214338",
+              "label": "Douglas Adams (disambiguation)",
+              "confidence": 0.031
+            }
+          ]
+        },
+        "predicate": {
+          "chosen": {
+            "property_id": "P569",
+            "label": "date of birth",
+            "match_type": "label_match",
+            "confidence": 0.995
+          },
+          "candidates": [
+            {
+              "property_id": "P569",
+              "label": "date of birth",
+              "confidence": 0.995
+            },
+            {
+              "property_id": "P570",
+              "label": "date of death",
+              "confidence": 0.072
+            }
+          ]
+        },
+        "object": {
+          "kind": "literal",
+          "datatype": "xsd:date",
+          "normalized": "1952-03-11",
+          "confidence": 0.98,
+          "normalization": {
+            "steps": [
+              {
+                "op": "parse_date",
+                "input": "11 March 1952",
+                "output": "1952-03-11"
+              },
+              {
+                "op": "type_assign",
+                "datatype": "xsd:date"
+              }
+            ]
+          }
+        }
+      },
+
+      "provenance_refs": [
+        {
+          "evidence_id": "ev-0001",
+          "relation": "prov:wasDerivedFrom"
+        }
+      ],
+
+      "evidence_refs": [
+        "ev-0001"
+      ],
+
+      "authority_recognition_refs": [],
+      "validation_decision_refs": [],
+
+      "notes": [
+        {
+          "code": "RESOLUTION_USED_CONTEXT",
+          "message": "Used local context and evidence excerpt to disambiguate subject and property."
+        }
+      ]
+    },
+
+    {
+      "assertion_id": "sha256:0002df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
+      "legacy_claim_id": "clm-0002",
+
+      "assertion_status": "disputed",
+      "validation_status": "not_evaluated",
+      "validated_as": "claim",
+      "certainty_level": "low",
+      "needs_human_review": true,
+
+      "scope": {
+        "domain": "wikidata",
+        "subdomain": "geographic-or-cultural-entity-resolution",
+        "jurisdiction": null,
+        "time_window": "2026-01-06/2026-01-07",
+        "tenant_id": "tenant_demo",
+        "environment": "demo",
+        "language": "en"
+      },
+
+      "statement": {
+        "subject": {
+          "kind": "unresolved_entity",
+          "surface": "Paris",
+          "language": "en"
+        },
+        "predicate": {
+          "kind": "property",
+          "property_id": "P17",
+          "label": "country",
+          "surface": "country",
+          "language": "en"
+        },
+        "object": {
+          "kind": "entity",
+          "entity_id": "Q142",
+          "label": "France",
+          "surface": "France",
+          "language": "en"
+        }
+      },
+
+      "original_statement": {
+        "subject": {
+          "surface": "Paris",
+          "language": "en"
+        },
+        "predicate": {
+          "surface": "country",
+          "language": "en"
+        },
+        "object": {
+          "surface": "France",
+          "language": "en"
+        },
+        "extractor_confidence": 0.62
+      },
+
+      "resolution": {
+        "resolution_status": "ambiguous",
+        "subject": {
+          "chosen": null,
+          "candidates": [
+            {
+              "entity_id": "Q90",
+              "label": "Paris",
+              "confidence": 0.881
+            },
+            {
+              "entity_id": "Q207511",
+              "label": "Paris (mythology)",
+              "confidence": 0.211
+            },
+            {
+              "entity_id": "Q191",
+              "label": "Paris, Texas",
+              "confidence": 0.144
+            }
+          ],
+          "unresolved": {
+            "reason": "SUBJECT_AMBIGUOUS",
+            "message": "Multiple plausible entity matches for 'Paris' given limited context; preserving ambiguity."
+          }
+        },
+        "predicate": {
+          "chosen": {
+            "property_id": "P17",
+            "label": "country",
+            "match_type": "label_match",
+            "confidence": 0.991
+          },
+          "candidates": [
+            {
+              "property_id": "P17",
+              "label": "country",
+              "confidence": 0.991
+            }
+          ]
+        },
+        "object": {
+          "kind": "entity",
+          "chosen": {
+            "entity_id": "Q142",
+            "label": "France",
+            "match_type": "exact_alias",
+            "confidence": 0.996
+          },
+          "candidates": [
+            {
+              "entity_id": "Q142",
+              "label": "France",
+              "confidence": 0.996
+            }
+          ]
+        }
+      },
+
+      "provenance_refs": [
+        {
+          "evidence_id": "ev-0002",
+          "relation": "prov:wasDerivedFrom"
+        }
+      ],
+
+      "evidence_refs": [
+        "ev-0002"
+      ],
+
+      "authority_recognition_refs": [],
+      "validation_decision_refs": [],
+
+      "issues": [
+        {
+          "severity": "warning",
+          "code": "SUBJECT_AMBIGUOUS",
+          "message": "Subject entity could not be uniquely resolved; compilation may proceed if policy allows unresolved subjects.",
+          "location": {
+            "assertion_id": "sha256:0002df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
+            "legacy_claim_id": "clm-0002",
+            "evidence_id": "ev-0002"
+          }
+        }
+      ]
+    }
+  ],
+
+  "certainty_summary": {
+    "unknown": 0,
+    "speculative": 0,
+    "low": 1,
+    "medium": 0,
+    "high": 1,
+    "established": 0,
+    "not_applicable": 0
+  },
+
+  "validation_summary": {
+    "not_evaluated": 2,
+    "in_review": 0,
+    "validated": 0,
+    "conditionally_validated": 0,
+    "disputed": 0,
+    "rejected": 0,
+    "revoked": 0
+  },
+
+  "resolution_summary": {
+    "resolved_count": 1,
+    "ambiguous_count": 1,
+    "unresolved_count": 0,
+    "error_count": 0,
+    "warning_count": 1
+  },
+
+  "review_refs": [],
+  "policy_refs": [
+    {
+      "policy_id": "kristal.v5:resolution-policy:preserve-ambiguity",
+      "policy_version": "1",
+      "description": "Ambiguous entity resolution is preserved as structured state rather than being discarded."
+    }
+  ],
+
+  "extensions": {
+    "legacy_resolved_claim_ir": {
+      "artifact_type": "resolved-claim-ir",
+      "artifact_id": "rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c",
+      "schema_version": "3.0"
+    }
+  }
+}
+```

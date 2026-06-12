@@ -1,0 +1,336 @@
+```json
+{
+  "schema_version": "5.0",
+  "artifact_type": "structured_epistemic_state",
+  "state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "created_at": "2026-01-07T12:34:56Z",
+  "created_by": {
+    "publisher_id": "publisher:example-softworks",
+    "name": "Example Softworks Ltd.",
+    "authority_channel": "authority:example-softworks",
+    "role": "publisher"
+  },
+  "scope": {
+    "domain": "technology",
+    "subdomain": "system-documentation",
+    "jurisdiction": null,
+    "time_window": "2026-01-01/2026-12-31",
+    "tenant_id": null,
+    "environment": "production",
+    "language": "en"
+  },
+  "source_refs": [
+    {
+      "id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "artifact_type": "external_document",
+      "label": "ExampleSoft System Documentation Snapshot 2026-01",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "uri": "https://example.invalid/docs/system/2026-01",
+      "media_type": "text/html"
+    },
+    {
+      "id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "artifact_type": "external_document",
+      "label": "ExampleSoft API Contract v5",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "uri": "https://example.invalid/docs/api/v5",
+      "media_type": "application/json"
+    }
+  ],
+  "derived_from": [],
+  "merged_from": [],
+  "supersedes": [],
+  "assertions": [
+    {
+      "assertion_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "statement": {
+        "subject": "example-system",
+        "predicate": "system_name",
+        "object": "ExampleSoft Knowledge Runtime"
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "publisher_declaration",
+      "scope": {
+        "domain": "technology",
+        "subdomain": "system-documentation",
+        "jurisdiction": null,
+        "time_window": "2026-01-01/2026-12-31",
+        "tenant_id": null,
+        "environment": "production",
+        "language": "en"
+      },
+      "provenance_refs": [
+        "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      ],
+      "evidence_refs": [
+        "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      ],
+      "authority_recognition_refs": [
+        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "validation_refs": [
+        "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      ],
+      "lineage": {
+        "source_artifacts": [
+          "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        ],
+        "transforms": [],
+        "compiler": null,
+        "policy_refs": [
+          "kristal.v5:validation-policy:publisher-declaration-basic"
+        ]
+      }
+    },
+    {
+      "assertion_id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "statement": {
+        "subject": "example-system",
+        "predicate": "supports_feature",
+        "object": "offline_query"
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "publisher_declaration",
+      "scope": {
+        "domain": "technology",
+        "subdomain": "system-documentation",
+        "jurisdiction": null,
+        "time_window": "2026-01-01/2026-12-31",
+        "tenant_id": null,
+        "environment": "production",
+        "language": "en"
+      },
+      "provenance_refs": [
+        "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      "evidence_refs": [
+        "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      "authority_recognition_refs": [
+        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "validation_refs": [
+        "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      ],
+      "lineage": {
+        "source_artifacts": [
+          "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        ],
+        "transforms": [],
+        "compiler": null,
+        "policy_refs": [
+          "kristal.v5:validation-policy:publisher-declaration-basic"
+        ]
+      }
+    },
+    {
+      "assertion_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "statement": {
+        "subject": "example-system",
+        "predicate": "exports_format",
+        "object": "application/ld+json"
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "technical_specification",
+      "scope": {
+        "domain": "technology",
+        "subdomain": "api-contract",
+        "jurisdiction": null,
+        "time_window": "2026-01-01/2026-12-31",
+        "tenant_id": null,
+        "environment": "production",
+        "language": "en"
+      },
+      "provenance_refs": [
+        "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      "evidence_refs": [
+        "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+      ],
+      "authority_recognition_refs": [
+        "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ],
+      "validation_refs": [
+        "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      ],
+      "lineage": {
+        "source_artifacts": [
+          "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        ],
+        "transforms": [],
+        "compiler": null,
+        "policy_refs": [
+          "kristal.v5:validation-policy:technical-specification-basic"
+        ]
+      }
+    },
+    {
+      "assertion_id": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "statement": {
+        "subject": "example-system",
+        "predicate": "security_review_status",
+        "object": "not_independently_audited"
+      },
+      "assertion_status": "sourced",
+      "certainty_level": "medium",
+      "validated_as": "sourced_claim",
+      "scope": {
+        "domain": "technology",
+        "subdomain": "security",
+        "jurisdiction": null,
+        "time_window": "2026-01-01/2026-12-31",
+        "tenant_id": null,
+        "environment": "production",
+        "language": "en"
+      },
+      "provenance_refs": [
+        "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      ],
+      "evidence_refs": [
+        "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      ],
+      "authority_recognition_refs": [],
+      "validation_refs": [],
+      "lineage": {
+        "source_artifacts": [
+          "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        ],
+        "transforms": [],
+        "compiler": null,
+        "policy_refs": []
+      }
+    }
+  ],
+  "provenance": [
+    {
+      "provenance_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "source_ref": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "source_type": "publisher_documentation",
+      "publisher": "publisher:example-softworks",
+      "captured_at": "2026-01-07T12:00:00Z",
+      "capture_method": "publisher_snapshot"
+    },
+    {
+      "provenance_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "source_ref": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "source_type": "api_contract",
+      "publisher": "publisher:example-softworks",
+      "captured_at": "2026-01-07T12:05:00Z",
+      "capture_method": "publisher_snapshot"
+    }
+  ],
+  "review_refs": [
+    {
+      "id": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "artifact_type": "review_bundle",
+      "label": "Publisher declaration review bundle"
+    }
+  ],
+  "policy_refs": [
+    {
+      "id": "kristal.v5:validation-policy:publisher-declaration-basic",
+      "artifact_type": "external_document",
+      "label": "Publisher Declaration Basic Validation Policy"
+    },
+    {
+      "id": "kristal.v5:validation-policy:technical-specification-basic",
+      "artifact_type": "external_document",
+      "label": "Technical Specification Basic Validation Policy"
+    }
+  ],
+  "authority_recognition_refs": [
+    {
+      "id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "artifact_type": "authority_recognition",
+      "issuer_authority_channel": "authority:example-softworks",
+      "target_level": "artifact",
+      "recognition_status": "recognized",
+      "recognized_as": "publisher_declaration",
+      "scope": {
+        "domain": "technology",
+        "subdomain": "system-documentation",
+        "jurisdiction": null,
+        "time_window": "2026-01-01/2026-12-31",
+        "tenant_id": null,
+        "environment": "production",
+        "language": "en"
+      }
+    }
+  ],
+  "validation_refs": [
+    {
+      "id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "artifact_type": "validation_report",
+      "target_level": "artifact",
+      "validation_status": "validated",
+      "validated_as": "publisher_declaration",
+      "certainty_level": "not_applicable",
+      "authority_channel": "authority:example-softworks",
+      "validation_policy_ref": "kristal.v5:validation-policy:publisher-declaration-basic"
+    },
+    {
+      "id": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "artifact_type": "validation_report",
+      "target_level": "assertion",
+      "validation_status": "validated",
+      "validated_as": "technical_specification",
+      "certainty_level": "not_applicable",
+      "authority_channel": "authority:example-softworks",
+      "validation_policy_ref": "kristal.v5:validation-policy:technical-specification-basic"
+    }
+  ],
+  "certainty_summary": {
+    "default_certainty_level": "not_applicable",
+    "contains_mixed_certainty": true,
+    "counts_by_certainty_level": {
+      "not_applicable": 3,
+      "medium": 1
+    },
+    "contains_hypotheses": false,
+    "contains_disputed_assertions": false,
+    "contains_fictional_or_mythological_material": false,
+    "notes": "Most assertions are validated as publisher declarations or technical specifications. Security review status remains a sourced claim and is not presented as independently validated."
+  },
+  "validation_summary": {
+    "default_validation_status": "validated",
+    "validated_as": [
+      "publisher_declaration",
+      "technical_specification",
+      "sourced_claim"
+    ],
+    "authority_channels": [
+      "authority:example-softworks"
+    ],
+    "recognition_statuses": [
+      "recognized"
+    ],
+    "counts_by_validation_status": {
+      "validated": 3,
+      "not_evaluated": 1
+    },
+    "notes": "Publisher recognition validates this artifact as the publisher's declared system description. It does not independently validate external claims about security, safety, performance, environmental impact, or public value."
+  },
+  "reader_policy_refs": [
+    {
+      "id": "reader_policy:validated_only",
+      "artifact_type": "reader_policy",
+      "mode": "validated_only"
+    },
+    {
+      "id": "reader_policy:all_with_labels",
+      "artifact_type": "reader_policy",
+      "mode": "all_with_labels"
+    }
+  ],
+  "extensions": {}
+}
+```

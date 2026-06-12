@@ -1,0 +1,306 @@
+{
+"schema_version": "5.0",
+"artifact_type": "validation_report",
+"report_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+"generated_at": "2026-01-07T00:00:00Z",
+"build_id": "build_example_0001",
+"tenant_id": "tenant_example",
+"scope": {
+"domain": "general",
+"subdomain": null,
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": "tenant_example",
+"environment": "test",
+"language": "en"
+},
+"authority_channel": "authority:example-validator",
+"validation_policy_ref": {
+"artifact_type": "validation_policy",
+"id": "validation-policy:example-reference-policy",
+"ref": "policies/example-reference-policy.json",
+"content_hash": {
+"alg": "sha256",
+"value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}
+},
+"input_refs": {
+"structured_epistemic_state_refs": [
+{
+"artifact_type": "structured_epistemic_state",
+"id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+"ref": "states/example-state.json",
+"content_hash": {
+"alg": "sha256",
+"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+}
+],
+"working_exchange_refs": [
+{
+"artifact_type": "working_exchange",
+"id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+"ref": "exchange/working-example.json",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
+}
+]
+},
+"status": "completed_with_findings",
+"validation_status": "rejected",
+"validated_as": "institutional_reference",
+"certainty_level": "not_applicable",
+"recognition_effect": {
+"reference_artifact_allowed": false,
+"authority_recognition_allowed": false,
+"working_artifact_allowed": true,
+"runtime_pack_allowed": true,
+"reason": "The submitted material may remain available as a Working Artifact, but it does not satisfy the selected validation policy for recognition as a Reference Artifact."
+},
+"summary": {
+"errors": 2,
+"warnings": 2,
+"infos": 1,
+"assertions_evaluated": 3,
+"assertions_validated": 0,
+"assertions_rejected": 2,
+"assertions_conditionally_accepted": 1
+},
+"results": [
+{
+"severity": "ERROR",
+"code": "VAL.ENTITY.UNRESOLVED",
+"reason_code": "policy_failed",
+"message": "Entity surface could not be resolved to a unique QID and the selected validation policy requires a unique binding for reference recognition.",
+"target_level": "assertion",
+"assertion_id": "assertion:claim_00042",
+"path": "/assertions/42/statement/subject",
+"validation_status": "rejected",
+"validated_as": "rejected_claim",
+"certainty_level": "unknown",
+"authority_channel": "authority:example-validator",
+"effect": {
+"blocks_reference_recognition": true,
+"blocks_working_artifact": false
+},
+"details": {
+"surface": "Springfield",
+"resolution_status": "ambiguous",
+"top_candidates": [
+{
+"id": "Q18094",
+"score": 0.63
+},
+{
+"id": "Q23055",
+"score": 0.61
+},
+{
+"id": "Q45761",
+"score": 0.59
+}
+],
+"required": "resolved_single"
+}
+},
+{
+"severity": "ERROR",
+"code": "VAL.EVIDENCE.MISSING",
+"reason_code": "evidence_insufficient",
+"message": "Assertion requires at least one evidence pointer under the selected validation policy, but none were provided.",
+"target_level": "assertion",
+"assertion_id": "assertion:claim_00077",
+"path": "/assertions/77/evidence_refs",
+"validation_status": "rejected",
+"validated_as": "rejected_claim",
+"certainty_level": "unknown",
+"authority_channel": "authority:example-validator",
+"effect": {
+"blocks_reference_recognition": true,
+"blocks_working_artifact": false
+},
+"details": {
+"min_evidence": 1,
+"provided_evidence": 0
+}
+},
+{
+"severity": "WARNING",
+"code": "VAL.LITERAL.NORMALIZATION.LOSSY",
+"reason_code": "normalization_lossy",
+"message": "Quantity normalization required unit coercion; precision may be reduced.",
+"target_level": "assertion",
+"assertion_id": "assertion:claim_00103",
+"path": "/assertions/103/statement/value",
+"validation_status": "conditionally_validated",
+"validated_as": "sourced_claim",
+"certainty_level": "medium",
+"authority_channel": "authority:example-validator",
+"effect": {
+"blocks_reference_recognition": false,
+"requires_label": true
+},
+"details": {
+"original": {
+"raw": "3.2 tons",
+"unit": "ton"
+},
+"normalized": {
+"value": 3200,
+"unit": "kg",
+"precision": "approx"
+},
+"lossy": true
+}
+},
+{
+"severity": "WARNING",
+"code": "VAL.RUNTIME_POLICY.NON_PORTABLE",
+"reason_code": "policy_failed",
+"message": "Runtime policy selection is not in the portable policy set; Runtime Pack comparability across implementations is not guaranteed.",
+"target_level": "runtime_pack",
+"path": "/runtime_pack/policy_selections/ordering",
+"validation_status": "conditionally_validated",
+"validated_as": "technical_specification",
+"certainty_level": "not_applicable",
+"authority_channel": "authority:example-validator",
+"effect": {
+"blocks_reference_recognition": false,
+"blocks_runtime_pack_activation": false,
+"requires_label": true
+},
+"details": {
+"provided": "CUSTOM_ORDERING_XYZ",
+"allowed": [
+"SPO",
+"SOP",
+"PSO",
+"POS",
+"OSP",
+"OPS",
+"ORDER_SET([...])"
+]
+}
+},
+{
+"severity": "INFO",
+"code": "VAL.EXPORT.RDF_INTEGRITY.DISABLED",
+"reason_code": "profile_not_enabled",
+"message": "RDF Integrity profile (RDFC) is not enabled; rdf_hash was not computed.",
+"target_level": "artifact",
+"validation_status": "not_evaluated",
+"validated_as": "technical_specification",
+"certainty_level": "not_applicable",
+"details": {
+"profile": "profile-rdf-integrity-rdfc",
+"enabled": false
+}
+}
+],
+"policy_context": {
+"policy_selections_version": "5.0",
+"reader_policy_ref": {
+"artifact_type": "reader_policy",
+"id": "reader_policy:validated_only",
+"ref": "policies/reader-policy-validated-only.json",
+"content_hash": {
+"alg": "sha256",
+"value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+}
+},
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated"
+],
+"allowed_certainty_levels": [
+"medium",
+"high",
+"established",
+"not_applicable"
+],
+"allowed_validated_as": [
+"sourced_claim",
+"reviewed_claim",
+"high_confidence_fact",
+"institutional_reference",
+"publisher_declaration",
+"technical_specification"
+],
+"include_disputed": false,
+"include_fictional": false,
+"include_mythological": false,
+"runtime_pack_policy": {
+"ordering": "ORDER_SET(["SPO"])",
+"row_groups": "FIXED_ROWS(500000)",
+"membership_filters": {
+"family": "BINARY_FUSE",
+"variant": "4_WISE",
+"seed": 1337,
+"bits_per_key": 9.5,
+"target_false_positive_rate": 0.01,
+"key_spaces": [
+"SPO_KEY"
+]
+},
+"bitmaps": {
+"format": "ROARING",
+"run_optimization": "ENABLED"
+},
+"query_limits": {
+"join1_cap": {
+"default": 100000,
+"mode": "STRICT"
+},
+"paging": "CURSOR"
+}
+}
+},
+"build_status": {
+"compile_status": "succeeded",
+"review_status": "completed",
+"validation_status": "rejected",
+"recognition_status": "rejected",
+"publication_status": "blocked",
+"activation_status": "not_applicable",
+"working_outputs": [
+{
+"artifact_type": "working_exchange",
+"id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+"ref": "exchange/working-example.json",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
+}
+],
+"reference_outputs": [],
+"runtime_pack_outputs": []
+},
+"integrity": {
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+},
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"signatures": [
+{
+"key_id": "ed25519:example_key_01",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+},
+"signature": "base64:ZmFrZV9zaWduYXR1cmU=",
+"created_at": "2026-01-07T00:00:00Z",
+"purpose": "validator",
+"signer": {
+"name": "Example Validator",
+"authority_channel_id": "authority:example-validator"
+}
+}
+]
+}
+}

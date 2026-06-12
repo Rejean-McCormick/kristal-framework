@@ -1,0 +1,143 @@
+{
+  "schema_version": "5.0",
+  "artifact_type": "exchange_federation_manifest",
+  "created_at": "2026-02-26T17:55:07Z",
+  "federation_id": "sha256:9f3c0b9a6b2b0bb6d4ed5a7b0f8d0f9e2d8f1c3b4a5e6f7a8b9c0d1e2f3a4b5c",
+  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
+  "canonicalization_version": "1",
+  "content_hash": {
+    "alg": "sha256",
+    "value": "3a7b1f0e9c2d4a6b8e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d"
+  },
+  "authority_registry_ref": {
+    "registry_id": "sha256:0d8c7b6a5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
+    "ref": "authority/authority-registry.json",
+    "content_hash": {
+      "alg": "sha256",
+      "value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
+    }
+  },
+  "shards": [
+    {
+      "shard_id": "sha256:1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+      "scope": {
+        "domain": "heritage",
+        "subdomain": "unesco",
+        "time_window": "2026-01",
+        "jurisdiction": null,
+        "tenant_id": null,
+        "environment": null,
+        "language": null
+      },
+      "shard_manifest_ref": "shards/heritage-unesco-2026-01/exchange-shard-manifest.json",
+      "shard_manifest_hash": {
+        "alg": "sha256",
+        "value": "6f1d7a3c2b9e0f4a5c6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3"
+      },
+      "artifact_status": "reference",
+      "authority_channel_refs": [
+        {
+          "ref": "authority:unesco",
+          "kind": "authority_channel"
+        }
+      ],
+      "recognition_status": "recognized"
+    },
+    {
+      "shard_id": "sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+      "scope": {
+        "domain": "local_notes",
+        "subdomain": "local",
+        "time_window": "2026-01",
+        "jurisdiction": null,
+        "tenant_id": null,
+        "environment": null,
+        "language": null
+      },
+      "shard_manifest_ref": "shards/notes-local-2026-01/exchange-shard-manifest.json",
+      "shard_manifest_hash": {
+        "alg": "sha256",
+        "value": "c3b2a1908f7e6d5c4b5a4938271605f4e3d2c1b0a9f8e7d6c5b4a3928171605f"
+      },
+      "artifact_status": "working",
+      "authority_channel_refs": [
+        {
+          "ref": "authority:curator",
+          "kind": "authority_channel"
+        }
+      ],
+      "recognition_status": "under_review"
+    }
+  ],
+  "composition_policy": {
+    "policy_id": "kristal.v5:composition-policy:default-federation",
+    "policy_version": "1",
+    "overlap_strategy": "authority_precedence",
+    "conflict_strategy": "preserve_disagreement",
+    "default_visibility": "reader_policy",
+    "ordering": {
+      "primary": "scope.domain_asc",
+      "secondary": "authority_precedence",
+      "tertiary": "shard_id_asc"
+    },
+    "authority_precedence": [
+      "recognized",
+      "conditionally_recognized",
+      "under_review"
+    ],
+    "parameters": {
+      "tie_breaker": "shard_id_asc",
+      "preserve_conflicting_claims": true,
+      "preserve_source_identities": true
+    }
+  },
+  "reader_policy_refs": [
+    {
+      "ref": "reader_policy:reference_only",
+      "kind": "policy"
+    },
+    {
+      "ref": "reader_policy:all_with_labels",
+      "kind": "policy"
+    }
+  ],
+  "trust_requirements": [
+    {
+      "scope": {
+        "domain": "heritage"
+      },
+      "required_recognition_status": [
+        "recognized"
+      ],
+      "required_authority_channels": [
+        "authority:unesco"
+      ]
+    },
+    {
+      "scope": {
+        "domain": "local_notes"
+      },
+      "required_recognition_status": [
+        "recognized",
+        "conditionally_recognized",
+        "under_review"
+      ],
+      "required_authority_channels": [
+        "authority:curator"
+      ]
+    }
+  ],
+  "publisher": {
+    "authority_channel": "authority:curator",
+    "key_id": "curator-ed25519-2026-01"
+  },
+  "signatures": [
+    {
+      "key_id": "curator-ed25519-2026-01",
+      "alg": "ed25519",
+      "signature": "mS7m9WmYvC8h3mZp3tG0Gf9G5a2lqkFf2m2cYw9qj3bR2cQkQq1y5w",
+      "created_at": "2026-02-26T17:55:07Z"
+    }
+  ],
+  "extensions": {}
+}

@@ -1,0 +1,264 @@
+{
+"schema_version": "5.0",
+"artifact_type": "authority_recognition",
+"recognition_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"created_at": "2026-01-07T00:00:00Z",
+"issuer_authority_channel": "authority:unesco-global-reference",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"target_level": "authority_channel",
+"target_ref": {
+"artifact_type": "authority_channel",
+"id": "authority:who",
+"ref": "registries/authority-channels/who.json",
+"content_hash": {
+"alg": "sha256",
+"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+},
+"scope": {
+"domain": "health",
+"subdomain": "public-health-and-clinical-guidance",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "reference",
+"language": "en"
+},
+"authority_registry_ref": {
+"artifact_type": "authority_registry",
+"id": "kristal:authority-registry:sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+"ref": "registries/global-authority-registry.json",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
+},
+"validation_policy_ref": {
+"artifact_type": "validation_policy",
+"id": "validation-policy:health-authority-recognition",
+"ref": "policies/health-authority-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
+},
+"recognition_policy": {
+"policy_id": "kristal.v5:recognition-policy:health-authority-recognition",
+"policy_version": "1",
+"recognition_basis": [
+"institutional_mandate",
+"domain_competence",
+"public_documentation",
+"global_scope",
+"governance_process"
+],
+"requires_direct_review_of_all_downstream_assertions": false,
+"allows_delegated_validation": true,
+"delegated_validation_scope": {
+"domain": "health",
+"subdomain": "public-health-and-clinical-guidance",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "reference",
+"language": "en"
+}
+},
+"authority_channel": {
+"authority_channel_id": "authority:who",
+"name": "World Health Organization",
+"authority_type": "intergovernmental_organization",
+"scope": {
+"domain": "health",
+"subdomain": "public-health-and-clinical-guidance",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "reference",
+"language": "en"
+},
+"recognized_by": [
+"authority:unesco-global-reference"
+],
+"trust_roots": [
+{
+"key_id": "ed25519:who-root-example-01",
+"purpose": "authority",
+"status": "active"
+}
+],
+"validation_policies": [
+{
+"artifact_type": "validation_policy",
+"id": "validation-policy:who-health-reference",
+"ref": "policies/who-health-reference.json",
+"content_hash": {
+"alg": "sha256",
+"value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}
+}
+],
+"revocation_policy_ref": {
+"artifact_type": "revocation_policy",
+"id": "revocation-policy:global-health-authority",
+"ref": "policies/revocation-global-health-authority.json",
+"content_hash": {
+"alg": "sha256",
+"value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+}
+}
+},
+"recognition_effect": {
+"recognized_targets": [
+"authority_channel"
+],
+"may_validate": [
+"structured_epistemic_state",
+"working_exchange",
+"reference_exchange",
+"exchange_shard",
+"exchange_federation_manifest",
+"runtime_pack"
+],
+"may_recognize_downstream_artifacts": true,
+"downstream_recognition_requires_policy_match": true,
+"downstream_recognition_is_scoped": true,
+"does_not_imply_universal_truth": true,
+"does_not_bypass_assertion_level_validation": true,
+"does_not_apply_outside_scope": true
+},
+"delegation_rules": {
+"may_delegate_to": [
+"authority:who-affiliated-technical-panel",
+"authority:who-recognized-research-body",
+"authority:national-public-health-agency"
+],
+"delegation_requires_explicit_record": true,
+"delegation_must_preserve_scope": true,
+"delegation_must_preserve_validation_policy": true,
+"delegation_must_be_revocable": true
+},
+"evidence_refs": [
+{
+"artifact_type": "source_document",
+"id": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+"ref": "evidence/who-institutional-mandate.json",
+"content_hash": {
+"alg": "sha256",
+"value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+},
+"description": "Evidence bundle describing the recognized public-health mandate of the authority channel."
+},
+{
+"artifact_type": "source_document",
+"id": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+"ref": "evidence/who-guideline-process.json",
+"content_hash": {
+"alg": "sha256",
+"value": "9999999999999999999999999999999999999999999999999999999999999999"
+},
+"description": "Evidence bundle describing the guideline and expert-review process used by the authority channel."
+}
+],
+"reason_codes": [
+"authority_recognized",
+"scope_satisfied",
+"policy_satisfied",
+"provenance_sufficient",
+"evidence_sufficient"
+],
+"conditions": [
+{
+"condition_id": "condition:scope-health-only",
+"description": "Recognition applies only to the declared health scope and does not extend to unrelated domains."
+},
+{
+"condition_id": "condition:policy-bound",
+"description": "Downstream Kristals validated by the recognized authority must declare the validation policy used."
+},
+{
+"condition_id": "condition:assertion-status-visible",
+"description": "Downstream assertions must preserve validation status, certainty level, and validated-as classification."
+},
+{
+"condition_id": "condition:revocation-aware",
+"description": "Consumers must check revocation status before treating this recognition as active."
+}
+],
+"exclusions": [
+{
+"exclusion_id": "exclusion:no-universal-truth",
+"description": "This recognition does not mean every assertion in every downstream health Kristal is universally true."
+},
+{
+"exclusion_id": "exclusion:no-out-of-scope-recognition",
+"description": "This recognition does not apply to domains outside public health and clinical guidance."
+},
+{
+"exclusion_id": "exclusion:no-silent-authority-transfer",
+"description": "Recognition by the issuer authority channel does not automatically imply recognition by any other authority channel."
+}
+],
+"validity": {
+"valid_from": "2026-01-07T00:00:00Z",
+"expires_at": null,
+"review_interval": "P1Y",
+"revocable": true
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_type": "authority_registry",
+"id": "kristal:authority-registry:sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+"ref": "registries/global-authority-registry.json",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
+}
+],
+"transforms": [],
+"compiler": {
+"name": "kristal-authority-recognition-builder",
+"version": "5.0"
+},
+"policy_refs": [
+{
+"artifact_type": "validation_policy",
+"id": "validation-policy:health-authority-recognition",
+"ref": "policies/health-authority-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
+}
+]
+},
+"integrity": {
+"content_hash": {
+"alg": "sha256",
+"value": "1111111111111111111111111111111111111111111111111111111111111111"
+},
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"signatures": [
+{
+"key_id": "ed25519:unesco-global-reference-example-key-01",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "1111111111111111111111111111111111111111111111111111111111111111"
+},
+"signature": "base64:ZmFrZV9zaWduYXR1cmVfZm9yX21lZGljYWxfYXV0aG9yaXR5X3JlY29nbml0aW9u",
+"created_at": "2026-01-07T00:00:00Z",
+"purpose": "authority",
+"signer": {
+"name": "UNESCO Global Reference Channel",
+"authority_channel_id": "authority:unesco-global-reference"
+}
+}
+]
+},
+"extensions": {}
+}

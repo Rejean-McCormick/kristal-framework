@@ -1,0 +1,708 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://kristal.org/schemas/v5/reader-policy.schema.json",
+"title": "Kristal v5 Reader Policy",
+"description": "A reader policy defines which Kristal artifacts, assertions, authority channels, validation statuses, certainty levels, and epistemic modes are visible or usable in a given reading, query, runtime, export, or agent context. Reader policy controls visibility and selection. It does not define universal truth.",
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"artifact_type",
+"reader_policy_id",
+"mode",
+"show_labels",
+"fallback_behavior"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"description": "Schema version for this reader policy format.",
+"const": "5.0"
+},
+
+```
+"artifact_type": {
+  "type": "string",
+  "description": "Kristal artifact type.",
+  "const": "reader_policy"
+},
+
+"reader_policy_id": {
+  "type": "string",
+  "description": "Stable reader policy identifier.",
+  "pattern": "^reader_policy:[A-Za-z0-9._:-]+$"
+},
+
+"content_hash": {
+  "$ref": "#/$defs/content_hash"
+},
+
+"canonicalization_profile": {
+  "type": "string",
+  "description": "Canonicalization profile used when this reader policy is content-addressed or signed.",
+  "const": "kristal.v5:jcs-rfc8785"
+},
+
+"canonicalization_version": {
+  "type": "string",
+  "description": "Canonicalization profile version.",
+  "const": "1"
+},
+
+"name": {
+  "type": "string",
+  "description": "Human-readable policy name.",
+  "minLength": 1
+},
+
+"description": {
+  "type": "string",
+  "description": "Human-readable explanation of the policy."
+},
+
+"created_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "UTC timestamp when the policy was created."
+},
+
+"updated_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "UTC timestamp when the policy was last updated."
+},
+
+"created_by": {
+  "$ref": "#/$defs/actor"
+},
+
+"mode": {
+  "type": "string",
+  "description": "High-level reader mode. This is a preset category; exact behavior is determined by the explicit filters in this policy.",
+  "enum": [
+    "reference_only",
+    "validated_only",
+    "high_certainty_only",
+    "research",
+    "creative",
+    "all_with_labels",
+    "custom"
+  ]
+},
+
+"policy_scope": {
+  "$ref": "#/$defs/scope"
+},
+
+"allowed_artifact_statuses": {
+  "type": "array",
+  "description": "Artifact statuses allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/artifact_status"
+  },
+  "uniqueItems": true
+},
+
+"allowed_assertion_statuses": {
+  "type": "array",
+  "description": "Assertion statuses allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/assertion_status"
+  },
+  "uniqueItems": true
+},
+
+"allowed_validation_statuses": {
+  "type": "array",
+  "description": "Validation statuses allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/validation_status"
+  },
+  "uniqueItems": true
+},
+
+"allowed_recognition_statuses": {
+  "type": "array",
+  "description": "Authority recognition statuses allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/recognition_status"
+  },
+  "uniqueItems": true
+},
+
+"allowed_certainty_levels": {
+  "type": "array",
+  "description": "Certainty levels allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/certainty_level"
+  },
+  "uniqueItems": true
+},
+
+"allowed_validated_as": {
+  "type": "array",
+  "description": "Validation modes allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/validated_as"
+  },
+  "uniqueItems": true
+},
+
+"allowed_authority_channels": {
+  "type": "array",
+  "description": "Authority channels explicitly allowed by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/authority_channel_id"
+  },
+  "uniqueItems": true
+},
+
+"denied_authority_channels": {
+  "type": "array",
+  "description": "Authority channels explicitly denied by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/authority_channel_id"
+  },
+  "uniqueItems": true
+},
+
+"required_authority_channels": {
+  "type": "array",
+  "description": "Authority channels that must recognize or validate a target before it is visible under this policy.",
+  "items": {
+    "$ref": "#/$defs/authority_channel_id"
+  },
+  "uniqueItems": true
+},
+
+"scope_filters": {
+  "type": "array",
+  "description": "Optional scopes included by this reader policy. If omitted, scope is controlled by other policy fields or implementation context.",
+  "items": {
+    "$ref": "#/$defs/scope"
+  }
+},
+
+"excluded_scopes": {
+  "type": "array",
+  "description": "Optional scopes excluded by this reader policy.",
+  "items": {
+    "$ref": "#/$defs/scope"
+  }
+},
+
+"include_disputed": {
+  "type": "boolean",
+  "description": "Whether disputed assertions or artifacts may be visible."
+},
+
+"include_rejected": {
+  "type": "boolean",
+  "description": "Whether rejected assertions or artifacts may be visible."
+},
+
+"include_revoked": {
+  "type": "boolean",
+  "description": "Whether revoked assertions, recognitions, or artifacts may be visible."
+},
+
+"include_retracted": {
+  "type": "boolean",
+  "description": "Whether retracted assertions may be visible."
+},
+
+"include_superseded": {
+  "type": "boolean",
+  "description": "Whether superseded assertions or artifacts may be visible."
+},
+
+"include_not_evaluated": {
+  "type": "boolean",
+  "description": "Whether not-yet-evaluated assertions or artifacts may be visible."
+},
+
+"include_unrecognized": {
+  "type": "boolean",
+  "description": "Whether artifacts or assertions without authority recognition may be visible."
+},
+
+"include_fictional": {
+  "type": "boolean",
+  "description": "Whether fictional corpora or fictional assertions may be visible."
+},
+
+"include_mythological": {
+  "type": "boolean",
+  "description": "Whether mythological corpora or mythological assertions may be visible."
+},
+
+"include_symbolic": {
+  "type": "boolean",
+  "description": "Whether symbolic models may be visible."
+},
+
+"include_local_notes": {
+  "type": "boolean",
+  "description": "Whether local notes or personal working material may be visible."
+},
+
+"show_labels": {
+  "type": "boolean",
+  "description": "Whether the reader surface must show or preserve labels such as authority channel, validation status, certainty level, scope, and dispute status."
+},
+
+"required_visible_labels": {
+  "type": "array",
+  "description": "Labels that must be visible or inspectable when present.",
+  "items": {
+    "type": "string",
+    "enum": [
+      "artifact_status",
+      "assertion_status",
+      "validation_status",
+      "recognition_status",
+      "certainty_level",
+      "validated_as",
+      "authority_channel",
+      "scope",
+      "provenance",
+      "evidence",
+      "lineage",
+      "reader_policy",
+      "dispute_status"
+    ]
+  },
+  "uniqueItems": true
+},
+
+"fallback_behavior": {
+  "type": "string",
+  "description": "Behavior when a target does not satisfy this reader policy or cannot be evaluated against it.",
+  "enum": [
+    "hide",
+    "show_unavailable",
+    "show_with_labels",
+    "require_user_choice",
+    "error"
+  ]
+},
+
+"conflict_strategy": {
+  "type": "string",
+  "description": "How the reader handles conflicting claims visible under the policy.",
+  "enum": [
+    "preserve_disagreement",
+    "authority_precedence",
+    "mark_disputed",
+    "exclude_conflict",
+    "require_reader_choice"
+  ]
+},
+
+"overlap_strategy": {
+  "type": "string",
+  "description": "How the reader handles overlapping assertions or shards.",
+  "enum": [
+    "authority_precedence",
+    "latest_time_window",
+    "explicit_allow_deny",
+    "preserve_all",
+    "reader_policy_selected"
+  ]
+},
+
+"authority_precedence": {
+  "type": "array",
+  "description": "Ordered authority channels used when conflict_strategy or overlap_strategy depends on authority precedence.",
+  "items": {
+    "$ref": "#/$defs/authority_channel_id"
+  },
+  "uniqueItems": true
+},
+
+"certainty_threshold": {
+  "$ref": "#/$defs/certainty_level"
+},
+
+"projection": {
+  "type": "string",
+  "description": "Optional projection mode requested by this reader policy.",
+  "enum": [
+    "full",
+    "best_rank",
+    "summary",
+    "labels_only",
+    "metadata_only"
+  ]
+},
+
+"export_compatibility": {
+  "type": "object",
+  "description": "Optional export behavior for readers that also produce derived artifacts.",
+  "additionalProperties": false,
+  "properties": {
+    "jsonld_export_allowed": {
+      "type": "boolean"
+    },
+    "rdf_export_allowed": {
+      "type": "boolean"
+    },
+    "wdqs_export_allowed": {
+      "type": "boolean"
+    },
+    "runtime_pack_allowed": {
+      "type": "boolean"
+    },
+    "preserve_filter_metadata": {
+      "type": "boolean"
+    }
+  }
+},
+
+"reason_codes": {
+  "type": "array",
+  "description": "Optional machine-readable reasons for this policy configuration.",
+  "items": {
+    "$ref": "#/$defs/reason_code"
+  },
+  "uniqueItems": true
+},
+
+"policy_refs": {
+  "type": "array",
+  "description": "External or upstream policies this reader policy depends on.",
+  "items": {
+    "$ref": "#/$defs/reference"
+  }
+},
+
+"authority_registry_ref": {
+  "$ref": "#/$defs/reference"
+},
+
+"signatures": {
+  "type": "array",
+  "description": "Signatures over this reader policy according to the active signature profile.",
+  "items": {
+    "$ref": "#/$defs/signature"
+  }
+},
+
+"attestations": {
+  "type": "array",
+  "description": "Optional attestations attached to this reader policy.",
+  "items": {
+    "$ref": "#/$defs/reference"
+  }
+},
+
+"extensions": {
+  "type": "object",
+  "description": "Implementation-specific additional fields. Extensions must not change v5 core reader-policy semantics.",
+  "additionalProperties": true
+}
+```
+
+},
+
+"$defs": {
+"content_hash": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"alg",
+"value"
+],
+"properties": {
+"alg": {
+"type": "string",
+"const": "sha256"
+},
+"value": {
+"type": "string",
+"pattern": "^[a-f0-9]{64}$"
+}
+}
+},
+
+```
+"reference": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ref"
+  ],
+  "properties": {
+    "ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/content_hash"
+    },
+    "media_type": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+},
+
+"actor": {
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "actor_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "community",
+        "association",
+        "research_collective",
+        "academic_institution",
+        "standards_body",
+        "company",
+        "government",
+        "intergovernmental_organization",
+        "ai_validator",
+        "hybrid_collective",
+        "tool",
+        "system"
+      ]
+    },
+    "authority_channel": {
+      "$ref": "#/$defs/authority_channel_id"
+    }
+  }
+},
+
+"scope": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "domain"
+  ],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "enum": [
+        "general",
+        "wikidata",
+        "science",
+        "health",
+        "education",
+        "heritage",
+        "law",
+        "policy",
+        "technology",
+        "environment",
+        "culture",
+        "mythology",
+        "fiction",
+        "research",
+        "operations",
+        "civic",
+        "local_notes"
+      ]
+    },
+    "subdomain": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "jurisdiction": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "time_window": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tenant_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "language": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+},
+
+"authority_channel_id": {
+  "type": "string",
+  "pattern": "^authority:[A-Za-z0-9._:-]+$"
+},
+
+"artifact_status": {
+  "type": "string",
+  "enum": [
+    "draft",
+    "working",
+    "under_review",
+    "recognized",
+    "reference",
+    "deprecated",
+    "superseded",
+    "revoked"
+  ]
+},
+
+"assertion_status": {
+  "type": "string",
+  "enum": [
+    "hypothesis",
+    "claimed",
+    "sourced",
+    "disputed",
+    "reviewed",
+    "validated",
+    "rejected",
+    "retracted",
+    "superseded"
+  ]
+},
+
+"validation_status": {
+  "type": "string",
+  "enum": [
+    "not_evaluated",
+    "in_review",
+    "validated",
+    "conditionally_validated",
+    "disputed",
+    "rejected",
+    "revoked"
+  ]
+},
+
+"recognition_status": {
+  "type": "string",
+  "enum": [
+    "recognized",
+    "conditionally_recognized",
+    "under_review",
+    "disputed",
+    "rejected",
+    "deprecated",
+    "revoked"
+  ]
+},
+
+"certainty_level": {
+  "type": "string",
+  "enum": [
+    "unknown",
+    "speculative",
+    "low",
+    "medium",
+    "high",
+    "established",
+    "not_applicable",
+    "mixed"
+  ]
+},
+
+"validated_as": {
+  "type": "string",
+  "enum": [
+    "hypothesis",
+    "claim",
+    "sourced_claim",
+    "reviewed_claim",
+    "high_confidence_fact",
+    "institutional_reference",
+    "publisher_declaration",
+    "technical_specification",
+    "legal_or_policy_position",
+    "mythological_corpus",
+    "fictional_corpus",
+    "symbolic_model",
+    "disputed_position",
+    "rejected_claim"
+  ]
+},
+
+"reason_code": {
+  "type": "string",
+  "enum": [
+    "schema_valid",
+    "schema_invalid",
+    "provenance_sufficient",
+    "provenance_insufficient",
+    "evidence_sufficient",
+    "evidence_insufficient",
+    "authority_recognized",
+    "authority_not_recognized",
+    "scope_mismatch",
+    "policy_satisfied",
+    "policy_failed",
+    "signature_valid",
+    "signature_invalid",
+    "hash_valid",
+    "hash_invalid",
+    "conflict_detected",
+    "disagreement_preserved",
+    "certainty_too_low_for_policy",
+    "rejected_by_authority_channel",
+    "revoked_by_authority_channel"
+  ]
+},
+
+"signature": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key_id",
+    "alg",
+    "signature"
+  ],
+  "properties": {
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alg": {
+      "type": "string",
+      "const": "ed25519"
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+```
+
+}
+}

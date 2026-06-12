@@ -1,0 +1,290 @@
+{
+"schema_version": "5.0",
+"artifact_type": "exchange_shard_manifest",
+"artifact_status": "reference",
+"created_at": "2026-02-26T18:05:00Z",
+
+"shard_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+"kristal_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+
+"content_hash": {
+"alg": "sha256",
+"value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
+},
+
+"producer": {
+"kind": "compiler",
+"name": "kristal-compiler",
+"version": "5.0.0"
+},
+
+"build": {
+"build_id": "build-2026-02-26T180500Z-0001",
+"schema_version": "5.0",
+"compiler": {
+"name": "kristal-compiler",
+"version": "5.0.0",
+"git_commit": "a1b2c3d4e5f6g7h8i9j0"
+},
+"config_hash": {
+"alg": "sha256",
+"value": "3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1"
+},
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"compile_status": "succeeded",
+"review_status": "completed",
+"validation_status": "validated",
+"recognition_status": "recognized",
+"publication_status": "published",
+"activation_status": "not_applicable",
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"evidence_sufficient",
+"policy_satisfied",
+"authority_recognized",
+"hash_valid",
+"signature_valid"
+]
+},
+
+"inputs": {
+"source_snapshot_refs": [
+{
+"id": "snap-2026-02-25-unesco-dump",
+"artifact_type": "source_snapshot",
+"uri": "konnaxion://snapshots/snap-2026-02-25-unesco-dump"
+}
+],
+"recipe_ref": {
+"id": "recipe-unesco-heritage-core",
+"artifact_type": "build_recipe"
+},
+"blueprint_hash": {
+"alg": "sha256",
+"value": "7b1a9c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f"
+},
+"structured_epistemic_state_refs": [
+{
+"id": "sha256:4b2f0a7c9e1d8f6a3c5b7d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c",
+"artifact_type": "structured_epistemic_state",
+"uri": "konnaxion://structured-epistemic-states/sha256:4b2f0a7c9e1d8f6a3c5b7d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c.json"
+}
+],
+"claim_ir_refs": [
+{
+"id": "ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4",
+"artifact_type": "claim_ir",
+"uri": "konnaxion://claim-ir/ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4.json"
+}
+],
+"resolved_claim_ir_refs": [
+{
+"id": "rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c",
+"artifact_type": "resolved_claim_ir",
+"uri": "konnaxion://resolved-claim-ir/rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c.json"
+}
+],
+"previous_exchange_refs": []
+},
+
+"lineage": {
+"derived_from": [
+{
+"id": "snap-2026-02-25-unesco-dump",
+"artifact_type": "source_snapshot"
+}
+],
+"merged_from": [],
+"supersedes": [],
+"transforms": [
+{
+"transform_id": "recipe-unesco-heritage-core",
+"transform_type": "kristal-compatible-packaging",
+"notes": "Packages the source corpus as a Kristal v5 shard while preserving source identifiers and provenance."
+}
+]
+},
+
+"policies": {
+"composition_policy_ref": {
+"id": "kristal.v5:composition-policy:heritage-authority-precedence",
+"artifact_type": "composition_policy"
+},
+"validation_policy_refs": [
+{
+"id": "policy:unesco-heritage-reference-validation@1",
+"artifact_type": "validation_policy"
+}
+],
+"recognition_policy_refs": [
+{
+"id": "policy:unesco-heritage-authority-recognition@1",
+"artifact_type": "recognition_policy"
+}
+],
+"reader_policy_refs": [
+{
+"id": "reader_policy:reference-only-unesco-heritage",
+"artifact_type": "reader_policy"
+},
+{
+"id": "reader_policy:validated-only-unesco-heritage",
+"artifact_type": "reader_policy"
+}
+],
+"ordering_policies": [
+"qid_pid_statement_id_asc"
+]
+},
+
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"jurisdiction": null,
+"time_window": "2020-01-01T00:00:00Z/2025-12-31T23:59:59Z",
+"tenant_id": "tenant_demo",
+"environment": "prod",
+"language": "en"
+},
+
+"visibility": {
+"default_reader_policy": "reader_policy:reference-only-unesco-heritage",
+"public": true,
+"labels_required": true
+},
+
+"assertion_summary": {
+"assertion_count": null,
+"assertion_statuses": [
+"sourced",
+"reviewed",
+"validated"
+],
+"certainty_levels": [
+"medium",
+"high",
+"established"
+],
+"validated_as": [
+"institutional_reference",
+"cultural_heritage_reference"
+],
+"contains_disputed_assertions": false,
+"contains_fictional_assertions": false,
+"contains_mythological_assertions": false
+},
+
+"validation_refs": [
+{
+"id": "sha256:2f3e4d5c6b7a8901b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f50617283",
+"artifact_type": "validation_decision",
+"hash": {
+"alg": "sha256",
+"value": "2f3e4d5c6b7a8901b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f50617283"
+},
+"uri": "konnaxion://validation-decisions/sha256:2f3e4d5c6b7a8901b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2d3e4f50617283.json"
+}
+],
+
+"validation_summary": {
+"validation_status": "validated",
+"validated_as": "institutional_reference",
+"certainty_level": "high",
+"authority_channel": "authority:unesco-heritage",
+"validation_policy_ref": "policy:unesco-heritage-reference-validation@1",
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"jurisdiction": null,
+"time_window": "2020-01-01T00:00:00Z/2025-12-31T23:59:59Z",
+"tenant_id": "tenant_demo",
+"environment": "prod",
+"language": "en"
+},
+"profiles": [
+"profile-validation-shacl@v5"
+],
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"evidence_sufficient",
+"policy_satisfied"
+]
+},
+
+"authority_recognition_refs": [
+{
+"id": "sha256:6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5",
+"artifact_type": "authority_recognition",
+"hash": {
+"alg": "sha256",
+"value": "6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5"
+},
+"uri": "konnaxion://authority-recognitions/sha256:6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e5f60718293a4b5.json"
+}
+],
+
+"authority_recognition_summary": {
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"issuer_authority_channel": "authority:unesco-heritage",
+"target_level": "shard",
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"jurisdiction": null,
+"time_window": "2020-01-01T00:00:00Z/2025-12-31T23:59:59Z",
+"tenant_id": "tenant_demo",
+"environment": "prod",
+"language": "en"
+}
+},
+
+"authority_channel": {
+"authority_channel_id": "authority:unesco-heritage",
+"name": "UNESCO Heritage Reference Channel",
+"authority_type": "intergovernmental_organization",
+"publisher_id": "did:example:unesco",
+"tenant_id": "tenant_demo",
+"environment": "prod",
+"key_id": "unesco-prod-ed25519-2026-01",
+"trust_roots": [
+{
+"id": "trust-root:unesco-prod-2026",
+"status": "recognized"
+}
+]
+},
+
+"integrity": {
+"hash_alg": "sha256",
+"manifest_hash": {
+"alg": "sha256",
+"value": "53152b34512bdb2f05bbfa2d41f4f7e5e379e5df67c831f3039ccacc7b1ea7bd"
+}
+},
+
+"signatures": [
+{
+"key_id": "unesco-prod-ed25519-2026-01",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "53152b34512bdb2f05bbfa2d41f4f7e5e379e5df67c831f3039ccacc7b1ea7bd"
+},
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-02-26T18:05:10Z"
+}
+],
+
+"extensions": {
+"source_namespace": "unesco",
+"source_channel": "unesco-official",
+"notes": "Example Kristal v5 shard manifest for a heritage reference shard. Validation and recognition are scoped to the declared UNESCO heritage authority channel."
+}
+}

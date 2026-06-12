@@ -1,0 +1,1107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v5/exchange-manifest.schema.json",
+  "title": "Kristal v5 Exchange Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "exchange_version",
+    "created_at",
+    "kristal_id",
+    "artifact_status",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "content_hash",
+    "build",
+    "inputs",
+    "scope"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "5.0",
+      "description": "Manifest schema version."
+    },
+    "artifact_type": {
+      "type": "string",
+      "enum": [
+        "working_exchange",
+        "reference_exchange"
+      ],
+      "description": "Exchange artifact type. A working exchange is compiled and inspectable. A reference exchange has been recognized for a declared scope by one or more authority channels."
+    },
+    "exchange_version": {
+      "type": "string",
+      "const": "5.0",
+      "description": "Kristal Exchange format version."
+    },
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique ID for this manifest. Recommended form: sha256:<hex> over the manifest hash target, excluding signatures."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp when the manifest was produced. Timestamps are not part of content-addressed Exchange payload IDs unless a profile explicitly says so."
+    },
+    "kristal_id": {
+      "$ref": "#/$defs/kristal_id",
+      "description": "Content-addressed ID of the Exchange payload (sha256:<hex>)."
+    },
+    "artifact_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "working",
+        "under_review",
+        "recognized",
+        "reference",
+        "deprecated",
+        "superseded",
+        "revoked"
+      ],
+      "description": "Lifecycle status of the Exchange artifact. Use 'working' for compiled artifacts not yet recognized as a reference, and 'reference' for artifacts accepted under declared authority channels and policies."
+    },
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v5:jcs-rfc8785",
+      "description": "Canonicalization profile identifier for deterministic hashing. The word canonicalization refers only to stable serialization."
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1",
+      "description": "Canonicalization profile version."
+    },
+    "content_hash": {
+      "$ref": "#/$defs/hash",
+      "description": "Hash of the canonicalized Exchange payload hash target. The hash target excludes kristal_id, content_hash, signatures, and external attestations."
+    },
+    "scope": {
+      "$ref": "#/$defs/scope",
+      "description": "Declared scope for this Exchange."
+    },
+    "build": {
+      "$ref": "#/$defs/build",
+      "description": "Deterministic build record and compiler identity. Build metadata is not part of the Exchange payload hash target unless a profile explicitly says so."
+    },
+    "inputs": {
+      "$ref": "#/$defs/inputs",
+      "description": "Input snapshot identifiers and upstream artifact references."
+    },
+    "source_state_refs": {
+      "type": "array",
+      "description": "Structured Epistemic State references used to produce this Exchange.",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "authority_registry_ref": {
+      "$ref": "#/$defs/artifact_ref",
+      "description": "Optional authority registry used to evaluate authority channels for this Exchange."
+    },
+    "authority_recognition_refs": {
+      "type": "array",
+      "description": "References to authority recognition artifacts that recognize this Exchange, one of its shards, or assertions within it.",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "validation_refs": {
+      "type": "array",
+      "description": "References to validation decisions or validation reports. Validation is scoped by authority channel, policy, certainty level, and domain.",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "review_refs": {
+      "type": "array",
+      "description": "References to review bundles, attestations, or workflow records.",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "reader_policy_refs": {
+      "type": "array",
+      "description": "Reader policies known to be compatible with this Exchange. Reader policies control visibility by authority channel, validation status, certainty level, and scope.",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "profiles_enabled": {
+      "type": "array",
+      "description": "Explicitly enabled optional profiles during compilation, validation, export, or distribution.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "certainty_summary": {
+      "$ref": "#/$defs/certainty_summary",
+      "description": "Aggregate certainty information for the Exchange. This summary must not replace assertion-level status."
+    },
+    "validation_summary": {
+      "$ref": "#/$defs/validation_summary",
+      "description": "Aggregate validation information for the Exchange. This summary must not replace scoped validation decisions."
+    },
+    "exports": {
+      "$ref": "#/$defs/exports",
+      "description": "Deterministic export declarations and optional export integrity hashes."
+    },
+    "policies": {
+      "$ref": "#/$defs/policies",
+      "description": "Portable policy selections that may affect derived artifacts; Exchange should record those relevant to reproducibility, reader selection, and authority recognition."
+    },
+    "references": {
+      "type": "array",
+      "description": "Human-facing references associated with the Exchange manifest.",
+      "items": {
+        "$ref": "#/$defs/reference"
+      }
+    },
+    "signatures": {
+      "type": "array",
+      "description": "Detached or embedded signatures over the manifest signature target. Signatures are excluded from content_hash and manifest_id hash targets.",
+      "items": {
+        "$ref": "#/$defs/signature"
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "description": "Extension namespace. Extension keys should be URI-like or reverse-DNS names to avoid collisions.",
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "artifact_type": {
+            "const": "reference_exchange"
+          }
+        },
+        "required": [
+          "artifact_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "artifact_status": {
+            "enum": [
+              "recognized",
+              "reference",
+              "deprecated",
+              "superseded",
+              "revoked"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "authority_recognition_refs"
+            ],
+            "properties": {
+              "authority_recognition_refs": {
+                "minItems": 1
+              }
+            }
+          },
+          {
+            "required": [
+              "validation_refs"
+            ],
+            "properties": {
+              "validation_refs": {
+                "minItems": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "artifact_type": {
+            "const": "working_exchange"
+          }
+        },
+        "required": [
+          "artifact_type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "artifact_status": {
+            "enum": [
+              "draft",
+              "working",
+              "under_review",
+              "deprecated",
+              "superseded",
+              "revoked"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sha256_prefixed": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "kristal_id": {
+      "$ref": "#/$defs/sha256_prefixed"
+    },
+    "hash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alg",
+        "value"
+      ],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "enum": [
+            "sha256"
+          ],
+          "description": "Hash algorithm identifier."
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex",
+          "description": "Lowercase hex-encoded hash digest."
+        }
+      }
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "artifact_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Artifact identifier. Recommended form: sha256:<hex> or a namespaced Kristal URI."
+        },
+        "artifact_type": {
+          "type": "string",
+          "enum": [
+            "structured_epistemic_state",
+            "working_exchange",
+            "reference_exchange",
+            "runtime_pack",
+            "exchange_shard_manifest",
+            "exchange_federation_manifest",
+            "authority_registry",
+            "authority_recognition",
+            "validation_report",
+            "validation_decision",
+            "review_bundle",
+            "revocations",
+            "reader_policy",
+            "transparency_log_entry",
+            "external_dataset",
+            "external_document"
+          ]
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain"
+      ],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": [
+            "general",
+            "wikidata",
+            "science",
+            "health",
+            "education",
+            "heritage",
+            "law",
+            "policy",
+            "technology",
+            "environment",
+            "culture",
+            "mythology",
+            "fiction",
+            "research",
+            "operations",
+            "civic",
+            "local_notes"
+          ]
+        },
+        "subdomain": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "jurisdiction": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "time_window": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "tenant_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "environment": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "BCP 47 language tag when applicable."
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_id",
+        "compiler_name",
+        "compiler_version",
+        "config_hash",
+        "compile_status"
+      ],
+      "properties": {
+        "build_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Correlation ID for end-to-end tracing."
+        },
+        "compiler_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compiler_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "config_hash": {
+          "$ref": "#/$defs/hash",
+          "description": "Digest of compilation configuration."
+        },
+        "compile_status": {
+          "type": "string",
+          "enum": [
+            "succeeded",
+            "failed",
+            "partial"
+          ]
+        },
+        "validation_status": {
+          "$ref": "#/$defs/validation_status",
+          "default": "not_evaluated"
+        },
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "not_required",
+            "pending",
+            "completed",
+            "blocked"
+          ],
+          "default": "not_required"
+        },
+        "recognition_status": {
+          "type": "string",
+          "enum": [
+            "none",
+            "recognized",
+            "conditionally_recognized",
+            "under_review",
+            "disputed",
+            "rejected",
+            "revoked"
+          ],
+          "default": "none"
+        },
+        "publication_status": {
+          "type": "string",
+          "enum": [
+            "not_published",
+            "published",
+            "blocked"
+          ],
+          "default": "not_published"
+        },
+        "activation_status": {
+          "type": "string",
+          "enum": [
+            "not_applicable",
+            "activated",
+            "blocked",
+            "revoked"
+          ],
+          "default": "not_applicable"
+        },
+        "working_outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "reference_outputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reason_code"
+          },
+          "uniqueItems": true
+        },
+        "git_commit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional SCM commit identifier for the compiler/runtime."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Optional build environment metadata.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_refs"
+      ],
+      "properties": {
+        "source_refs": {
+          "type": "array",
+          "description": "Input documents, datasets, Structured Epistemic States, Claim-IR artifacts, prior Exchanges, or external corpora used to build this Exchange.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "source_snapshot_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional identifier of the source snapshot used to build the Exchange."
+        },
+        "recipe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional subset/build recipe identifier."
+        },
+        "structured_epistemic_state_ids": {
+          "type": "array",
+          "description": "Optional list of Structured Epistemic State artifact IDs used.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Claim-IR artifact identifiers used by extractor proposal profiles. Claim-IR is not the universal required input format in Kristal v5.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "resolved_claim_ir_ids": {
+          "type": "array",
+          "description": "Optional list of Resolved Claim-IR artifact identifiers used when a resolution profile is part of the build.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "previous_exchange_ids": {
+          "type": "array",
+          "description": "Optional parent Exchange IDs for incremental builds, forks, merges, or lineage.",
+          "items": {
+            "$ref": "#/$defs/kristal_id"
+          },
+          "uniqueItems": true
+        },
+        "derived_from": {
+          "type": "array",
+          "description": "Artifacts this Exchange derives from.",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "merged_from": {
+          "type": "array",
+          "description": "Artifacts merged to create this Exchange.",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "supersedes": {
+          "type": "array",
+          "description": "Artifacts superseded by this Exchange.",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        }
+      }
+    },
+    "exports": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rdf": {
+          "$ref": "#/$defs/export_decl"
+        },
+        "jsonld": {
+          "$ref": "#/$defs/export_decl"
+        },
+        "wdqs": {
+          "$ref": "#/$defs/export_decl"
+        },
+        "tpf": {
+          "$ref": "#/$defs/export_decl"
+        },
+        "custom": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/export_decl"
+          }
+        }
+      }
+    },
+    "export_decl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "enabled"
+      ],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "policies": {
+      "type": "object",
+      "description": "Portable policy selections for reproducibility, reader selection, validation, recognition, and distribution.",
+      "additionalProperties": false,
+      "properties": {
+        "ordering_policies": {
+          "type": "array",
+          "description": "Selected triple-table orderings.",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "SPO",
+              "SOP",
+              "PSO",
+              "POS",
+              "OSP",
+              "OPS"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "row_group_policy": {
+          "$ref": "#/$defs/row_group_policy"
+        },
+        "reader_policy_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "validation_policy_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "recognition_policy_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "composition_policy": {
+          "$ref": "#/$defs/composition_policy"
+        },
+        "allowed_runtime_pack_policies": {
+          "type": "array",
+          "description": "Runtime pack policy identifiers allowed for this Exchange.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "row_group_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FIXED_ROWS",
+            "FIXED_BYTES",
+            "ADAPTIVE"
+          ]
+        },
+        "rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "target_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "target_bytes": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "FIXED_ROWS"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "rows"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "FIXED_BYTES"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "bytes"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "ADAPTIVE"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "target_rows",
+              "target_bytes"
+            ]
+          }
+        }
+      ]
+    },
+    "composition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "policy_version",
+        "overlap_strategy",
+        "conflict_strategy",
+        "default_visibility",
+        "ordering"
+      ],
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "overlap_strategy": {
+          "type": "string",
+          "enum": [
+            "authority_precedence",
+            "latest_time_window",
+            "explicit_allow_deny",
+            "preserve_all",
+            "reader_policy_selected"
+          ]
+        },
+        "conflict_strategy": {
+          "type": "string",
+          "enum": [
+            "preserve_disagreement",
+            "authority_precedence",
+            "mark_disputed",
+            "exclude_conflict",
+            "require_reader_choice"
+          ]
+        },
+        "default_visibility": {
+          "type": "string",
+          "enum": [
+            "reader_policy",
+            "show_all_with_labels",
+            "reference_only",
+            "validated_only"
+          ]
+        },
+        "ordering": {
+          "type": "string",
+          "enum": [
+            "stable",
+            "source_order",
+            "authority_order",
+            "time_order"
+          ]
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "certainty_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default_certainty_level": {
+          "$ref": "#/$defs/certainty_level"
+        },
+        "contains_mixed_certainty": {
+          "type": "boolean"
+        },
+        "counts_by_certainty_level": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "contains_hypotheses": {
+          "type": "boolean"
+        },
+        "contains_disputed_assertions": {
+          "type": "boolean"
+        },
+        "contains_fictional_or_mythological_material": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "validation_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default_validation_status": {
+          "$ref": "#/$defs/validation_status"
+        },
+        "validated_as": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/validated_as"
+          },
+          "uniqueItems": true
+        },
+        "authority_channels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/authority_channel_id"
+          },
+          "uniqueItems": true
+        },
+        "recognition_statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recognition_status"
+          },
+          "uniqueItems": true
+        },
+        "counts_by_validation_status": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "not_evaluated",
+        "in_review",
+        "validated",
+        "conditionally_validated",
+        "disputed",
+        "rejected",
+        "revoked"
+      ]
+    },
+    "recognition_status": {
+      "type": "string",
+      "enum": [
+        "recognized",
+        "conditionally_recognized",
+        "under_review",
+        "disputed",
+        "rejected",
+        "deprecated",
+        "revoked"
+      ]
+    },
+    "certainty_level": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "speculative",
+        "low",
+        "medium",
+        "high",
+        "established",
+        "not_applicable"
+      ]
+    },
+    "validated_as": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "claim",
+        "sourced_claim",
+        "reviewed_claim",
+        "high_confidence_fact",
+        "institutional_reference",
+        "publisher_declaration",
+        "technical_specification",
+        "legal_or_policy_position",
+        "mythological_corpus",
+        "fictional_corpus",
+        "symbolic_model",
+        "disputed_position",
+        "rejected_claim"
+      ]
+    },
+    "authority_channel_id": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "schema_valid",
+        "schema_invalid",
+        "provenance_sufficient",
+        "provenance_insufficient",
+        "evidence_sufficient",
+        "evidence_insufficient",
+        "authority_recognized",
+        "authority_not_recognized",
+        "scope_mismatch",
+        "policy_satisfied",
+        "policy_failed",
+        "signature_valid",
+        "signature_invalid",
+        "hash_valid",
+        "hash_invalid",
+        "conflict_detected",
+        "disagreement_preserved",
+        "certainty_too_low_for_policy",
+        "rejected_by_authority_channel",
+        "revoked_by_authority_channel"
+      ]
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "uri"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key_id",
+        "alg",
+        "signature"
+      ],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Key identifier used to verify this signature."
+        },
+        "alg": {
+          "type": "string",
+          "enum": [
+            "ed25519"
+          ],
+          "description": "Signature algorithm identifier."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Signature value, encoded as specified by the signing profile."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signer": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "org": {
+              "type": "string",
+              "minLength": 1
+            },
+            "authority_channel": {
+              "$ref": "#/$defs/authority_channel_id"
+            }
+          }
+        },
+        "certificate_uri": {
+          "type": "string",
+          "format": "uri",
+          "description": "Optional pointer to a certificate chain or public key material."
+        }
+      }
+    }
+  }
+}

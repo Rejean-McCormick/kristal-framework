@@ -1,0 +1,446 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://kristal.org/schemas/v5/revocations.schema.json",
+"title": "Kristal v5 Revocations List",
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"artifact_type",
+"revocations_id",
+"created_at",
+"issuer_authority_channel",
+"canonicalization_profile",
+"canonicalization_version",
+"content_hash",
+"scope",
+"revoked_keys",
+"revoked_targets",
+"signatures"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"const": "5.0",
+"description": "Schema version for this revocations list format."
+},
+
+```
+"artifact_type": {
+  "type": "string",
+  "const": "revocations",
+  "description": "Artifact discriminator."
+},
+
+"revocations_id": {
+  "type": "string",
+  "pattern": "^sha256:[a-f0-9]{64}$",
+  "description": "Content-addressed ID for this revocations list artifact."
+},
+
+"created_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "UTC timestamp when this revocations list was produced. This timestamp must not affect the content-addressed ID unless a profile explicitly includes it in the hash target."
+},
+
+"issuer_authority_channel": {
+  "type": "string",
+  "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
+  "description": "Authority channel issuing this revocations list."
+},
+
+"canonicalization_profile": {
+  "type": "string",
+  "const": "kristal.v5:jcs-rfc8785",
+  "description": "Canonicalization profile identifier."
+},
+
+"canonicalization_version": {
+  "type": "string",
+  "const": "1",
+  "description": "Canonicalization version."
+},
+
+"content_hash": {
+  "$ref": "#/$defs/hash",
+  "description": "Hash of the canonicalized revocations content with output ID fields and signatures excluded from the hash target."
+},
+
+"scope": {
+  "$ref": "#/$defs/scope",
+  "description": "Scope for which these revocations apply."
+},
+
+"revocation_policy_ref": {
+  "$ref": "#/$defs/artifact_ref",
+  "description": "Optional reference to the policy under which this revocation list is issued."
+},
+
+"effective_from": {
+  "type": "string",
+  "format": "date-time",
+  "description": "Optional time from which this revocations list becomes effective."
+},
+
+"expires_at": {
+  "type": "string",
+  "format": "date-time",
+  "description": "Optional expiration time for this revocations list."
+},
+
+"revoked_keys": {
+  "type": "array",
+  "minItems": 0,
+  "description": "Revoked signing keys and metadata.",
+  "items": {
+    "$ref": "#/$defs/revoked_key"
+  }
+},
+
+"revoked_targets": {
+  "type": "array",
+  "minItems": 0,
+  "description": "Revoked artifacts, authority recognitions, validation decisions, authority channels, runtime packs, or other revocable Kristal targets.",
+  "items": {
+    "$ref": "#/$defs/revoked_target"
+  }
+},
+
+"signatures": {
+  "type": "array",
+  "minItems": 1,
+  "description": "Signatures over the revocations signing target. Declared signature requirements must be verified before this list is trusted by a reader, runtime, or authority policy.",
+  "items": {
+    "$ref": "#/$defs/signature"
+  }
+},
+
+"extensions": {
+  "type": "object",
+  "description": "Implementation-specific fields. Extensions must not change core identity, hashing, revocation, or verification semantics.",
+  "additionalProperties": true
+}
+```
+
+},
+
+"$defs": {
+"hash": {
+"type": "object",
+"additionalProperties": false,
+"required": ["alg", "value"],
+"properties": {
+"alg": {
+"type": "string",
+"enum": ["sha256"]
+},
+"value": {
+"type": "string",
+"pattern": "^[a-f0-9]{64}$"
+}
+}
+},
+
+```
+"scope": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["domain"],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Primary domain for the scope."
+    },
+    "subdomain": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional subdomain."
+    },
+    "jurisdiction": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional legal, institutional, or geographic jurisdiction."
+    },
+    "time_window": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional time window or versioned period label."
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional tenant boundary."
+    },
+    "environment": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional deployment environment."
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional language tag."
+    }
+  }
+},
+
+"artifact_ref": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifact_id", "artifact_type"],
+  "properties": {
+    "artifact_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content_hash": {
+      "$ref": "#/$defs/hash"
+    }
+  }
+},
+
+"revoked_key": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key_id",
+    "revoked_at",
+    "reason",
+    "scope"
+  ],
+  "properties": {
+    "key_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Revoked key identifier."
+    },
+    "authority_channel": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
+      "description": "Authority channel associated with the revoked key."
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the key was revoked."
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional effective time if different from revoked_at."
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "compromised",
+        "rotated",
+        "deprecated",
+        "policy_failed",
+        "authority_revoked",
+        "scope_changed",
+        "superseded",
+        "unknown"
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      }
+    },
+    "details": {
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope",
+      "description": "Scope within which the key revocation applies."
+    },
+    "replaces_key_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Optional pointer to a replacement key identifier."
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      }
+    }
+  }
+},
+
+"revoked_target": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "target_ref",
+    "target_type",
+    "revoked_at",
+    "reason",
+    "scope"
+  ],
+  "properties": {
+    "target_ref": {
+      "$ref": "#/$defs/artifact_ref",
+      "description": "Reference to the revoked target."
+    },
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "structured_epistemic_state",
+        "working_exchange",
+        "reference_exchange",
+        "runtime_pack",
+        "exchange_shard_manifest",
+        "exchange_federation_manifest",
+        "authority_registry",
+        "authority_channel",
+        "authority_recognition",
+        "validation_decision",
+        "validation_report",
+        "review_bundle",
+        "reader_policy",
+        "transparency_log_entry",
+        "dataset",
+        "key",
+        "other"
+      ]
+    },
+    "authority_channel": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
+      "description": "Authority channel associated with the revoked target."
+    },
+    "revoked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the target was revoked."
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional effective time if different from revoked_at."
+    },
+    "reason": {
+      "type": "string",
+      "enum": [
+        "compromised",
+        "rotated",
+        "deprecated",
+        "policy_failed",
+        "authority_revoked",
+        "recognition_revoked",
+        "validation_revoked",
+        "scope_changed",
+        "superseded",
+        "data_error",
+        "provenance_error",
+        "signature_invalid",
+        "hash_invalid",
+        "unknown"
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      }
+    },
+    "details": {
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope",
+      "description": "Scope within which the target revocation applies."
+    },
+    "superseded_by": {
+      "$ref": "#/$defs/artifact_ref",
+      "description": "Optional replacement target."
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      }
+    }
+  }
+},
+
+"reason_code": {
+  "type": "string",
+  "enum": [
+    "schema_valid",
+    "schema_invalid",
+    "provenance_sufficient",
+    "provenance_insufficient",
+    "evidence_sufficient",
+    "evidence_insufficient",
+    "authority_recognized",
+    "authority_not_recognized",
+    "scope_mismatch",
+    "policy_satisfied",
+    "policy_failed",
+    "signature_valid",
+    "signature_invalid",
+    "hash_valid",
+    "hash_invalid",
+    "conflict_detected",
+    "disagreement_preserved",
+    "certainty_too_low_for_policy",
+    "rejected_by_authority_channel",
+    "revoked_by_authority_channel"
+  ]
+},
+
+"signature": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "key_id",
+    "alg",
+    "signature"
+  ],
+  "properties": {
+    "sig_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "key_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alg": {
+      "type": "string",
+      "enum": [
+        "ed25519",
+        "rsa-pss-sha256"
+      ]
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 16
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+```
+
+}
+}

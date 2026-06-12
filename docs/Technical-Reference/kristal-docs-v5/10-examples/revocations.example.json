@@ -1,0 +1,123 @@
+{
+"schema_version": "5.0",
+"artifact_type": "revocations",
+"created_at": "2026-02-26T18:55:00Z",
+
+"revocations_id": "sha256:4d2c1a9b8e7f6051423a1b0c9d8e7f6051423a1b0c9d8e7f6051423a1b0c9d8e",
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+
+"issuer_authority_channel": {
+"authority_channel_id": "authority:tenant_123",
+"name": "Tenant 123 Trust Root"
+},
+
+"content_hash": {
+"alg": "sha256",
+"value": "4d2c1a9b8e7f6051423a1b0c9d8e7f6051423a1b0c9d8e7f6051423a1b0c9d8e"
+},
+
+"hash_target_policy": {
+"exclude_fields": ["revocations_id", "content_hash", "signatures"],
+"notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned revocation artifact, excluding revocations_id, content_hash, and signatures."
+},
+
+"scope": {
+"domain": "operations",
+"subdomain": "trust-roots",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": "tenant_123",
+"environment": "prod",
+"language": "en"
+},
+
+"revocation_policy_ref": {
+"policy_id": "kristal.v5:revocation-policy:tenant_123-prod",
+"policy_version": "1"
+},
+
+"entries": [
+{
+"entry_id": "rev-0001",
+"target_level": "key",
+"kind": "key_id",
+"target": {
+"key_id": "tenant_123_root_ed25519_v1"
+},
+"revocation_status": "revoked",
+"revoked_at": "2026-02-20T09:12:03Z",
+"effective_at": "2026-02-20T10:00:00Z",
+"expires_at": null,
+"reason_code": "planned_key_rotation",
+"reason": "Key rotation (planned)",
+"replacement_ref": {
+"key_id": "tenant_123_root_ed25519_v2"
+},
+"effect": {
+"new_signatures_allowed": false,
+"historical_signatures_remain_verifiable": true,
+"reader_policy_effect": "treat_new_artifacts_signed_only_by_this_key_as_untrusted_for_selected_authority_channel"
+},
+"notes": "Replaced by tenant_123_root_ed25519_v2."
+},
+{
+"entry_id": "rev-0002",
+"target_level": "authority_channel",
+"kind": "authority_channel_id",
+"target": {
+"authority_channel_id": "authority:unesco",
+"name": "UNESCO"
+},
+"revocation_status": "conditionally_revoked",
+"revoked_at": "2026-02-22T14:30:00Z",
+"effective_at": "2026-02-22T14:30:00Z",
+"expires_at": "2026-03-01T00:00:00Z",
+"reason_code": "temporary_suspension_pending_review",
+"reason": "Authority temporarily suspended",
+"effect": {
+"new_recognitions_allowed": false,
+"existing_recognitions_remain_visible": true,
+"reader_policy_effect": "exclude_or_label_material_recognized_only_by_this_authority_channel_when_policy_disallows_conditionally_revoked_authorities"
+},
+"notes": "Temporary suspension pending review."
+},
+{
+"entry_id": "rev-0003",
+"target_level": "artifact",
+"kind": "artifact_id",
+"target": {
+"artifact_id": "sha256:9f3e6e5d2c1a4b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c",
+"artifact_type": "reference_exchange"
+},
+"revocation_status": "revoked",
+"revoked_at": "2026-02-24T18:05:10Z",
+"effective_at": "2026-02-24T18:05:10Z",
+"expires_at": null,
+"reason_code": "post_publication_validation_revoked",
+"reason": "Validation decision revoked after publication",
+"validation_refs": [
+{
+"validation_decision_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
+],
+"effect": {
+"new_distribution_allowed": false,
+"existing_traces_remain_visible": true,
+"reader_policy_effect": "mark_as_revoked_and_exclude_under_reader_policies_that_disallow_revoked_artifacts"
+},
+"notes": "Consumers should preserve lineage and display the revoked status. Federations that include this artifact should expose the revocation and apply the active reader policy."
+}
+],
+
+"signatures": [
+{
+"key_id": "tenant_123_root_ed25519_v2",
+"alg": "ed25519",
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-02-26T18:55:10Z"
+}
+],
+
+"extensions": {}
+}
