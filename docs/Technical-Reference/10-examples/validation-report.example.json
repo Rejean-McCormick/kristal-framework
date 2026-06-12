@@ -1,0 +1,450 @@
+{
+"schema_version": "5.0",
+"artifact_type": "validation_report",
+"validation_report_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+"created_at": "2026-06-12T16:45:00Z",
+"updated_at": "2026-06-12T16:45:00Z",
+
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+},
+
+"hash_target_policy": {
+"exclude_fields": ["validation_report_id", "content_hash", "signatures"],
+"notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned validation report, excluding validation_report_id, content_hash, and signatures."
+},
+
+"issuer_authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+},
+
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"artifact_type": "structured_epistemic_state",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+}
+},
+
+"target_level": "structured_epistemic_state",
+
+"scope": {
+"domain": "science",
+"subdomain": "planetary-science",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+"policy_version": "1"
+},
+
+"validation_status": "validated",
+"validated_as": "high_confidence_fact",
+"certainty_level": "established",
+"recognition_status": "recognized",
+
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+"recognition_status": "recognized",
+"recognized_as": "high_confidence_fact",
+"authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+},
+"scope": {
+"domain": "science",
+"subdomain": "planetary-science",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+"policy_version": "1"
+}
+}
+],
+
+"reader_policy_refs": [
+{
+"reader_policy_id": "reader_policy:reference-only-global-science",
+"mode": "reference_only"
+},
+{
+"reader_policy_id": "reader_policy:validated-only-selected-authorities",
+"mode": "validated_only"
+}
+],
+
+"input_refs": [
+{
+"artifact_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"artifact_type": "structured_epistemic_state",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+},
+"created_at": "2026-06-12T16:30:00Z"
+}
+],
+
+"evidence_refs": [
+{
+"evidence_id": "evidence:science-reference-earth-shape-0001",
+"source_ref": {
+"source_id": "source:global-science-reference-earth-shape",
+"source_type": "institutional_record",
+"title": "Global science reference position on Earth shape",
+"publisher": "Global Science Reference Example",
+"retrieved_at": "2026-06-12T16:21:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+}
+},
+"quote": "The reference model describes Earth as approximately spherical for general scientific and educational use.",
+"section": "Reference position",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+}
+}
+],
+
+"provenance_refs": [
+{
+"artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+"artifact_type": "reference_exchange",
+"content_hash": {
+"alg": "sha256",
+"value": "6666666666666666666666666666666666666666666666666666666666666666"
+},
+"created_at": "2026-06-01T00:00:00Z"
+}
+],
+
+"findings": [
+{
+"finding_id": "finding:schema-valid-0001",
+"check_id": "check:schema-validation",
+"check_type": "schema",
+"status": "passed",
+"severity": "info",
+"reason_code": "schema_valid",
+"message": "The target Structured Epistemic State satisfies the applicable Kristal v5 schema requirements.",
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"artifact_type": "structured_epistemic_state"
+}
+},
+{
+"finding_id": "finding:integrity-valid-0001",
+"check_id": "check:content-hash",
+"check_type": "hash",
+"status": "passed",
+"severity": "info",
+"reason_code": "hash_valid",
+"message": "The target content hash matched the declared hash.",
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+}
+}
+},
+{
+"finding_id": "finding:evidence-sufficient-0001",
+"check_id": "check:evidence-sufficiency",
+"check_type": "evidence",
+"status": "passed",
+"severity": "info",
+"reason_code": "evidence_sufficient",
+"message": "The reviewed assertion has sufficient evidence for the selected authority channel and validation policy.",
+"target": {
+"assertion_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:science-reference-earth-shape-0001",
+"source_ref": {
+"source_id": "source:global-science-reference-earth-shape",
+"source_type": "institutional_record",
+"title": "Global science reference position on Earth shape",
+"publisher": "Global Science Reference Example",
+"content_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+}
+},
+"evidence_status": "sufficient"
+}
+]
+},
+{
+"finding_id": "finding:disagreement-preserved-0001",
+"check_id": "check:federated-disagreement",
+"check_type": "conflict",
+"status": "passed",
+"severity": "info",
+"reason_code": "disagreement_preserved",
+"message": "The target preserves the disagreement between the scientific reference assertion and the divergent fork assertion without silently merging them.",
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+}
+}
+],
+
+"assertion_results": [
+{
+"assertion_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+"assertion_status": "validated",
+"validation_status": "validated",
+"validated_as": "high_confidence_fact",
+"certainty_level": "established",
+"authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+},
+"scope": {
+"domain": "science",
+"subdomain": "planetary-science",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+"policy_version": "1"
+},
+"findings": [
+{
+"finding_id": "finding:assertion-evidence-sufficient-0001",
+"check_id": "check:assertion-evidence",
+"check_type": "evidence",
+"status": "passed",
+"severity": "info",
+"reason_code": "evidence_sufficient",
+"message": "The assertion is supported by sufficient evidence under the selected scientific reference review policy."
+},
+{
+"finding_id": "finding:assertion-authority-recognized-0001",
+"check_id": "check:authority-channel",
+"check_type": "authority",
+"status": "passed",
+"severity": "info",
+"reason_code": "authority_recognized",
+"message": "The validating authority channel is recognized for this example science scope."
+}
+],
+"reason_codes": ["authority_recognized", "evidence_sufficient", "policy_satisfied"],
+"notes": "Validated as a high-confidence scientific reference assertion within the declared authority channel and scope."
+},
+{
+"assertion_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+"assertion_status": "disputed",
+"validation_status": "rejected",
+"validated_as": "rejected_claim",
+"certainty_level": "low",
+"authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+},
+"scope": {
+"domain": "science",
+"subdomain": "planetary-science",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+"policy_version": "1"
+},
+"findings": [
+{
+"finding_id": "finding:assertion-rejected-0001",
+"check_id": "check:scientific-reference-position",
+"check_type": "policy",
+"status": "failed",
+"severity": "high",
+"reason_code": "rejected_by_authority_channel",
+"message": "The divergent assertion is rejected under the selected scientific reference review policy."
+},
+{
+"finding_id": "finding:conflict-detected-0001",
+"check_id": "check:conflict-detection",
+"check_type": "conflict",
+"status": "warning",
+"severity": "medium",
+"reason_code": "conflict_detected",
+"message": "The assertion conflicts with the validated scientific reference assertion."
+}
+],
+"reason_codes": ["rejected_by_authority_channel", "conflict_detected"],
+"notes": "Rejected only under the global science reference example authority channel. This does not erase the assertion from the divergent fork; it defines how this authority evaluates it."
+}
+],
+
+"artifact_checks": [
+{
+"check_id": "check:target-schema-valid",
+"check_type": "schema",
+"status": "passed",
+"severity": "info",
+"reason_code": "schema_valid",
+"message": "Target artifact schema is valid.",
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+}
+},
+{
+"check_id": "check:target-integrity-valid",
+"check_type": "integrity",
+"status": "passed",
+"severity": "info",
+"reason_code": "hash_valid",
+"message": "Target artifact integrity check passed.",
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+}
+}
+},
+{
+"check_id": "check:target-scope-valid",
+"check_type": "scope",
+"status": "passed",
+"severity": "info",
+"reason_code": "policy_satisfied",
+"message": "The target scope matches the validation policy scope.",
+"target": {
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+}
+}
+],
+
+"policy_evaluation": {
+"policy_ref": {
+"policy_id": "kristal.v5:validation-policy:scientific-reference-review",
+"policy_version": "1"
+},
+"status": "passed",
+"matched_rules": [
+"schema_valid",
+"content_hash_valid",
+"authority_channel_recognized",
+"evidence_sufficient_for_reference_assertion",
+"disagreement_preserved"
+],
+"failed_rules": [],
+"reason_codes": ["policy_satisfied"],
+"notes": "The validation report evaluates the target under the declared scientific reference review policy."
+},
+
+"summary": {
+"total_findings": 4,
+"passed": 4,
+"failed": 0,
+"warnings": 0,
+"not_applicable": 0,
+"not_evaluated": 0,
+"assertions_total": 2,
+"assertions_validated": 1,
+"assertions_conditionally_validated": 0,
+"assertions_disputed": 1,
+"assertions_rejected": 1,
+"counts_by_certainty_level": {
+"established": 1,
+"low": 1
+},
+"counts_by_validated_as": {
+"high_confidence_fact": 1,
+"rejected_claim": 1
+},
+"notes": "This report demonstrates scoped validation: one assertion is validated by the scientific authority channel, while a conflicting divergent assertion is rejected by that same channel but remains traceable."
+},
+
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"artifact_type": "structured_epistemic_state",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+},
+"created_at": "2026-06-12T16:30:00Z"
+}
+],
+"source_reports": [],
+"derived_from": [],
+"supersedes": []
+},
+
+"build": {
+"build_id": "build:20260612T164500Z:validation-report-example",
+"schema_version": "5.0",
+"compile_status": "succeeded",
+"validation_status": "validated",
+"review_status": "completed",
+"recognition_status": "recognized",
+"publication_status": "not_published",
+"activation_status": "not_applicable",
+"working_outputs": [],
+"reference_outputs": [],
+"reason_codes": ["schema_valid", "hash_valid", "policy_satisfied", "disagreement_preserved"],
+"created_at": "2026-06-12T16:45:00Z"
+},
+
+"warnings": [],
+
+"errors": [],
+
+"signatures": [
+{
+"key_id": "global_science_reference_example_ed25519_v1",
+"alg": "ed25519",
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-06-12T16:45:10Z",
+"authority_channel": {
+"authority_channel_id": "authority:global-science-reference-example",
+"name": "Global Science Reference Example"
+}
+}
+],
+
+"extensions": {
+"example_purpose": "Demonstrates a Kristal v5 validation report where validation is scoped by authority, policy, domain, certainty, and validated-as mode."
+}
+}

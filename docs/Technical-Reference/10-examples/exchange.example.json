@@ -1,0 +1,332 @@
+{
+  "schema_version": "5.0",
+  "artifact_type": "reference_exchange",
+  "exchange_version": "5.0",
+  "manifest_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "created_at": "2026-01-07T16:10:00Z",
+
+  "kristal_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+  "artifact_status": "reference",
+
+  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
+  "canonicalization_version": "1",
+
+  "content_hash": {
+    "alg": "sha256",
+    "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
+  },
+
+  "scope": {
+    "domain": "wikidata",
+    "subdomain": "seed-example",
+    "jurisdiction": null,
+    "time_window": "2026-01",
+    "tenant_id": "tenant_demo",
+    "environment": "demo",
+    "language": "en"
+  },
+
+  "build": {
+    "build_id": "build-2026-01-07T161000Z-0007",
+    "schema_version": "5.0",
+    "compiler_name": "kristal-compiler",
+    "compiler_version": "5.0.0",
+    "compile_status": "succeeded",
+    "validation_status": "validated",
+    "review_status": "completed",
+    "recognition_status": "recognized",
+    "publication_status": "published",
+    "activation_status": "not_applicable",
+    "config_hash": {
+      "alg": "sha256",
+      "value": "3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1"
+    },
+    "git_commit": "a1b2c3d4e5f6a7b8c9d0",
+    "working_outputs": [],
+    "reference_outputs": [
+      {
+        "ref": "exchange/demo-wikidata-seed-reference.exchange.json",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
+        }
+      }
+    ],
+    "reason_codes": [
+      "schema_valid",
+      "hash_valid",
+      "signature_valid",
+      "provenance_sufficient",
+      "policy_satisfied",
+      "authority_recognized"
+    ],
+    "created_at": "2026-01-07T16:10:00Z"
+  },
+
+  "inputs": {
+    "source_snapshot_id": "snap-2026-01-06-wikidata-seed-demo",
+    "recipe_id": "recipe-demo-encyclopedia-core",
+    "source_state_refs": [
+      {
+        "artifact_id": "sha256:2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2",
+        "artifact_type": "structured_epistemic_state",
+        "ref": "states/demo-wikidata-seed.state.json",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2"
+        }
+      }
+    ],
+    "claim_ir_refs": [
+      {
+        "artifact_id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "artifact_type": "claim_ir",
+        "ref": "claim-ir/ci-demo-wikidata-seed.json",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      }
+    ],
+    "resolved_claim_ir_refs": [
+      {
+        "artifact_id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "artifact_type": "resolved_claim_ir",
+        "ref": "resolved-claim-ir/rci-demo-wikidata-seed.json",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        }
+      }
+    ],
+    "previous_exchange_refs": []
+  },
+
+  "profiles_enabled": [
+    "kristal.v5:jsonld-1.1@1",
+    "kristal.v5:rdf-wdqs-export@1",
+    "kristal.v5:profile-query-tpf-pagination@1"
+  ],
+
+  "policies": {
+    "ordering_policies": [
+      "SPO",
+      "POS"
+    ],
+    "row_group_policy": {
+      "type": "FIXED_ROWS",
+      "rows": 100000
+    },
+    "membership_filter_policy": {
+      "family": "binary_fuse",
+      "variant": "3wise",
+      "key_space": "spo_hash",
+      "target_fpr": 0.001,
+      "bits_per_key": 9.5,
+      "seed": 42
+    },
+    "bitmap_policy": {
+      "format": "roaring",
+      "run_opt": true
+    },
+    "join1_cap_policy": {
+      "cap": 5000,
+      "strict_mode": true,
+      "on_exceed": "error"
+    },
+    "reader_policy_defaults": {
+      "default_reader_policy_id": "reader_policy:validated-only-wikidata-reference",
+      "supported_reader_modes": [
+        "reference_only",
+        "validated_only",
+        "research",
+        "all_with_labels"
+      ]
+    }
+  },
+
+  "assertion_status_summary": {
+    "counts_by_assertion_status": {
+      "validated": 3,
+      "sourced": 1,
+      "disputed": 0,
+      "rejected": 0,
+      "revoked": 0
+    }
+  },
+
+  "certainty_summary": {
+    "counts_by_certainty_level": {
+      "established": 2,
+      "high": 1,
+      "medium": 1,
+      "low": 0,
+      "speculative": 0,
+      "unknown": 0,
+      "not_applicable": 0
+    },
+    "counts_by_validated_as": {
+      "institutional_reference": 3,
+      "sourced_claim": 1
+    },
+    "notes": "Example summary for a small Wikidata seed reference exchange. Counts are illustrative."
+  },
+
+  "validation_summary": {
+    "validation_status": "validated",
+    "validated_as": "institutional_reference",
+    "certainty_level": "high",
+    "authority_channel": {
+      "authority_channel_id": "authority:wikidata-seed-demo",
+      "name": "Wikidata Seed Demo Authority"
+    },
+    "validation_policy_ref": {
+      "policy_id": "kristal.v5:validation-policy:wikidata-seed-demo",
+      "policy_version": "1"
+    },
+    "scope": {
+      "domain": "wikidata",
+      "subdomain": "seed-example",
+      "jurisdiction": null,
+      "time_window": "2026-01",
+      "tenant_id": "tenant_demo",
+      "environment": "demo",
+      "language": "en"
+    },
+    "reason_codes": [
+      "schema_valid",
+      "provenance_sufficient",
+      "evidence_sufficient",
+      "policy_satisfied",
+      "authority_recognized"
+    ],
+    "notes": "This Exchange is recognized as a reference artifact for the declared Wikidata seed demo scope. Recognition does not imply that every assertion is universally true."
+  },
+
+  "validation_refs": [
+    {
+      "artifact_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "artifact_type": "validation_report",
+      "ref": "validation/demo-wikidata-seed-validation-report.json",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      }
+    }
+  ],
+
+  "authority_recognition_refs": [
+    {
+      "artifact_id": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "artifact_type": "authority_recognition",
+      "ref": "authority-recognitions/demo-wikidata-seed-recognition.json",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      }
+    }
+  ],
+
+  "reader_policy_refs": [
+    {
+      "artifact_id": "reader_policy:validated-only-wikidata-reference",
+      "artifact_type": "reader_policy",
+      "ref": "reader-policies/validated-only-wikidata-reference.json"
+    },
+    {
+      "artifact_id": "reader_policy:research-all-with-labels",
+      "artifact_type": "reader_policy",
+      "ref": "reader-policies/research-all-with-labels.json"
+    }
+  ],
+
+  "exports": {
+    "jsonld": {
+      "enabled": true,
+      "profile": "kristal.v5:jsonld-1.1@1",
+      "ref": "exports/demo-wikidata-seed.jsonld",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    "rdf_wdqs": {
+      "enabled": true,
+      "profile": "kristal.v5:rdf-wdqs-export@1",
+      "projection": "full",
+      "ref": "exports/demo-wikidata-seed-full.nt",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    }
+  },
+
+  "query_contract": {
+    "contract_id": "kristal-query-core@1",
+    "supports_pagination": true,
+    "supports_cardinality_estimates": false,
+    "supported_filters": [
+      "artifact_status",
+      "assertion_status",
+      "validation_status",
+      "certainty_level",
+      "validated_as",
+      "authority_channel",
+      "recognition_status",
+      "scope.domain",
+      "scope.subdomain",
+      "reader_policy"
+    ],
+    "supported_reader_modes": [
+      "reference_only",
+      "validated_only",
+      "research",
+      "all_with_labels"
+    ],
+    "supported_ordering": [
+      "SPO",
+      "POS"
+    ]
+  },
+
+  "publisher": {
+    "authority_channel_id": "authority:wikidata-seed-demo",
+    "key_id": "wikidata-seed-demo-ed25519-2026-01",
+    "name": "Wikidata Seed Demo Publisher"
+  },
+
+  "integrity": {
+    "hash_alg": "sha256",
+    "manifest_hash": {
+      "alg": "sha256",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "hash_target_policy": {
+      "exclude_fields": [
+        "manifest_id",
+        "kristal_id",
+        "content_hash",
+        "integrity",
+        "signatures"
+      ],
+      "notes": "IDs, content hashes, integrity envelopes, and signatures are excluded from their own hash targets."
+    }
+  },
+
+  "signatures": [
+    {
+      "key_id": "wikidata-seed-demo-ed25519-2026-01",
+      "alg": "ed25519",
+      "signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+      "created_at": "2026-01-07T16:10:10Z"
+    }
+  ],
+
+  "extensions": {
+    "example_purpose": "Demonstrates a Kristal v5 reference Exchange compiled from a Wikidata seed Structured Epistemic State.",
+    "source_namespace": "wikidata",
+    "source_mode": "full_statements",
+    "notes": "This example preserves scoped validation, authority recognition, certainty summaries, reader policy references, and deterministic build metadata."
+  }
+}

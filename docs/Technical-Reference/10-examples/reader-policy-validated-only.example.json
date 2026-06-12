@@ -1,0 +1,220 @@
+{
+  "schema_version": "5.0",
+  "artifact_type": "reader_policy",
+  "reader_policy_id": "reader_policy:validated-only",
+  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
+  "canonicalization_version": "1",
+
+  "content_hash": {
+    "alg": "sha256",
+    "value": "6262626262626262626262626262626262626262626262626262626262626262"
+  },
+
+  "name": "Validated Only",
+  "description": "A reader policy that exposes only assertions accepted under selected validation policies and authority channels. Validated-only does not mean maximum certainty, universal truth, or universal agreement. It means every visible assertion satisfies this policy's validation, authority, certainty, and scope filters.",
+
+  "created_at": "2026-06-12T16:22:19Z",
+  "updated_at": "2026-06-12T16:22:19Z",
+
+  "mode": "validated_only",
+
+  "policy_scope": {
+    "domain": "general",
+    "subdomain": "validated-reader-view",
+    "jurisdiction": null,
+    "time_window": null,
+    "tenant_id": null,
+    "environment": "example",
+    "language": "en"
+  },
+
+  "allowed_artifact_statuses": [
+    "recognized",
+    "reference"
+  ],
+
+  "allowed_assertion_statuses": [
+    "validated"
+  ],
+
+  "allowed_validation_statuses": [
+    "validated",
+    "conditionally_validated"
+  ],
+
+  "allowed_recognition_statuses": [
+    "recognized",
+    "conditionally_recognized"
+  ],
+
+  "allowed_certainty_levels": [
+    "low",
+    "medium",
+    "high",
+    "established",
+    "not_applicable"
+  ],
+
+  "allowed_validated_as": [
+    "hypothesis",
+    "sourced_claim",
+    "reviewed_claim",
+    "high_confidence_fact",
+    "institutional_reference",
+    "publisher_declaration",
+    "technical_specification",
+    "legal_or_policy_position",
+    "mythological_corpus",
+    "fictional_corpus",
+    "symbolic_model",
+    "disputed_position"
+  ],
+
+  "allowed_authority_channels": [
+    "authority:unesco-science-education",
+    "authority:wikidata-seed",
+    "authority:who",
+    "authority:local-community-archive",
+    "authority:cultural-heritage-archive",
+    "authority:publisher-declared-systems"
+  ],
+
+  "denied_authority_channels": [],
+
+  "allowed_domains": [
+    "general",
+    "wikidata",
+    "science",
+    "health",
+    "education",
+    "heritage",
+    "law",
+    "policy",
+    "technology",
+    "environment",
+    "culture",
+    "mythology",
+    "fiction",
+    "research",
+    "operations",
+    "civic"
+  ],
+
+  "denied_domains": [],
+
+  "include_disputed": true,
+  "include_rejected": false,
+  "include_revoked": false,
+  "include_fictional": true,
+  "include_mythological": true,
+  "include_symbolic": true,
+  "include_speculative": false,
+
+  "show_labels": true,
+  "fallback_behavior": "show_unavailable",
+
+  "label_requirements": {
+    "show_assertion_status": true,
+    "show_validation_status": true,
+    "show_certainty_level": true,
+    "show_validated_as": true,
+    "show_authority_channel": true,
+    "show_recognition_status": true,
+    "show_scope": true,
+    "show_disputed_status": true,
+    "show_fictional_status": true,
+    "show_mythological_status": true
+  },
+
+  "selection_notes": [
+    "This policy includes only material with validation_status validated or conditionally_validated.",
+    "The policy may include low or not_applicable certainty when the assertion is explicitly validated as a hypothesis, fictional corpus, mythological corpus, symbolic model, publisher declaration, technical specification, or disputed position.",
+    "This policy does not present scoped validation as universal truth.",
+    "This policy requires labels to remain visible or recoverable so readers know validated as what, by whom, for which scope, and at which certainty level."
+  ],
+
+  "reason_codes": [
+    "reader_policy_satisfied",
+    "policy_satisfied",
+    "authority_recognized",
+    "disagreement_preserved"
+  ],
+
+  "examples": {
+    "allowed": [
+      {
+        "assertion_status": "validated",
+        "validation_status": "validated",
+        "certainty_level": "established",
+        "validated_as": "high_confidence_fact",
+        "authority_channel": "authority:unesco-science-education",
+        "scope": {
+          "domain": "science",
+          "subdomain": "education",
+          "language": "en"
+        }
+      },
+      {
+        "assertion_status": "validated",
+        "validation_status": "validated",
+        "certainty_level": "not_applicable",
+        "validated_as": "mythological_corpus",
+        "authority_channel": "authority:cultural-heritage-archive",
+        "scope": {
+          "domain": "mythology",
+          "subdomain": "cultural-corpus",
+          "language": "en"
+        }
+      },
+      {
+        "assertion_status": "validated",
+        "validation_status": "conditionally_validated",
+        "certainty_level": "low",
+        "validated_as": "hypothesis",
+        "authority_channel": "authority:independent-research-collective",
+        "scope": {
+          "domain": "research",
+          "subdomain": "early-stage-hypothesis",
+          "language": "en"
+        }
+      }
+    ],
+    "excluded": [
+      {
+        "assertion_status": "claimed",
+        "validation_status": "not_evaluated",
+        "certainty_level": "medium",
+        "validated_as": "claim",
+        "reason": "Not validated under the active policy."
+      },
+      {
+        "assertion_status": "rejected",
+        "validation_status": "rejected",
+        "certainty_level": "low",
+        "validated_as": "rejected_claim",
+        "reason": "Rejected material is excluded by this policy."
+      },
+      {
+        "assertion_status": "validated",
+        "validation_status": "validated",
+        "certainty_level": "high",
+        "validated_as": "high_confidence_fact",
+        "authority_channel": "authority:unselected-authority",
+        "reason": "The validating authority channel is not allowed by this policy."
+      }
+    ]
+  },
+
+  "signatures": [
+    {
+      "key_id": "example_reader_policy_ed25519_v1",
+      "alg": "ed25519",
+      "signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+      "created_at": "2026-06-12T16:22:29Z"
+    }
+  ],
+
+  "extensions": {
+    "example_purpose": "Demonstrates a Kristal v5 validated-only reader policy. The policy allows only validated or conditionally validated material, but does not collapse certainty, authority, scope, fiction, mythology, or disputed position labels into universal truth."
+  }
+}

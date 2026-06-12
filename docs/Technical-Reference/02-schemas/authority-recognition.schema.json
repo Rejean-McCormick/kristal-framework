@@ -1,0 +1,944 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v5/authority-recognition.schema.json",
+  "title": "Authority Recognition v5",
+  "description": "Authority Recognition records how one authority channel recognizes, conditionally recognizes, disputes, rejects, deprecates, or revokes a target artifact, shard, assertion, dataset, runtime pack, or authority channel under an explicit scope and validation policy. Recognition is scoped and does not imply universal truth.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "recognition_id",
+    "recognition_status",
+    "created_at",
+    "issuer_authority_channel",
+    "target",
+    "target_level",
+    "recognized_as",
+    "scope",
+    "validation_policy_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "5.0"
+    },
+    "artifact_type": {
+      "type": "string",
+      "const": "authority_recognition"
+    },
+    "recognition_id": {
+      "$ref": "#/$defs/sha256_uri"
+    },
+    "recognition_status": {
+      "$ref": "#/$defs/recognition_status"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v5:jcs-rfc8785"
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "hash_target_policy": {
+      "$ref": "#/$defs/hash_target_policy"
+    },
+    "issuer_authority_channel": {
+      "$ref": "#/$defs/authority_ref"
+    },
+    "issuer_agent": {
+      "$ref": "#/$defs/agent_ref"
+    },
+    "target_level": {
+      "$ref": "#/$defs/target_level"
+    },
+    "target": {
+      "$ref": "#/$defs/recognition_target"
+    },
+    "recognized_as": {
+      "$ref": "#/$defs/validated_as"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "validation_policy_ref": {
+      "$ref": "#/$defs/validation_policy_ref"
+    },
+    "recognition_basis": {
+      "$ref": "#/$defs/recognition_basis"
+    },
+    "certainty_level": {
+      "$ref": "#/$defs/certainty_level"
+    },
+    "validation_status": {
+      "$ref": "#/$defs/validation_status"
+    },
+    "assertion_status": {
+      "$ref": "#/$defs/assertion_status"
+    },
+    "delegated_authority_refs": {
+      "description": "Authority channels that the issuer recognizes as competent within the declared scope.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authority_delegation"
+      },
+      "default": []
+    },
+    "recognizes_authority_channels": {
+      "description": "Authority channels recognized by this recognition artifact. Use when target_level is authority_channel or when the recognition delegates competence to another authority.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/authority_ref"
+      },
+      "default": []
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "default": []
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "review_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "supersedes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "conflicts_with": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      },
+      "default": []
+    },
+    "effects": {
+      "$ref": "#/$defs/recognition_effects"
+    },
+    "reader_policy_effect": {
+      "type": "string",
+      "description": "Human-readable summary of how readers should treat this recognition under policy-controlled views."
+    },
+    "notes": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/warning"
+      },
+      "default": []
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/signature"
+      },
+      "default": []
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "recognition_status": {
+            "enum": ["recognized", "conditionally_recognized"]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "recognized_as",
+          "scope",
+          "validation_policy_ref",
+          "recognition_basis"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "target_level": {
+            "const": "authority_channel"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "required": ["authority_channel"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "target_level": {
+            "const": "assertion"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "required": ["assertion_id"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "target_level": {
+            "enum": ["artifact", "shard", "dataset", "runtime_pack"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "target": {
+            "required": ["artifact_ref"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "sha256_uri": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "hash_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "const": "sha256"
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex"
+        }
+      }
+    },
+    "hash_target_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exclude_fields"],
+      "properties": {
+        "exclude_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "recognition_id",
+              "content_hash",
+              "signatures"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature", "created_at"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alg": {
+          "type": "string",
+          "const": "ed25519"
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      }
+    },
+    "qid": {
+      "type": "string",
+      "pattern": "^Q[1-9][0-9]*$"
+    },
+    "pid": {
+      "type": "string",
+      "pattern": "^P[1-9][0-9]*$"
+    },
+    "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$"
+    },
+    "authority_channel_id": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "authority_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_channel_id"],
+      "properties": {
+        "authority_channel_id": {
+          "$ref": "#/$defs/authority_channel_id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "authority_type": {
+          "$ref": "#/$defs/authority_type"
+        },
+        "authority_registry_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      }
+    },
+    "authority_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "community",
+        "association",
+        "research_collective",
+        "academic_institution",
+        "standards_body",
+        "company",
+        "government",
+        "intergovernmental_organization",
+        "ai_validator",
+        "hybrid_collective"
+      ]
+    },
+    "agent_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "agent_type": {
+          "type": "string",
+          "enum": [
+            "individual",
+            "community",
+            "association",
+            "research_collective",
+            "academic_institution",
+            "standards_body",
+            "company",
+            "government",
+            "intergovernmental_organization",
+            "ai_validator",
+            "hybrid_collective",
+            "service",
+            "system"
+          ]
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["agent_id"]
+        },
+        {
+          "required": ["name"]
+        },
+        {
+          "required": ["authority_channel"]
+        }
+      ]
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["artifact_id"]
+        },
+        {
+          "required": ["uri"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": [
+            "general",
+            "wikidata",
+            "science",
+            "health",
+            "education",
+            "heritage",
+            "law",
+            "policy",
+            "technology",
+            "environment",
+            "culture",
+            "mythology",
+            "fiction",
+            "research",
+            "operations",
+            "civic",
+            "local_notes"
+          ]
+        },
+        "subdomain": {
+          "type": ["string", "null"]
+        },
+        "jurisdiction": {
+          "type": ["string", "null"]
+        },
+        "time_window": {
+          "type": ["string", "null"]
+        },
+        "tenant_id": {
+          "type": ["string", "null"]
+        },
+        "environment": {
+          "type": ["string", "null"]
+        },
+        "language": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "target_level": {
+      "type": "string",
+      "enum": [
+        "artifact",
+        "shard",
+        "assertion",
+        "authority_channel",
+        "dataset",
+        "runtime_pack"
+      ]
+    },
+    "recognition_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        },
+        "assertion_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "statement_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        },
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime_pack_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["artifact_ref"]
+        },
+        {
+          "required": ["assertion_id"]
+        },
+        {
+          "required": ["statement_id"]
+        },
+        {
+          "required": ["authority_channel"]
+        },
+        {
+          "required": ["dataset_id"]
+        },
+        {
+          "required": ["runtime_pack_id"]
+        }
+      ]
+    },
+    "recognition_status": {
+      "type": "string",
+      "enum": [
+        "recognized",
+        "conditionally_recognized",
+        "under_review",
+        "disputed",
+        "rejected",
+        "deprecated",
+        "revoked"
+      ]
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "not_evaluated",
+        "in_review",
+        "validated",
+        "conditionally_validated",
+        "disputed",
+        "rejected",
+        "revoked"
+      ]
+    },
+    "assertion_status": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "claimed",
+        "sourced",
+        "disputed",
+        "reviewed",
+        "validated",
+        "rejected",
+        "retracted",
+        "superseded"
+      ]
+    },
+    "certainty_level": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "speculative",
+        "low",
+        "medium",
+        "high",
+        "established",
+        "not_applicable"
+      ]
+    },
+    "validated_as": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "claim",
+        "sourced_claim",
+        "reviewed_claim",
+        "high_confidence_fact",
+        "institutional_reference",
+        "publisher_declaration",
+        "technical_specification",
+        "legal_or_policy_position",
+        "mythological_corpus",
+        "fictional_corpus",
+        "symbolic_model",
+        "disputed_position",
+        "rejected_claim"
+      ]
+    },
+    "validation_policy_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["policy_id"]
+        },
+        {
+          "required": ["policy_ref"]
+        }
+      ]
+    },
+    "recognition_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "basis_type": {
+          "type": "string",
+          "enum": [
+            "direct_review",
+            "delegated_authority",
+            "publisher_declaration",
+            "institutional_attestation",
+            "standards_conformance",
+            "evidence_review",
+            "dataset_identity",
+            "technical_integrity",
+            "community_position",
+            "automated_validation",
+            "hybrid_review"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "review_process_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        },
+        "attestation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "policy_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/validation_policy_ref"
+          },
+          "default": []
+        }
+      }
+    },
+    "authority_delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delegated_authority_channel",
+        "delegation_scope",
+        "delegation_status"
+      ],
+      "properties": {
+        "delegated_authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        },
+        "delegation_scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "delegation_status": {
+          "type": "string",
+          "enum": [
+            "recognized",
+            "conditionally_recognized",
+            "under_review",
+            "rejected",
+            "revoked"
+          ]
+        },
+        "delegation_policy_ref": {
+          "$ref": "#/$defs/validation_policy_ref"
+        },
+        "expires_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_ref"],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "$ref": "#/$defs/source_ref"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "section": {
+          "type": "string"
+        },
+        "offsets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start_char": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end_char": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "evidence_status": {
+          "type": "string",
+          "enum": [
+            "provided",
+            "missing",
+            "weak",
+            "sufficient",
+            "contested"
+          ]
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        }
+      }
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "dataset",
+            "document",
+            "web_page",
+            "wikidata_dump",
+            "api_result",
+            "human_submission",
+            "institutional_record",
+            "claim_ir",
+            "resolved_claim_ir",
+            "structured_epistemic_state",
+            "exchange",
+            "runtime_pack",
+            "other"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "license": {
+          "type": "string"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["source_id"]
+        },
+        {
+          "required": ["source_url"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "recognition_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "eligible_for_reference_views": {
+          "type": "boolean"
+        },
+        "eligible_for_validated_only_views": {
+          "type": "boolean"
+        },
+        "eligible_for_high_certainty_views": {
+          "type": "boolean"
+        },
+        "requires_visible_label": {
+          "type": "boolean"
+        },
+        "requires_dispute_label": {
+          "type": "boolean"
+        },
+        "requires_authority_label": {
+          "type": "boolean"
+        },
+        "requires_certainty_label": {
+          "type": "boolean"
+        },
+        "distribution_allowed": {
+          "type": "boolean"
+        },
+        "runtime_activation_allowed": {
+          "type": "boolean"
+        },
+        "reader_policy_effect": {
+          "type": "string"
+        }
+      }
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "schema_valid",
+        "schema_invalid",
+        "provenance_sufficient",
+        "provenance_insufficient",
+        "evidence_sufficient",
+        "evidence_insufficient",
+        "authority_recognized",
+        "authority_not_recognized",
+        "authority_delegated",
+        "authority_delegation_expired",
+        "scope_mismatch",
+        "policy_satisfied",
+        "policy_failed",
+        "signature_valid",
+        "signature_invalid",
+        "hash_valid",
+        "hash_invalid",
+        "conflict_detected",
+        "disagreement_preserved",
+        "certainty_too_low_for_policy",
+        "recognized_by_authority_channel",
+        "conditionally_recognized_by_authority_channel",
+        "rejected_by_authority_channel",
+        "revoked_by_authority_channel",
+        "deprecated_by_authority_channel"
+      ]
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "LOW_CERTAINTY",
+            "DISPUTED_RECOGNITION",
+            "CONDITIONAL_RECOGNITION",
+            "RECOGNITION_SCOPE_NARROW",
+            "AUTHORITY_DELEGATION_USED",
+            "AUTHORITY_CHANNEL_UNRECOGNIZED_BY_READER_POLICY",
+            "EVIDENCE_WEAK",
+            "EVIDENCE_CONTESTED",
+            "EXPIRES_AT_PRESENT",
+            "CONFLICT_DETECTED"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "reason_code": {
+          "$ref": "#/$defs/reason_code"
+        }
+      }
+    }
+  }
+}

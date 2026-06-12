@@ -1,0 +1,725 @@
+{
+  "schema_version": "5.0",
+  "artifact_type": "structured_epistemic_state",
+  "state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "artifact_status": "recognized",
+  "created_at": "2026-06-12T16:40:00Z",
+  "created_by": {
+    "agent_id": "agent:hellenic-cultural-archive-example",
+    "name": "Hellenic Cultural Archive Example",
+    "agent_type": "academic_institution",
+    "authority_channel": {
+      "authority_channel_id": "authority:hellenic-cultural-archive-example",
+      "name": "Hellenic Cultural Archive Example"
+    }
+  },
+  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
+  "canonicalization_version": "1",
+  "content_hash": {
+    "alg": "sha256",
+    "value": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "hash_target_policy": {
+    "exclude_fields": ["state_id", "content_hash", "signatures"],
+    "notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned Structured Epistemic State, excluding state_id, content_hash, and signatures."
+  },
+  "scope": {
+    "domain": "mythology",
+    "subdomain": "greek-mythology",
+    "jurisdiction": null,
+    "time_window": "classical-antiquity-to-modern-cultural-reference",
+    "tenant_id": null,
+    "environment": "example",
+    "language": "en"
+  },
+  "source_refs": [
+    {
+      "source_id": "source:greek-mythology-cultural-corpus-example",
+      "source_type": "document",
+      "title": "Greek Mythology Cultural Corpus Example",
+      "publisher": "Hellenic Cultural Archive Example",
+      "retrieved_at": "2026-06-12T16:30:00Z",
+      "license": "example-only",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "authority_channel": {
+        "authority_channel_id": "authority:hellenic-cultural-archive-example",
+        "name": "Hellenic Cultural Archive Example"
+      }
+    },
+    {
+      "source_id": "source:mythology-reader-policy-example",
+      "source_type": "institutional_record",
+      "title": "Reader policy guidance for mythology corpora",
+      "publisher": "Kristal v5 Example Authority",
+      "retrieved_at": "2026-06-12T16:31:00Z",
+      "license": "example-only",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "authority_channel": {
+        "authority_channel_id": "authority:kristal-v5-example",
+        "name": "Kristal v5 Example Authority"
+      }
+    }
+  ],
+  "derived_from": [],
+  "merged_from": [],
+  "supersedes": [],
+  "assertions": [
+    {
+      "assertion_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "source_assertion_id": "mythology-claim-0001",
+      "statement": {
+        "subject": {
+          "label": "Zeus",
+          "description": "A figure in Greek mythology",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:hellenic-cultural-archive-example",
+            "name": "Hellenic Cultural Archive Example"
+          }
+        },
+        "predicate": {
+          "label": "is described in mythology as",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:hellenic-cultural-archive-example",
+            "name": "Hellenic Cultural Archive Example"
+          }
+        },
+        "object": {
+          "kind": "monolingual_text",
+          "value": {
+            "text": "the ruler of the Olympian gods",
+            "lang": "en"
+          }
+        },
+        "qualifiers": [
+          {
+            "predicate": {
+              "label": "epistemic mode",
+              "language": "en"
+            },
+            "object": {
+              "kind": "string",
+              "value": "mythological corpus"
+            },
+            "scope": {
+              "domain": "mythology",
+              "subdomain": "greek-mythology",
+              "jurisdiction": null,
+              "time_window": "classical-antiquity-to-modern-cultural-reference",
+              "tenant_id": null,
+              "environment": "example",
+              "language": "en"
+            },
+            "notes": "This qualifier marks the assertion as valid within a mythological corpus, not as a physical-world factual claim."
+          }
+        ],
+        "rank": "normal",
+        "statement_hash": {
+          "alg": "sha256",
+          "value": "6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      },
+      "natural_language_statement": {
+        "text": "In Greek mythology, Zeus is described as the ruler of the Olympian gods.",
+        "lang": "en"
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "mythological_corpus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek-mythology",
+        "jurisdiction": null,
+        "time_window": "classical-antiquity-to-modern-cultural-reference",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "evidence_refs": [
+        {
+          "evidence_id": "evidence:greek-mythology-corpus-0001",
+          "source_ref": {
+            "source_id": "source:greek-mythology-cultural-corpus-example",
+            "source_type": "document",
+            "title": "Greek Mythology Cultural Corpus Example",
+            "publisher": "Hellenic Cultural Archive Example",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "authority_channel": {
+              "authority_channel_id": "authority:hellenic-cultural-archive-example",
+              "name": "Hellenic Cultural Archive Example"
+            }
+          },
+          "quote": "Zeus is presented in this corpus as ruler of the Olympian gods.",
+          "section": "Olympian figures",
+          "evidence_status": "sufficient",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "7777777777777777777777777777777777777777777777777777777777777777"
+          }
+        }
+      ],
+      "provenance_refs": [
+        {
+          "artifact_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "artifact_type": "document",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "9999999999999999999999999999999999999999999999999999999999999999"
+          },
+          "created_at": "2026-06-12T16:25:00Z"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "recognition_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "recognition_status": "recognized",
+          "recognized_as": "mythological_corpus",
+          "authority_channel": {
+            "authority_channel_id": "authority:hellenic-cultural-archive-example",
+            "name": "Hellenic Cultural Archive Example"
+          },
+          "scope": {
+            "domain": "mythology",
+            "subdomain": "greek-mythology",
+            "jurisdiction": null,
+            "time_window": "classical-antiquity-to-modern-cultural-reference",
+            "tenant_id": null,
+            "environment": "example",
+            "language": "en"
+          },
+          "validation_policy_ref": {
+            "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+            "policy_version": "1"
+          }
+        }
+      ],
+      "validation": {
+        "validation_status": "validated",
+        "validated_as": "mythological_corpus",
+        "certainty_level": "not_applicable",
+        "authority_channel": {
+          "authority_channel_id": "authority:hellenic-cultural-archive-example",
+          "name": "Hellenic Cultural Archive Example"
+        },
+        "validation_policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        },
+        "scope": {
+          "domain": "mythology",
+          "subdomain": "greek-mythology",
+          "jurisdiction": null,
+          "time_window": "classical-antiquity-to-modern-cultural-reference",
+          "tenant_id": null,
+          "environment": "example",
+          "language": "en"
+        },
+        "reason_codes": ["authority_recognized", "policy_satisfied", "evidence_sufficient"],
+        "validation_refs": [],
+        "notes": "Validated as a mythological corpus assertion. This does not validate the assertion as a physical-world factual claim."
+      },
+      "uncertainty": {
+        "confidence": 1,
+        "method": "scope-based cultural validation",
+        "notes": "Certainty about physical-world truth is not applicable. The assertion is validated only as a mythological-corpus statement."
+      },
+      "lineage": {
+        "source_assertions": [],
+        "source_artifacts": [
+          {
+            "artifact_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+            "artifact_type": "document",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "9999999999999999999999999999999999999999999999999999999999999999"
+            }
+          }
+        ],
+        "transforms": [
+          {
+            "transform_id": "transform:mythology-import-0001",
+            "transform_type": "import",
+            "tool": "example-cultural-corpus-importer",
+            "policy_ref": {
+              "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+              "policy_version": "1"
+            },
+            "created_at": "2026-06-12T16:35:00Z",
+            "notes": "Imported as a mythology-domain assertion with explicit non-physical-world scope."
+          }
+        ]
+      },
+      "conflicts_with": [],
+      "supersedes": [],
+      "notes": "Reader surfaces must not render this claim as physical-world truth."
+    },
+    {
+      "assertion_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "source_assertion_id": "mythology-claim-0002",
+      "statement": {
+        "subject": {
+          "label": "Poseidon",
+          "description": "A figure in Greek mythology",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:hellenic-cultural-archive-example",
+            "name": "Hellenic Cultural Archive Example"
+          }
+        },
+        "predicate": {
+          "label": "is described in mythology as associated with",
+          "language": "en",
+          "authority_channel": {
+            "authority_channel_id": "authority:hellenic-cultural-archive-example",
+            "name": "Hellenic Cultural Archive Example"
+          }
+        },
+        "object": {
+          "kind": "monolingual_text",
+          "value": {
+            "text": "the sea, storms, and earthquakes",
+            "lang": "en"
+          }
+        },
+        "qualifiers": [
+          {
+            "predicate": {
+              "label": "epistemic mode",
+              "language": "en"
+            },
+            "object": {
+              "kind": "string",
+              "value": "mythological corpus"
+            },
+            "scope": {
+              "domain": "mythology",
+              "subdomain": "greek-mythology",
+              "jurisdiction": null,
+              "time_window": "classical-antiquity-to-modern-cultural-reference",
+              "tenant_id": null,
+              "environment": "example",
+              "language": "en"
+            },
+            "notes": "This is a scoped mythology assertion."
+          }
+        ],
+        "rank": "normal",
+        "statement_hash": {
+          "alg": "sha256",
+          "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      },
+      "natural_language_statement": {
+        "text": "In Greek mythology, Poseidon is associated with the sea, storms, and earthquakes.",
+        "lang": "en"
+      },
+      "assertion_status": "validated",
+      "certainty_level": "not_applicable",
+      "validated_as": "mythological_corpus",
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek-mythology",
+        "jurisdiction": null,
+        "time_window": "classical-antiquity-to-modern-cultural-reference",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "evidence_refs": [
+        {
+          "evidence_id": "evidence:greek-mythology-corpus-0002",
+          "source_ref": {
+            "source_id": "source:greek-mythology-cultural-corpus-example",
+            "source_type": "document",
+            "title": "Greek Mythology Cultural Corpus Example",
+            "publisher": "Hellenic Cultural Archive Example",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "authority_channel": {
+              "authority_channel_id": "authority:hellenic-cultural-archive-example",
+              "name": "Hellenic Cultural Archive Example"
+            }
+          },
+          "quote": "Poseidon is presented in this corpus as associated with the sea, storms, and earthquakes.",
+          "section": "Olympian figures",
+          "evidence_status": "sufficient",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          }
+        }
+      ],
+      "provenance_refs": [
+        {
+          "artifact_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+          "artifact_type": "document",
+          "content_hash": {
+            "alg": "sha256",
+            "value": "9999999999999999999999999999999999999999999999999999999999999999"
+          },
+          "created_at": "2026-06-12T16:25:00Z"
+        }
+      ],
+      "authority_recognition_refs": [
+        {
+          "recognition_id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "recognition_status": "recognized",
+          "recognized_as": "mythological_corpus",
+          "authority_channel": {
+            "authority_channel_id": "authority:hellenic-cultural-archive-example",
+            "name": "Hellenic Cultural Archive Example"
+          },
+          "scope": {
+            "domain": "mythology",
+            "subdomain": "greek-mythology",
+            "jurisdiction": null,
+            "time_window": "classical-antiquity-to-modern-cultural-reference",
+            "tenant_id": null,
+            "environment": "example",
+            "language": "en"
+          },
+          "validation_policy_ref": {
+            "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+            "policy_version": "1"
+          }
+        }
+      ],
+      "validation": {
+        "validation_status": "validated",
+        "validated_as": "mythological_corpus",
+        "certainty_level": "not_applicable",
+        "authority_channel": {
+          "authority_channel_id": "authority:hellenic-cultural-archive-example",
+          "name": "Hellenic Cultural Archive Example"
+        },
+        "validation_policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        },
+        "scope": {
+          "domain": "mythology",
+          "subdomain": "greek-mythology",
+          "jurisdiction": null,
+          "time_window": "classical-antiquity-to-modern-cultural-reference",
+          "tenant_id": null,
+          "environment": "example",
+          "language": "en"
+        },
+        "reason_codes": ["authority_recognized", "policy_satisfied", "evidence_sufficient"],
+        "validation_refs": [],
+        "notes": "Validated as a mythological corpus assertion. This does not validate the assertion as a physical-world factual claim."
+      },
+      "uncertainty": {
+        "confidence": 1,
+        "method": "scope-based cultural validation",
+        "notes": "Physical-world certainty is not applicable to this mythology-scope assertion."
+      },
+      "lineage": {
+        "source_assertions": [],
+        "source_artifacts": [
+          {
+            "artifact_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+            "artifact_type": "document",
+            "content_hash": {
+              "alg": "sha256",
+              "value": "9999999999999999999999999999999999999999999999999999999999999999"
+            }
+          }
+        ],
+        "transforms": [
+          {
+            "transform_id": "transform:mythology-import-0002",
+            "transform_type": "import",
+            "tool": "example-cultural-corpus-importer",
+            "policy_ref": {
+              "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+              "policy_version": "1"
+            },
+            "created_at": "2026-06-12T16:35:00Z",
+            "notes": "Imported as a mythology-domain assertion with explicit cultural scope."
+          }
+        ]
+      },
+      "conflicts_with": [],
+      "supersedes": [],
+      "notes": "This claim is valid as mythology, not as an empirical claim about the physical world."
+    }
+  ],
+  "provenance": [
+    {
+      "provenance_id": "prov:mythology-corpus-created-0001",
+      "event_type": "created",
+      "created_at": "2026-06-12T16:35:00Z",
+      "agent": {
+        "agent_id": "agent:hellenic-cultural-archive-example",
+        "name": "Hellenic Cultural Archive Example",
+        "agent_type": "academic_institution",
+        "authority_channel": {
+          "authority_channel_id": "authority:hellenic-cultural-archive-example",
+          "name": "Hellenic Cultural Archive Example"
+        }
+      },
+      "source_ref": {
+        "source_id": "source:greek-mythology-cultural-corpus-example",
+        "source_type": "document",
+        "title": "Greek Mythology Cultural Corpus Example",
+        "publisher": "Hellenic Cultural Archive Example",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "authority_channel": {
+          "authority_channel_id": "authority:hellenic-cultural-archive-example",
+          "name": "Hellenic Cultural Archive Example"
+        }
+      },
+      "policy_refs": [
+        {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        }
+      ],
+      "notes": "The corpus was created as a mythology-domain Structured Epistemic State."
+    },
+    {
+      "provenance_id": "prov:mythology-corpus-reviewed-0001",
+      "event_type": "reviewed",
+      "created_at": "2026-06-12T16:38:00Z",
+      "agent": {
+        "agent_id": "agent:cultural-review-board-example",
+        "name": "Cultural Review Board Example",
+        "agent_type": "association",
+        "authority_channel": {
+          "authority_channel_id": "authority:hellenic-cultural-archive-example",
+          "name": "Hellenic Cultural Archive Example"
+        }
+      },
+      "artifact_ref": {
+        "artifact_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "artifact_type": "structured_epistemic_state",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "created_at": "2026-06-12T16:40:00Z"
+      },
+      "policy_refs": [
+        {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        }
+      ],
+      "notes": "Reviewed for cultural-corpus scope and labeling."
+    }
+  ],
+  "review_refs": [
+    {
+      "artifact_id": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "artifact_type": "review_bundle",
+      "content_hash": {
+        "alg": "sha256",
+        "value": "1212121212121212121212121212121212121212121212121212121212121212"
+      },
+      "created_at": "2026-06-12T16:38:00Z"
+    }
+  ],
+  "policy_refs": [
+    {
+      "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+      "policy_version": "1"
+    },
+    {
+      "policy_id": "kristal.v5:reader-policy:mythology-with-labels",
+      "policy_version": "1"
+    },
+    {
+      "policy_id": "kristal.v5:reader-policy:reference-only-exclude-mythology",
+      "policy_version": "1"
+    }
+  ],
+  "authority_recognition_refs": [
+    {
+      "recognition_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "recognition_status": "recognized",
+      "recognized_as": "mythological_corpus",
+      "authority_channel": {
+        "authority_channel_id": "authority:hellenic-cultural-archive-example",
+        "name": "Hellenic Cultural Archive Example"
+      },
+      "scope": {
+        "domain": "mythology",
+        "subdomain": "greek-mythology",
+        "jurisdiction": null,
+        "time_window": "classical-antiquity-to-modern-cultural-reference",
+        "tenant_id": null,
+        "environment": "example",
+        "language": "en"
+      },
+      "validation_policy_ref": {
+        "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+        "policy_version": "1"
+      }
+    }
+  ],
+  "reader_policy_refs": [
+    {
+      "reader_policy_id": "reader_policy:mythology-with-labels",
+      "mode": "all_with_labels"
+    },
+    {
+      "reader_policy_id": "reader_policy:creative",
+      "mode": "creative"
+    },
+    {
+      "reader_policy_id": "reader_policy:reference-only-exclude-mythology",
+      "mode": "reference_only"
+    }
+  ],
+  "certainty_summary": {
+    "counts_by_certainty_level": {
+      "not_applicable": 2
+    },
+    "counts_by_assertion_status": {
+      "validated": 2
+    },
+    "counts_by_validated_as": {
+      "mythological_corpus": 2
+    },
+    "notes": "The corpus is validated as mythology. Physical-world certainty is intentionally not applicable."
+  },
+  "validation_summary": {
+    "validation_status": "validated",
+    "recognition_status": "recognized",
+    "authority_channels": [
+      {
+        "authority_channel_id": "authority:hellenic-cultural-archive-example",
+        "name": "Hellenic Cultural Archive Example"
+      }
+    ],
+    "validation_refs": [],
+    "recognition_refs": [
+      {
+        "recognition_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "recognition_status": "recognized",
+        "recognized_as": "mythological_corpus",
+        "authority_channel": {
+          "authority_channel_id": "authority:hellenic-cultural-archive-example",
+          "name": "Hellenic Cultural Archive Example"
+        },
+        "scope": {
+          "domain": "mythology",
+          "subdomain": "greek-mythology",
+          "jurisdiction": null,
+          "time_window": "classical-antiquity-to-modern-cultural-reference",
+          "tenant_id": null,
+          "environment": "example",
+          "language": "en"
+        },
+        "validation_policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        }
+      }
+    ],
+    "reason_codes": ["authority_recognized", "policy_satisfied", "evidence_sufficient"],
+    "notes": "This Structured Epistemic State is recognized as a mythology corpus. It must not be rendered as a physical-world factual reference."
+  },
+  "lineage": {
+    "source_artifacts": [
+      {
+        "artifact_id": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "artifact_type": "document",
+        "content_hash": {
+          "alg": "sha256",
+          "value": "9999999999999999999999999999999999999999999999999999999999999999"
+        },
+        "created_at": "2026-06-12T16:25:00Z"
+      }
+    ],
+    "source_states": [],
+    "transforms": [
+      {
+        "transform_id": "transform:mythology-corpus-build-0001",
+        "transform_type": "import",
+        "tool": "example-cultural-corpus-importer",
+        "policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        },
+        "created_at": "2026-06-12T16:35:00Z",
+        "notes": "Compiled as a Structured Epistemic State for mythology-domain use."
+      },
+      {
+        "transform_id": "transform:mythology-corpus-review-0001",
+        "transform_type": "review",
+        "tool": "example-cultural-review-workflow",
+        "policy_ref": {
+          "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+          "policy_version": "1"
+        },
+        "created_at": "2026-06-12T16:38:00Z",
+        "notes": "Reviewed to ensure mythology scope and non-physical-world labels are explicit."
+      }
+    ],
+    "compiler": {
+      "agent_id": "agent:example-compiler",
+      "name": "Example Compiler",
+      "agent_type": "system"
+    },
+    "policy_refs": [
+      {
+        "policy_id": "kristal.v5:validation-policy:cultural-corpus-review",
+        "policy_version": "1"
+      }
+    ]
+  },
+  "build": {
+    "build_id": "build:20260612T164000Z:mythology-corpus-example",
+    "schema_version": "5.0",
+    "compile_status": "succeeded",
+    "validation_status": "validated",
+    "review_status": "completed",
+    "recognition_status": "recognized",
+    "publication_status": "not_published",
+    "activation_status": "not_applicable",
+    "working_outputs": [],
+    "reference_outputs": [],
+    "reason_codes": ["authority_recognized", "policy_satisfied", "evidence_sufficient"],
+    "created_at": "2026-06-12T16:40:00Z"
+  },
+  "warnings": [
+    {
+      "code": "PROJECTION_REQUIRES_REVIEW",
+      "message": "Reader surfaces must preserve the mythology scope and must not render mythology-domain assertions as physical-world factual claims.",
+      "path": "/assertions",
+      "reason_code": "scope_mismatch"
+    }
+  ],
+  "extensions": {
+    "example_purpose": "Demonstrates that a Kristal can be validated as a mythology corpus while explicitly avoiding physical-world truth claims."
+  },
+  "signatures": [
+    {
+      "key_id": "hellenic_cultural_archive_example_ed25519_v1",
+      "alg": "ed25519",
+      "signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+      "created_at": "2026-06-12T16:40:10Z",
+      "authority_channel": {
+        "authority_channel_id": "authority:hellenic-cultural-archive-example",
+        "name": "Hellenic Cultural Archive Example"
+      }
+    }
+  ]
+}
