@@ -1,446 +1,1025 @@
 {
-"$schema": "https://json-schema.org/draft/2020-12/schema",
-"$id": "https://kristal.org/schemas/v5/revocations.schema.json",
-"title": "Kristal v5 Revocations List",
-"type": "object",
-"additionalProperties": false,
-"required": [
-"schema_version",
-"artifact_type",
-"revocations_id",
-"created_at",
-"issuer_authority_channel",
-"canonicalization_profile",
-"canonicalization_version",
-"content_hash",
-"scope",
-"revoked_keys",
-"revoked_targets",
-"signatures"
-],
-"properties": {
-"schema_version": {
-"type": "string",
-"const": "5.0",
-"description": "Schema version for this revocations list format."
-},
-
-```
-"artifact_type": {
-  "type": "string",
-  "const": "revocations",
-  "description": "Artifact discriminator."
-},
-
-"revocations_id": {
-  "type": "string",
-  "pattern": "^sha256:[a-f0-9]{64}$",
-  "description": "Content-addressed ID for this revocations list artifact."
-},
-
-"created_at": {
-  "type": "string",
-  "format": "date-time",
-  "description": "UTC timestamp when this revocations list was produced. This timestamp must not affect the content-addressed ID unless a profile explicitly includes it in the hash target."
-},
-
-"issuer_authority_channel": {
-  "type": "string",
-  "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
-  "description": "Authority channel issuing this revocations list."
-},
-
-"canonicalization_profile": {
-  "type": "string",
-  "const": "kristal.v5:jcs-rfc8785",
-  "description": "Canonicalization profile identifier."
-},
-
-"canonicalization_version": {
-  "type": "string",
-  "const": "1",
-  "description": "Canonicalization version."
-},
-
-"content_hash": {
-  "$ref": "#/$defs/hash",
-  "description": "Hash of the canonicalized revocations content with output ID fields and signatures excluded from the hash target."
-},
-
-"scope": {
-  "$ref": "#/$defs/scope",
-  "description": "Scope for which these revocations apply."
-},
-
-"revocation_policy_ref": {
-  "$ref": "#/$defs/artifact_ref",
-  "description": "Optional reference to the policy under which this revocation list is issued."
-},
-
-"effective_from": {
-  "type": "string",
-  "format": "date-time",
-  "description": "Optional time from which this revocations list becomes effective."
-},
-
-"expires_at": {
-  "type": "string",
-  "format": "date-time",
-  "description": "Optional expiration time for this revocations list."
-},
-
-"revoked_keys": {
-  "type": "array",
-  "minItems": 0,
-  "description": "Revoked signing keys and metadata.",
-  "items": {
-    "$ref": "#/$defs/revoked_key"
-  }
-},
-
-"revoked_targets": {
-  "type": "array",
-  "minItems": 0,
-  "description": "Revoked artifacts, authority recognitions, validation decisions, authority channels, runtime packs, or other revocable Kristal targets.",
-  "items": {
-    "$ref": "#/$defs/revoked_target"
-  }
-},
-
-"signatures": {
-  "type": "array",
-  "minItems": 1,
-  "description": "Signatures over the revocations signing target. Declared signature requirements must be verified before this list is trusted by a reader, runtime, or authority policy.",
-  "items": {
-    "$ref": "#/$defs/signature"
-  }
-},
-
-"extensions": {
-  "type": "object",
-  "description": "Implementation-specific fields. Extensions must not change core identity, hashing, revocation, or verification semantics.",
-  "additionalProperties": true
-}
-```
-
-},
-
-"$defs": {
-"hash": {
-"type": "object",
-"additionalProperties": false,
-"required": ["alg", "value"],
-"properties": {
-"alg": {
-"type": "string",
-"enum": ["sha256"]
-},
-"value": {
-"type": "string",
-"pattern": "^[a-f0-9]{64}$"
-}
-}
-},
-
-```
-"scope": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v5/revocations.schema.json",
+  "title": "Kristal Revocations v5",
+  "description": "A Kristal v5 revocations artifact records scoped revocation, suspension, deprecation, or replacement decisions for keys, authority channels, artifacts, shards, assertions, validation decisions, recognitions, runtime packs, federation manifests, and reader policies. Revocation does not erase lineage; it changes the status and reader-policy treatment of the target.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["domain"],
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "created_at",
+    "revocations_id",
+    "canonicalization_profile",
+    "canonicalization_version",
+    "issuer_authority_channel",
+    "content_hash",
+    "scope",
+    "entries"
+  ],
   "properties": {
-    "domain": {
+    "schema_version": {
       "type": "string",
-      "minLength": 1,
-      "description": "Primary domain for the scope."
-    },
-    "subdomain": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional subdomain."
-    },
-    "jurisdiction": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional legal, institutional, or geographic jurisdiction."
-    },
-    "time_window": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional time window or versioned period label."
-    },
-    "tenant_id": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional tenant boundary."
-    },
-    "environment": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional deployment environment."
-    },
-    "language": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional language tag."
-    }
-  }
-},
-
-"artifact_ref": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["artifact_id", "artifact_type"],
-  "properties": {
-    "artifact_id": {
-      "type": "string",
-      "minLength": 1
+      "const": "5.0"
     },
     "artifact_type": {
       "type": "string",
-      "minLength": 1
-    },
-    "ref": {
-      "type": "string",
-      "minLength": 1
-    },
-    "content_hash": {
-      "$ref": "#/$defs/hash"
-    }
-  }
-},
-
-"revoked_key": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "key_id",
-    "revoked_at",
-    "reason",
-    "scope"
-  ],
-  "properties": {
-    "key_id": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Revoked key identifier."
-    },
-    "authority_channel": {
-      "type": "string",
-      "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
-      "description": "Authority channel associated with the revoked key."
-    },
-    "revoked_at": {
-      "type": "string",
-      "format": "date-time",
-      "description": "When the key was revoked."
-    },
-    "effective_from": {
-      "type": "string",
-      "format": "date-time",
-      "description": "Optional effective time if different from revoked_at."
-    },
-    "reason": {
-      "type": "string",
-      "enum": [
-        "compromised",
-        "rotated",
-        "deprecated",
-        "policy_failed",
-        "authority_revoked",
-        "scope_changed",
-        "superseded",
-        "unknown"
-      ]
-    },
-    "reason_codes": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/reason_code"
-      }
-    },
-    "details": {
-      "type": "string"
-    },
-    "scope": {
-      "$ref": "#/$defs/scope",
-      "description": "Scope within which the key revocation applies."
-    },
-    "replaces_key_id": {
-      "type": "string",
-      "minLength": 1,
-      "description": "Optional pointer to a replacement key identifier."
-    },
-    "evidence_refs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/artifact_ref"
-      }
-    }
-  }
-},
-
-"revoked_target": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "target_ref",
-    "target_type",
-    "revoked_at",
-    "reason",
-    "scope"
-  ],
-  "properties": {
-    "target_ref": {
-      "$ref": "#/$defs/artifact_ref",
-      "description": "Reference to the revoked target."
-    },
-    "target_type": {
-      "type": "string",
-      "enum": [
-        "structured_epistemic_state",
-        "working_exchange",
-        "reference_exchange",
-        "runtime_pack",
-        "exchange_shard_manifest",
-        "exchange_federation_manifest",
-        "authority_registry",
-        "authority_channel",
-        "authority_recognition",
-        "validation_decision",
-        "validation_report",
-        "review_bundle",
-        "reader_policy",
-        "transparency_log_entry",
-        "dataset",
-        "key",
-        "other"
-      ]
-    },
-    "authority_channel": {
-      "type": "string",
-      "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
-      "description": "Authority channel associated with the revoked target."
-    },
-    "revoked_at": {
-      "type": "string",
-      "format": "date-time",
-      "description": "When the target was revoked."
-    },
-    "effective_from": {
-      "type": "string",
-      "format": "date-time",
-      "description": "Optional effective time if different from revoked_at."
-    },
-    "reason": {
-      "type": "string",
-      "enum": [
-        "compromised",
-        "rotated",
-        "deprecated",
-        "policy_failed",
-        "authority_revoked",
-        "recognition_revoked",
-        "validation_revoked",
-        "scope_changed",
-        "superseded",
-        "data_error",
-        "provenance_error",
-        "signature_invalid",
-        "hash_invalid",
-        "unknown"
-      ]
-    },
-    "reason_codes": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/reason_code"
-      }
-    },
-    "details": {
-      "type": "string"
-    },
-    "scope": {
-      "$ref": "#/$defs/scope",
-      "description": "Scope within which the target revocation applies."
-    },
-    "superseded_by": {
-      "$ref": "#/$defs/artifact_ref",
-      "description": "Optional replacement target."
-    },
-    "evidence_refs": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/artifact_ref"
-      }
-    }
-  }
-},
-
-"reason_code": {
-  "type": "string",
-  "enum": [
-    "schema_valid",
-    "schema_invalid",
-    "provenance_sufficient",
-    "provenance_insufficient",
-    "evidence_sufficient",
-    "evidence_insufficient",
-    "authority_recognized",
-    "authority_not_recognized",
-    "scope_mismatch",
-    "policy_satisfied",
-    "policy_failed",
-    "signature_valid",
-    "signature_invalid",
-    "hash_valid",
-    "hash_invalid",
-    "conflict_detected",
-    "disagreement_preserved",
-    "certainty_too_low_for_policy",
-    "rejected_by_authority_channel",
-    "revoked_by_authority_channel"
-  ]
-},
-
-"signature": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "key_id",
-    "alg",
-    "signature"
-  ],
-  "properties": {
-    "sig_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "key_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "alg": {
-      "type": "string",
-      "enum": [
-        "ed25519",
-        "rsa-pss-sha256"
-      ]
-    },
-    "signature": {
-      "type": "string",
-      "minLength": 16
+      "const": "revocations"
     },
     "created_at": {
       "type": "string",
       "format": "date-time"
     },
-    "expires_at": {
+    "updated_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "revocations_id": {
+      "$ref": "#/$defs/sha256_uri"
+    },
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v5:jcs-rfc8785"
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "issuer_authority_channel": {
+      "$ref": "#/$defs/authority_ref"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "hash_target_policy": {
+      "$ref": "#/$defs/hash_target_policy"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "revocation_policy_ref": {
+      "$ref": "#/$defs/policy_ref"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/revocation_entry"
+      }
+    },
+    "lineage": {
+      "$ref": "#/$defs/lineage"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/warning"
+      },
+      "default": []
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/signature"
+      },
+      "default": []
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "sha256_uri": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "hash_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "const": "sha256"
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex"
+        }
+      }
+    },
+    "hash_target_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exclude_fields"],
+      "properties": {
+        "exclude_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "revocations_id",
+              "content_hash",
+              "signatures"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": [
+            "general",
+            "wikidata",
+            "science",
+            "health",
+            "education",
+            "heritage",
+            "law",
+            "policy",
+            "technology",
+            "environment",
+            "culture",
+            "mythology",
+            "fiction",
+            "research",
+            "operations",
+            "civic",
+            "local_notes"
+          ]
+        },
+        "subdomain": {
+          "type": ["string", "null"]
+        },
+        "jurisdiction": {
+          "type": ["string", "null"]
+        },
+        "time_window": {
+          "type": ["string", "null"]
+        },
+        "tenant_id": {
+          "type": ["string", "null"]
+        },
+        "environment": {
+          "type": ["string", "null"]
+        },
+        "language": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "authority_channel_id": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "authority_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_channel_id"],
+      "properties": {
+        "authority_channel_id": {
+          "$ref": "#/$defs/authority_channel_id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "authority_registry_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      }
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["artifact_id"]
+        },
+        {
+          "required": ["uri"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "policy_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["policy_id"]
+        },
+        {
+          "required": ["policy_ref"]
+        }
+      ]
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature", "created_at"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alg": {
+          "type": "string",
+          "const": "ed25519"
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      }
+    },
+    "target_level": {
+      "type": "string",
+      "enum": [
+        "key",
+        "authority_channel",
+        "artifact",
+        "shard",
+        "assertion",
+        "validation_decision",
+        "authority_recognition",
+        "reader_policy",
+        "runtime_pack",
+        "federation",
+        "dataset"
+      ]
+    },
+    "revocation_kind": {
+      "type": "string",
+      "enum": [
+        "key_id",
+        "authority_channel_id",
+        "artifact_id",
+        "shard_id",
+        "assertion_id",
+        "validation_decision_id",
+        "recognition_id",
+        "reader_policy_id",
+        "runtime_pack_id",
+        "federation_id",
+        "dataset_id"
+      ]
+    },
+    "revocation_status": {
+      "type": "string",
+      "enum": [
+        "revoked",
+        "conditionally_revoked",
+        "suspended",
+        "deprecated",
+        "superseded",
+        "expired",
+        "reinstated"
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "planned_key_rotation",
+        "key_compromise",
+        "key_lost",
+        "authority_suspended",
+        "authority_revoked",
+        "temporary_suspension_pending_review",
+        "post_publication_validation_revoked",
+        "validation_decision_revoked",
+        "recognition_revoked",
+        "artifact_integrity_failure",
+        "artifact_superseded",
+        "artifact_deprecated",
+        "scope_mismatch",
+        "policy_failed",
+        "policy_superseded",
+        "reader_policy_revoked",
+        "runtime_pack_revoked",
+        "federation_manifest_revoked",
+        "publisher_request",
+        "legal_or_compliance_request",
+        "administrative_correction",
+        "other"
+      ]
+    },
+    "target_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority_channel_id": {
+          "$ref": "#/$defs/authority_channel_id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shard_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "assertion_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "validation_decision_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "recognition_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "reader_policy_id": {
+          "type": "string",
+          "pattern": "^reader_policy:[a-z0-9][a-z0-9._:-]*$"
+        },
+        "runtime_pack_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "federation_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "artifact_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["key_id"]
+        },
+        {
+          "required": ["authority_channel_id"]
+        },
+        {
+          "required": ["artifact_id"]
+        },
+        {
+          "required": ["shard_id"]
+        },
+        {
+          "required": ["assertion_id"]
+        },
+        {
+          "required": ["validation_decision_id"]
+        },
+        {
+          "required": ["recognition_id"]
+        },
+        {
+          "required": ["reader_policy_id"]
+        },
+        {
+          "required": ["runtime_pack_id"]
+        },
+        {
+          "required": ["federation_id"]
+        },
+        {
+          "required": ["dataset_id"]
+        },
+        {
+          "required": ["artifact_ref"]
+        }
+      ]
+    },
+    "replacement_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authority_channel_id": {
+          "$ref": "#/$defs/authority_channel_id"
+        },
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "validation_decision_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "recognition_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "reader_policy_id": {
+          "type": "string",
+          "pattern": "^reader_policy:[a-z0-9][a-z0-9._:-]*$"
+        },
+        "runtime_pack_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "federation_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "artifact_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["key_id"]
+        },
+        {
+          "required": ["authority_channel_id"]
+        },
+        {
+          "required": ["artifact_id"]
+        },
+        {
+          "required": ["validation_decision_id"]
+        },
+        {
+          "required": ["recognition_id"]
+        },
+        {
+          "required": ["reader_policy_id"]
+        },
+        {
+          "required": ["runtime_pack_id"]
+        },
+        {
+          "required": ["federation_id"]
+        },
+        {
+          "required": ["artifact_ref"]
+        }
+      ]
+    },
+    "revocation_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "new_signatures_allowed": {
+          "type": "boolean"
+        },
+        "new_recognitions_allowed": {
+          "type": "boolean"
+        },
+        "new_validation_decisions_allowed": {
+          "type": "boolean"
+        },
+        "new_distribution_allowed": {
+          "type": "boolean"
+        },
+        "new_runtime_activation_allowed": {
+          "type": "boolean"
+        },
+        "historical_signatures_remain_verifiable": {
+          "type": "boolean"
+        },
+        "existing_recognitions_remain_visible": {
+          "type": "boolean"
+        },
+        "existing_traces_remain_visible": {
+          "type": "boolean"
+        },
+        "reader_policy_effect": {
+          "type": "string",
+          "enum": [
+            "exclude",
+            "label_only",
+            "mark_as_revoked",
+            "mark_as_deprecated",
+            "mark_as_superseded",
+            "mark_as_suspended",
+            "exclude_or_label_material_recognized_only_by_this_authority_channel_when_policy_disallows_conditionally_revoked_authorities",
+            "mark_as_revoked_and_exclude_under_reader_policies_that_disallow_revoked_artifacts",
+            "treat_new_artifacts_signed_only_by_this_key_as_untrusted_for_selected_authority_channel",
+            "custom"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "revocation_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entry_id",
+        "target_level",
+        "kind",
+        "target",
+        "revocation_status",
+        "revoked_at",
+        "effective_at",
+        "reason_code",
+        "reason"
+      ],
+      "properties": {
+        "entry_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_level": {
+          "$ref": "#/$defs/target_level"
+        },
+        "kind": {
+          "$ref": "#/$defs/revocation_kind"
+        },
+        "target": {
+          "$ref": "#/$defs/target_ref"
+        },
+        "revocation_status": {
+          "$ref": "#/$defs/revocation_status"
+        },
+        "revoked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "reason_code": {
+          "$ref": "#/$defs/reason_code"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "replacement_ref": {
+          "$ref": "#/$defs/replacement_ref"
+        },
+        "validation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/validation_decision_ref"
+          },
+          "default": []
+        },
+        "recognition_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recognition_ref"
+          },
+          "default": []
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_ref"
+          },
+          "default": []
+        },
+        "effect": {
+          "$ref": "#/$defs/revocation_effect"
+        },
+        "issued_by": {
+          "$ref": "#/$defs/authority_ref"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "key_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "key"
+              },
+              "target": {
+                "required": ["key_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "authority_channel_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "authority_channel"
+              },
+              "target": {
+                "required": ["authority_channel_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "artifact_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "artifact"
+              },
+              "target": {
+                "required": ["artifact_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "assertion_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "assertion"
+              },
+              "target": {
+                "required": ["assertion_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "validation_decision_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "validation_decision"
+              },
+              "target": {
+                "required": ["validation_decision_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "recognition_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "authority_recognition"
+              },
+              "target": {
+                "required": ["recognition_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "runtime_pack_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "runtime_pack"
+              },
+              "target": {
+                "required": ["runtime_pack_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "federation_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "federation"
+              },
+              "target": {
+                "required": ["federation_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "reader_policy_id"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target_level": {
+                "const": "reader_policy"
+              },
+              "target": {
+                "required": ["reader_policy_id"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validation_decision_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validation_decision_id"],
+      "properties": {
+        "validation_decision_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "validation_status": {
+          "type": "string",
+          "enum": [
+            "not_evaluated",
+            "in_review",
+            "validated",
+            "conditionally_validated",
+            "disputed",
+            "rejected",
+            "revoked"
+          ]
+        },
+        "artifact_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      }
+    },
+    "recognition_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recognition_id"],
+      "properties": {
+        "recognition_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "recognition_status": {
+          "type": "string",
+          "enum": [
+            "recognized",
+            "conditionally_recognized",
+            "under_review",
+            "disputed",
+            "rejected",
+            "deprecated",
+            "revoked"
+          ]
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        },
+        "artifact_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      }
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "$ref": "#/$defs/source_ref"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "section": {
+          "type": "string"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["evidence_id"]
+        },
+        {
+          "required": ["source_ref"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["source_id"]
+        },
+        {
+          "required": ["source_url"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "supersedes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          },
+          "default": []
+        },
+        "policy_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/policy_ref"
+          },
+          "default": []
+        }
+      }
+    },
+    "warning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "TARGET_ALREADY_REVOKED",
+            "TARGET_NOT_FOUND",
+            "TEMPORARY_REVOCATION",
+            "REVOCATION_EXPIRES",
+            "REPLACEMENT_DECLARED",
+            "AUTHORITY_SCOPE_LIMITED",
+            "READER_POLICY_EFFECT_DECLARED"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
     }
   }
-}
-```
-
-}
 }

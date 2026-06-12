@@ -1,602 +1,853 @@
 {
-"$schema": "https://json-schema.org/draft/2020-12/schema",
-"$id": "https://kristal.org/schemas/v5/assertion-status.schema.json",
-"title": "Kristal v5 Assertion Status",
-"description": "Schema for assertion status, certainty, validation state, recognition state, and scoped epistemic classification in Kristal v5.",
-"type": "object",
-"additionalProperties": false,
-"required": [
-"schema_version",
-"artifact_type",
-"assertion_id",
-"assertion_status",
-"certainty_level",
-"validation_status",
-"recognition_status",
-"validated_as",
-"scope"
-],
-"properties": {
-"schema_version": {
-"type": "string",
-"const": "5.0",
-"description": "Schema version for this assertion status object."
-},
-
-```
-"artifact_type": {
-  "type": "string",
-  "const": "assertion_status",
-  "description": "Artifact discriminator."
-},
-
-"status_record_id": {
-  "type": "string",
-  "pattern": "^sha256:[a-f0-9]{64}$",
-  "description": "Optional content-addressed identifier for this assertion status record."
-},
-
-"assertion_id": {
-  "type": "string",
-  "minLength": 1,
-  "description": "Identifier of the assertion whose status is described."
-},
-
-"assertion_status": {
-  "$ref": "#/$defs/assertion_status",
-  "description": "Current epistemic status of the assertion."
-},
-
-"certainty_level": {
-  "$ref": "#/$defs/certainty_level",
-  "description": "Declared certainty level for the assertion in the stated scope."
-},
-
-"validation_status": {
-  "$ref": "#/$defs/validation_status",
-  "description": "Validation state of the assertion under the referenced validation policy and authority channel."
-},
-
-"recognition_status": {
-  "$ref": "#/$defs/recognition_status",
-  "description": "Authority recognition state of the assertion."
-},
-
-"validated_as": {
-  "$ref": "#/$defs/validated_as",
-  "description": "Epistemic mode under which the assertion is or may be validated."
-},
-
-"scope": {
-  "$ref": "#/$defs/scope",
-  "description": "Scope in which this assertion status applies."
-},
-
-"authority_channel": {
-  "type": "string",
-  "pattern": "^authority:[a-z0-9][a-z0-9._-]*$",
-  "description": "Authority channel responsible for this status, validation, or recognition claim when applicable."
-},
-
-"validation_policy_ref": {
-  "$ref": "#/$defs/artifact_ref",
-  "description": "Reference to the validation policy used to evaluate this assertion."
-},
-
-"recognition_policy_ref": {
-  "$ref": "#/$defs/artifact_ref",
-  "description": "Reference to the recognition policy used to recognize this assertion."
-},
-
-"validation_refs": {
-  "type": "array",
-  "description": "References to validation decisions affecting this assertion.",
-  "items": {
-    "$ref": "#/$defs/artifact_ref"
-  }
-},
-
-"authority_recognition_refs": {
-  "type": "array",
-  "description": "References to authority recognition records affecting this assertion.",
-  "items": {
-    "$ref": "#/$defs/artifact_ref"
-  }
-},
-
-"provenance_refs": {
-  "type": "array",
-  "description": "References to provenance records supporting this assertion status.",
-  "items": {
-    "$ref": "#/$defs/artifact_ref"
-  }
-},
-
-"evidence_refs": {
-  "type": "array",
-  "description": "References to evidence records supporting this assertion status.",
-  "items": {
-    "$ref": "#/$defs/artifact_ref"
-  }
-},
-
-"lineage": {
-  "$ref": "#/$defs/lineage",
-  "description": "Lineage information for this assertion status."
-},
-
-"reason_codes": {
-  "type": "array",
-  "description": "Machine-readable reason codes explaining this assertion status.",
-  "items": {
-    "$ref": "#/$defs/reason_code"
-  }
-},
-
-"findings": {
-  "type": "array",
-  "description": "Human-readable or machine-readable findings related to this status.",
-  "items": {
-    "$ref": "#/$defs/finding"
-  }
-},
-
-"created_at": {
-  "type": "string",
-  "format": "date-time",
-  "description": "Timestamp when this assertion status record was created. This field must not affect content-addressed identity unless a profile explicitly includes it in the hash target."
-},
-
-"created_by": {
-  "$ref": "#/$defs/agent",
-  "description": "Agent that created this assertion status record."
-},
-
-"expires_at": {
-  "type": "string",
-  "format": "date-time",
-  "description": "Optional expiration time for this status record."
-},
-
-"replaces_status_record_id": {
-  "type": "string",
-  "pattern": "^sha256:[a-f0-9]{64}$",
-  "description": "Optional previous status record replaced by this one."
-},
-
-"content_hash": {
-  "$ref": "#/$defs/hash",
-  "description": "Optional hash of this assertion status record with output ID fields and signatures excluded."
-},
-
-"signatures": {
-  "type": "array",
-  "description": "Optional signatures over this assertion status record. Signatures must be excluded from the primary content hash target.",
-  "items": {
-    "$ref": "#/$defs/signature"
-  }
-},
-
-"extensions": {
-  "type": "object",
-  "description": "Implementation-specific extension fields. Extensions must not change core assertion status, certainty, validation, recognition, or scope semantics unless a declared profile explicitly defines them.",
-  "additionalProperties": true
-}
-```
-
-},
-
-"$defs": {
-"assertion_status": {
-"type": "string",
-"enum": [
-"hypothesis",
-"claimed",
-"sourced",
-"disputed",
-"reviewed",
-"validated",
-"rejected",
-"retracted",
-"superseded"
-]
-},
-
-```
-"certainty_level": {
-  "type": "string",
-  "enum": [
-    "unknown",
-    "speculative",
-    "low",
-    "medium",
-    "high",
-    "established",
-    "not_applicable"
-  ]
-},
-
-"validation_status": {
-  "type": "string",
-  "enum": [
-    "not_evaluated",
-    "in_review",
-    "validated",
-    "conditionally_validated",
-    "disputed",
-    "rejected",
-    "revoked"
-  ]
-},
-
-"recognition_status": {
-  "type": "string",
-  "enum": [
-    "not_evaluated",
-    "recognized",
-    "conditionally_recognized",
-    "under_review",
-    "disputed",
-    "rejected",
-    "deprecated",
-    "revoked"
-  ]
-},
-
-"validated_as": {
-  "type": "string",
-  "enum": [
-    "hypothesis",
-    "claim",
-    "sourced_claim",
-    "reviewed_claim",
-    "high_confidence_fact",
-    "institutional_reference",
-    "publisher_declaration",
-    "technical_specification",
-    "legal_or_policy_position",
-    "mythological_corpus",
-    "fictional_corpus",
-    "symbolic_model",
-    "disputed_position",
-    "rejected_claim"
-  ]
-},
-
-"scope": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kristal.org/schemas/v5/assertion-status.schema.json",
+  "title": "Kristal v5 Assertion Status",
+  "description": "Schema for assertion status, certainty level, validation status, authority recognition, scoped epistemic classification, and reader-policy relevant labels in Kristal v5.",
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "domain"
+    "schema_version",
+    "artifact_type",
+    "assertion_id",
+    "assertion_status",
+    "certainty_level",
+    "validation_status",
+    "scope"
   ],
   "properties": {
-    "domain": {
+    "schema_version": {
       "type": "string",
-      "enum": [
-        "general",
-        "wikidata",
-        "science",
-        "health",
-        "education",
-        "heritage",
-        "law",
-        "policy",
-        "technology",
-        "environment",
-        "culture",
-        "mythology",
-        "fiction",
-        "research",
-        "operations",
-        "civic",
-        "local_notes"
-      ]
-    },
-    "subdomain": {
-      "type": "string",
-      "minLength": 1
-    },
-    "jurisdiction": {
-      "type": "string",
-      "minLength": 1
-    },
-    "time_window": {
-      "type": "string",
-      "minLength": 1
-    },
-    "tenant_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "environment": {
-      "type": "string",
-      "minLength": 1
-    },
-    "language": {
-      "type": "string",
-      "minLength": 1
-    }
-  }
-},
-
-"artifact_ref": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "artifact_id",
-    "artifact_type"
-  ],
-  "properties": {
-    "artifact_id": {
-      "type": "string",
-      "minLength": 1
+      "const": "5.0"
     },
     "artifact_type": {
       "type": "string",
-      "enum": [
-        "structured_epistemic_state",
-        "working_exchange",
-        "reference_exchange",
-        "runtime_pack",
-        "exchange_shard_manifest",
-        "exchange_federation_manifest",
-        "authority_registry",
-        "authority_channel",
-        "authority_recognition",
-        "validation_decision",
-        "validation_report",
-        "review_bundle",
-        "revocations",
-        "reader_policy",
-        "transparency_log_entry",
-        "dataset",
-        "evidence_bundle",
-        "source_document",
-        "claim_ir",
-        "resolved_claim_ir",
-        "other"
-      ]
+      "const": "assertion_status"
     },
-    "ref": {
+    "status_record_id": {
+      "$ref": "#/$defs/sha256_uri"
+    },
+    "assertion_id": {
       "type": "string",
       "minLength": 1
     },
-    "content_hash": {
-      "$ref": "#/$defs/hash"
-    }
-  }
-},
-
-"hash": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "alg",
-    "value"
-  ],
-  "properties": {
-    "alg": {
-      "type": "string",
-      "enum": [
-        "sha256"
-      ]
+    "statement_ref": {
+      "$ref": "#/$defs/statement_ref"
     },
-    "value": {
-      "type": "string",
-      "pattern": "^[a-f0-9]{64}$"
-    }
-  }
-},
-
-"lineage": {
-  "type": "object",
-  "additionalProperties": false,
-  "properties": {
-    "source_artifacts": {
+    "assertion_status": {
+      "$ref": "#/$defs/assertion_status"
+    },
+    "certainty_level": {
+      "$ref": "#/$defs/certainty_level"
+    },
+    "validation_status": {
+      "$ref": "#/$defs/validation_status"
+    },
+    "validated_as": {
+      "$ref": "#/$defs/validated_as"
+    },
+    "recognition_status": {
+      "$ref": "#/$defs/recognition_status"
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "authority_channel": {
+      "$ref": "#/$defs/authority_ref"
+    },
+    "validation_policy_ref": {
+      "$ref": "#/$defs/policy_ref"
+    },
+    "recognition_policy_ref": {
+      "$ref": "#/$defs/policy_ref"
+    },
+    "reader_policy_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reader_policy_ref"
+      },
+      "default": []
+    },
+    "validation_refs": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/artifact_ref"
-      }
+      },
+      "default": []
     },
-    "derived_from_assertion_ids": {
+    "authority_recognition_refs": {
       "type": "array",
       "items": {
-        "type": "string",
-        "minLength": 1
-      }
+        "$ref": "#/$defs/authority_recognition_ref"
+      },
+      "default": []
     },
-    "supersedes_assertion_ids": {
+    "provenance_refs": {
       "type": "array",
       "items": {
-        "type": "string",
-        "minLength": 1
-      }
-    },
-    "merged_from_assertion_ids": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1
-      }
-    },
-    "transforms": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "transform_id",
-          "transform_type"
-        ],
-        "properties": {
-          "transform_id": {
-            "type": "string",
-            "minLength": 1
-          },
-          "transform_type": {
-            "type": "string",
-            "minLength": 1
-          },
-          "tool": {
-            "$ref": "#/$defs/agent"
-          },
-          "config_hash": {
-            "$ref": "#/$defs/hash"
-          }
-        }
-      }
-    }
-  }
-},
-
-"finding": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "code",
-    "message"
-  ],
-  "properties": {
-    "code": {
-      "type": "string",
-      "minLength": 1
-    },
-    "severity": {
-      "type": "string",
-      "enum": [
-        "info",
-        "warning",
-        "error",
-        "blocking"
-      ]
-    },
-    "message": {
-      "type": "string",
-      "minLength": 1
-    },
-    "path": {
-      "type": "string",
-      "minLength": 1
+        "$ref": "#/$defs/artifact_ref"
+      },
+      "default": []
     },
     "evidence_refs": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/artifact_ref"
-      }
-    }
-  }
-},
-
-"reason_code": {
-  "type": "string",
-  "enum": [
-    "schema_valid",
-    "schema_invalid",
-    "provenance_sufficient",
-    "provenance_insufficient",
-    "evidence_sufficient",
-    "evidence_insufficient",
-    "authority_recognized",
-    "authority_not_recognized",
-    "scope_mismatch",
-    "policy_satisfied",
-    "policy_failed",
-    "signature_valid",
-    "signature_invalid",
-    "hash_valid",
-    "hash_invalid",
-    "conflict_detected",
-    "disagreement_preserved",
-    "certainty_too_low_for_policy",
-    "rejected_by_authority_channel",
-    "revoked_by_authority_channel"
-  ]
-},
-
-"agent": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "kind",
-    "name"
-  ],
-  "properties": {
-    "kind": {
-      "type": "string",
-      "enum": [
-        "individual",
-        "community",
-        "association",
-        "research_collective",
-        "academic_institution",
-        "standards_body",
-        "company",
-        "government",
-        "intergovernmental_organization",
-        "ai_validator",
-        "hybrid_collective",
-        "software",
-        "system"
-      ]
+        "$ref": "#/$defs/evidence_ref"
+      },
+      "default": []
     },
-    "name": {
-      "type": "string",
-      "minLength": 1
+    "lineage": {
+      "$ref": "#/$defs/lineage"
     },
-    "id": {
-      "type": "string",
-      "minLength": 1
+    "reason_codes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reason_code"
+      },
+      "default": []
     },
-    "version": {
-      "type": "string",
-      "minLength": 1
-    },
-    "authority_channel": {
-      "type": "string",
-      "pattern": "^authority:[a-z0-9][a-z0-9._-]*$"
-    }
-  }
-},
-
-"signature": {
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "key_id",
-    "alg",
-    "signature"
-  ],
-  "properties": {
-    "sig_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "key_id": {
-      "type": "string",
-      "minLength": 1
-    },
-    "alg": {
-      "type": "string",
-      "enum": [
-        "ed25519",
-        "rsa-pss-sha256"
-      ]
-    },
-    "signature": {
-      "type": "string",
-      "minLength": 16
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      },
+      "default": []
     },
     "created_at": {
       "type": "string",
       "format": "date-time"
     },
+    "created_by": {
+      "$ref": "#/$defs/agent_ref"
+    },
     "expires_at": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date-time"
+    },
+    "replaces_status_record_id": {
+      "$ref": "#/$defs/sha256_uri"
+    },
+    "canonicalization_profile": {
+      "type": "string",
+      "const": "kristal.v5:jcs-rfc8785"
+    },
+    "canonicalization_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "content_hash": {
+      "$ref": "#/$defs/hash_ref"
+    },
+    "hash_target_policy": {
+      "$ref": "#/$defs/hash_target_policy"
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/signature"
+      },
+      "default": []
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "validation_status": {
+            "enum": ["validated", "conditionally_validated", "rejected", "revoked"]
+          }
+        },
+        "required": ["validation_status"]
+      },
+      "then": {
+        "required": [
+          "validated_as",
+          "authority_channel",
+          "validation_policy_ref",
+          "scope"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "recognition_status": {
+            "enum": [
+              "recognized",
+              "conditionally_recognized",
+              "disputed",
+              "rejected",
+              "deprecated",
+              "revoked"
+            ]
+          }
+        },
+        "required": ["recognition_status"]
+      },
+      "then": {
+        "required": [
+          "authority_channel",
+          "recognition_policy_ref",
+          "scope"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "sha256_hex": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "sha256_uri": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-fA-F]{64}$"
+    },
+    "hash_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": {
+          "type": "string",
+          "const": "sha256"
+        },
+        "value": {
+          "$ref": "#/$defs/sha256_hex"
+        }
+      }
+    },
+    "hash_target_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exclude_fields"],
+      "properties": {
+        "exclude_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "status_record_id",
+              "content_hash",
+              "signatures"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_id", "alg", "signature", "created_at"],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alg": {
+          "type": "string",
+          "const": "ed25519"
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      }
+    },
+    "assertion_status": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "claimed",
+        "sourced",
+        "disputed",
+        "reviewed",
+        "validated",
+        "rejected",
+        "retracted",
+        "superseded"
+      ]
+    },
+    "certainty_level": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "speculative",
+        "low",
+        "medium",
+        "high",
+        "established",
+        "not_applicable"
+      ]
+    },
+    "validation_status": {
+      "type": "string",
+      "enum": [
+        "not_evaluated",
+        "in_review",
+        "validated",
+        "conditionally_validated",
+        "disputed",
+        "rejected",
+        "revoked"
+      ]
+    },
+    "validated_as": {
+      "type": "string",
+      "enum": [
+        "hypothesis",
+        "claim",
+        "sourced_claim",
+        "reviewed_claim",
+        "high_confidence_fact",
+        "institutional_reference",
+        "publisher_declaration",
+        "technical_specification",
+        "legal_or_policy_position",
+        "mythological_corpus",
+        "fictional_corpus",
+        "symbolic_model",
+        "disputed_position",
+        "rejected_claim"
+      ]
+    },
+    "recognition_status": {
+      "type": "string",
+      "enum": [
+        "not_evaluated",
+        "recognized",
+        "conditionally_recognized",
+        "under_review",
+        "disputed",
+        "rejected",
+        "deprecated",
+        "revoked"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": [
+            "general",
+            "wikidata",
+            "science",
+            "health",
+            "education",
+            "heritage",
+            "law",
+            "policy",
+            "technology",
+            "environment",
+            "culture",
+            "mythology",
+            "fiction",
+            "research",
+            "operations",
+            "civic",
+            "local_notes"
+          ]
+        },
+        "subdomain": {
+          "type": ["string", "null"]
+        },
+        "jurisdiction": {
+          "type": ["string", "null"]
+        },
+        "time_window": {
+          "type": ["string", "null"]
+        },
+        "tenant_id": {
+          "type": ["string", "null"]
+        },
+        "environment": {
+          "type": ["string", "null"]
+        },
+        "language": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "authority_channel_id": {
+      "type": "string",
+      "pattern": "^authority:[a-z0-9][a-z0-9._:-]*$"
+    },
+    "authority_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authority_channel_id"],
+      "properties": {
+        "authority_channel_id": {
+          "$ref": "#/$defs/authority_channel_id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "authority_registry_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      }
+    },
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["artifact_id"]
+        },
+        {
+          "required": ["uri"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "policy_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "policy_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["policy_id"]
+        },
+        {
+          "required": ["policy_ref"]
+        }
+      ]
+    },
+    "reader_mode": {
+      "type": "string",
+      "enum": [
+        "reference_only",
+        "validated_only",
+        "high_certainty_only",
+        "research",
+        "creative",
+        "all_with_labels",
+        "custom"
+      ]
+    },
+    "reader_policy_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "reader_policy_id": {
+          "type": "string",
+          "pattern": "^reader_policy:[a-z0-9][a-z0-9._:-]*$"
+        },
+        "mode": {
+          "$ref": "#/$defs/reader_mode"
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["reader_policy_id"]
+        },
+        {
+          "required": ["policy_ref"]
+        }
+      ]
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "dataset",
+            "document",
+            "web_page",
+            "wikidata_dump",
+            "api_result",
+            "human_submission",
+            "institutional_record",
+            "claim_ir",
+            "resolved_claim_ir",
+            "structured_epistemic_state",
+            "exchange",
+            "runtime_pack",
+            "other"
+          ]
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "title": {
+          "type": "string"
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "license": {
+          "type": "string"
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["source_id"]
+        },
+        {
+          "required": ["source_url"]
+        },
+        {
+          "required": ["content_hash"]
+        }
+      ]
+    },
+    "evidence_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_ref"],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "$ref": "#/$defs/source_ref"
+        },
+        "quote": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "section": {
+          "type": "string"
+        },
+        "offsets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start_char": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "end_char": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "evidence_status": {
+          "type": "string",
+          "enum": [
+            "provided",
+            "missing",
+            "weak",
+            "sufficient",
+            "contested"
+          ]
+        },
+        "content_hash": {
+          "$ref": "#/$defs/hash_ref"
+        }
+      }
+    },
+    "authority_recognition_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recognition_status", "authority_channel"],
+      "properties": {
+        "recognition_id": {
+          "$ref": "#/$defs/sha256_uri"
+        },
+        "recognition_status": {
+          "$ref": "#/$defs/recognition_status"
+        },
+        "recognized_as": {
+          "$ref": "#/$defs/validated_as"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "validation_policy_ref": {
+          "$ref": "#/$defs/policy_ref"
+        },
+        "recognition_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      }
+    },
+    "agent_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string"
+        },
+        "agent_type": {
+          "type": "string",
+          "enum": [
+            "individual",
+            "community",
+            "association",
+            "research_collective",
+            "academic_institution",
+            "standards_body",
+            "company",
+            "government",
+            "intergovernmental_organization",
+            "ai_validator",
+            "hybrid_collective",
+            "service",
+            "system"
+          ]
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["agent_id"]
+        },
+        {
+          "required": ["name"]
+        },
+        {
+          "required": ["authority_channel"]
+        }
+      ]
+    },
+    "statement_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "statement_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement_hash": {
+          "$ref": "#/$defs/hash_ref"
+        },
+        "subject_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "predicate_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "object_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_artifact_ref": {
+          "$ref": "#/$defs/artifact_ref"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["statement_id"]
+        },
+        {
+          "required": ["statement_hash"]
+        },
+        {
+          "required": ["source_artifact_ref"]
+        }
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source_assertions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "source_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact_ref"
+          }
+        },
+        "transforms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/transform_record"
+          }
+        }
+      }
+    },
+    "transform_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transform_id", "transform_type"],
+      "properties": {
+        "transform_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transform_type": {
+          "type": "string",
+          "enum": [
+            "import",
+            "extraction",
+            "resolution",
+            "normalization",
+            "merge",
+            "split",
+            "manual_edit",
+            "review",
+            "validation",
+            "recognition",
+            "revocation"
+          ]
+        },
+        "tool": {
+          "type": "string"
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/policy_ref"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["finding_id", "severity", "message"],
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "reason_code": {
+          "$ref": "#/$defs/reason_code"
+        },
+        "authority_channel": {
+          "$ref": "#/$defs/authority_ref"
+        }
+      }
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "schema_valid",
+        "schema_invalid",
+        "provenance_sufficient",
+        "provenance_insufficient",
+        "evidence_sufficient",
+        "evidence_insufficient",
+        "authority_recognized",
+        "authority_not_recognized",
+        "scope_mismatch",
+        "policy_satisfied",
+        "policy_failed",
+        "signature_valid",
+        "signature_invalid",
+        "hash_valid",
+        "hash_invalid",
+        "conflict_detected",
+        "disagreement_preserved",
+        "certainty_too_low_for_policy",
+        "rejected_by_authority_channel",
+        "revoked_by_authority_channel"
+      ]
     }
   }
-}
-```
-
-}
 }

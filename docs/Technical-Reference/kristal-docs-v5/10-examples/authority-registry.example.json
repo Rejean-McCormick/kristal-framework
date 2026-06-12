@@ -1,100 +1,585 @@
 {
-  "schema_version": "3.0",
-  "artifact_type": "exchange_federation_manifest",
-
-  "created_at": "2026-02-26T17:55:07Z",
-
-  "federation_id": "sha256:9f3c0b9a6b2b0bb6d4ed5a7b0f8d0f9e2d8f1c3b4a5e6f7a8b9c0d1e2f3a4b5c",
-
-  "canonicalization_profile": "kristal.v3:jcs-rfc8785",
-  "canonicalization_version": "1",
-
-  "content_hash": {
-    "alg": "sha256",
-    "value": "3a7b1f0e9c2d4a6b8e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d"
-  },
-
-  "authority_registry_ref": {
-    "registry_id": "sha256:0d8c7b6a5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
-    "ref": "authority/authority-registry.json",
-    "content_hash": {
-      "alg": "sha256",
-      "value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
-    }
-  },
-
-  "shards": [
-    {
-      "shard_id": "sha256:1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
-      "scope": {
-        "domain": "heritage",
-        "subdomain": "unesco",
-        "time_window": "2026-01"
-      },
-      "shard_manifest_ref": "shards/heritage-unesco-2026-01/exchange-shard-manifest.json",
-      "shard_manifest_hash": {
-        "alg": "sha256",
-        "value": "6f1d7a3c2b9e0f4a5c6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3"
-      }
-    },
-    {
-      "shard_id": "sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
-      "scope": {
-        "domain": "notes",
-        "subdomain": "local",
-        "time_window": "2026-01"
-      },
-      "shard_manifest_ref": "shards/notes-local-2026-01/exchange-shard-manifest.json",
-      "shard_manifest_hash": {
-        "alg": "sha256",
-        "value": "c3b2a1908f7e6d5c4b5a4938271605f4e3d2c1b0a9f8e7d6c5b4a3928171605f"
-      }
-    }
-  ],
-
-  "composition_policy": {
-    "policy_id": "kristal.v3:federation-composition",
-    "policy_version": "1",
-    "ordering": {
-      "primary": "scope.domain_asc",
-      "secondary": "authority_precedence",
-      "tertiary": "shard_id_asc"
-    },
-    "authority_precedence": ["recognized", "personal"],
-    "conflict_resolution": {
-      "mode": "precedence",
-      "tie_breaker": "shard_id_asc"
-    }
-  },
-
-  "trust_requirements": [
-    {
-      "scope": { "domain": "heritage" },
-      "required_authority_class": "recognized"
-    },
-    {
-      "scope": { "domain": "notes" },
-      "required_authority_class": "personal_or_recognized"
-    }
-  ],
-
-  "publisher": {
-    "authority_id": "authority:curator",
-    "key_id": "curator-ed25519-2026-01"
-  },
-
-  "signatures": [
-    {
-      "key_id": "curator-ed25519-2026-01",
-      "alg": "ed25519",
-      "payload_hash": {
-        "alg": "sha256",
-        "value": "3a7b1f0e9c2d4a6b8e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d"
-      },
-      "signature": "mS7m9WmYvC8h3mZp3tG0Gf9G5a2lqkFf2m2cYw9qj3bR2cQkQq1y5w",
-      "created_at": "2026-02-26T17:55:07Z"
-    }
-  ],
-
-  "extensions": {}
+"schema_version": "5.0",
+"artifact_type": "authority_registry",
+"registry_id": "sha256:0d8c7b6a5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
+"created_at": "2026-06-12T16:40:00Z",
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"content_hash": {
+"alg": "sha256",
+"value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
+},
+"registry_scope": {
+"domain": "general",
+"subdomain": "example-authority-registry",
+"environment": "example",
+"language": "en"
+},
+"authority_channels": [
+{
+"authority_channel_id": "authority:curator",
+"name": "Example Curator Authority",
+"authority_type": "individual",
+"description": "Example local curator channel used to publish and sign this registry.",
+"scope": {
+"domain": "general",
+"subdomain": "registry-publication",
+"environment": "example",
+"language": "en"
+},
+"recognized_by": [],
+"recognizes": [
+"authority:unesco",
+"authority:local-notes"
+],
+"trust_roots": [
+"root:curator-ed25519-2026-01"
+],
+"validation_policies": [
+"kristal.v5:validation-policy:registry-publication"
+],
+"recognition_policies": [
+"kristal.v5:recognition-policy:scoped-authority-channel"
+],
+"revocation_policy_ref": "kristal.v5:revocation-policy:example-authority-registry",
+"metadata": {
+"example": true
+}
+},
+{
+"authority_channel_id": "authority:unesco",
+"name": "UNESCO Example Heritage Channel",
+"authority_type": "intergovernmental_organization",
+"description": "Example heritage authority channel. Recognition is scoped to heritage examples and does not imply universal authority.",
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"time_window": "2026-01",
+"environment": "example",
+"language": "en"
+},
+"recognized_by": [
+"authority:curator"
+],
+"recognizes": [],
+"trust_roots": [
+"root:unesco-example-ed25519-2026-01"
+],
+"validation_policies": [
+"kristal.v5:validation-policy:heritage-reference"
+],
+"recognition_policies": [
+"kristal.v5:recognition-policy:heritage-reference"
+],
+"revocation_policy_ref": "kristal.v5:revocation-policy:example-authority-registry",
+"metadata": {
+"example": true
+}
+},
+{
+"authority_channel_id": "authority:local-notes",
+"name": "Local Notes Example Channel",
+"authority_type": "individual",
+"description": "Example local-notes authority channel. Material from this channel is scoped as local notes unless another authority recognizes it under a different policy.",
+"scope": {
+"domain": "local_notes",
+"subdomain": "personal-notes",
+"time_window": "2026-01",
+"environment": "example",
+"language": "en"
+},
+"recognized_by": [
+"authority:curator"
+],
+"recognizes": [],
+"trust_roots": [
+"root:local-notes-ed25519-2026-01"
+],
+"validation_policies": [
+"kristal.v5:validation-policy:local-notes-declaration"
+],
+"recognition_policies": [
+"kristal.v5:recognition-policy:local-notes"
+],
+"revocation_policy_ref": "kristal.v5:revocation-policy:example-authority-registry",
+"metadata": {
+"example": true
+}
+}
+],
+"trust_roots": {
+"active_roots": [
+{
+"root_id": "root:curator-ed25519-2026-01",
+"category": "personal",
+"label": "Example curator signing root",
+"authority_channel_ids": [
+"authority:curator"
+],
+"key_id": "curator-ed25519-2026-01",
+"public_key_jwk": {
+"kty": "OKP",
+"crv": "Ed25519",
+"kid": "curator-ed25519-2026-01",
+"x": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+},
+"not_before": "2026-01-01T00:00:00Z",
+"not_after": "2027-01-01T00:00:00Z"
+},
+{
+"root_id": "root:unesco-example-ed25519-2026-01",
+"category": "intergovernmental_organization",
+"label": "Example UNESCO heritage signing root",
+"authority_channel_ids": [
+"authority:unesco"
+],
+"key_id": "unesco-example-ed25519-2026-01",
+"public_key_jwk": {
+"kty": "OKP",
+"crv": "Ed25519",
+"kid": "unesco-example-ed25519-2026-01",
+"x": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+},
+"not_before": "2026-01-01T00:00:00Z",
+"not_after": "2027-01-01T00:00:00Z"
+},
+{
+"root_id": "root:local-notes-ed25519-2026-01",
+"category": "personal",
+"label": "Example local notes signing root",
+"authority_channel_ids": [
+"authority:local-notes"
+],
+"key_id": "local-notes-ed25519-2026-01",
+"public_key_jwk": {
+"kty": "OKP",
+"crv": "Ed25519",
+"kid": "local-notes-ed25519-2026-01",
+"x": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+},
+"not_before": "2026-01-01T00:00:00Z",
+"not_after": "2027-01-01T00:00:00Z"
+}
+],
+"deprecated_roots": [],
+"blocked_roots": []
+},
+"validation_policies": [
+{
+"policy_id": "kristal.v5:validation-policy:registry-publication",
+"policy_version": "1",
+"scope": {
+"domain": "general",
+"subdomain": "registry-publication",
+"environment": "example",
+"language": "en"
+},
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated"
+],
+"allowed_validated_as": [
+"technical_specification",
+"publisher_declaration"
+],
+"allowed_certainty_levels": [
+"high",
+"established",
+"not_applicable"
+],
+"required_evidence": [
+"registry-signature",
+"content-hash"
+],
+"required_profiles": [
+"kristal.v5:jcs-rfc8785"
+],
+"min_signatures": 1
+},
+{
+"policy_id": "kristal.v5:validation-policy:heritage-reference",
+"policy_version": "1",
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"environment": "example",
+"language": "en"
+},
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated",
+"disputed"
+],
+"allowed_validated_as": [
+"institutional_reference",
+"reviewed_claim",
+"disputed_position"
+],
+"allowed_certainty_levels": [
+"medium",
+"high",
+"established"
+],
+"required_evidence": [
+"institutional-source",
+"provenance-reference"
+],
+"required_profiles": [
+"kristal.v5:authority-recognition"
+],
+"min_signatures": 1
+},
+{
+"policy_id": "kristal.v5:validation-policy:local-notes-declaration",
+"policy_version": "1",
+"scope": {
+"domain": "local_notes",
+"subdomain": "personal-notes",
+"environment": "example",
+"language": "en"
+},
+"allowed_validation_statuses": [
+"not_evaluated",
+"in_review",
+"validated",
+"disputed"
+],
+"allowed_validated_as": [
+"claim",
+"sourced_claim",
+"publisher_declaration",
+"disputed_position"
+],
+"allowed_certainty_levels": [
+"unknown",
+"speculative",
+"low",
+"medium"
+],
+"required_evidence": [
+"source-declaration"
+],
+"required_profiles": [],
+"min_signatures": 1
+}
+],
+"recognition_policies": [
+{
+"policy_id": "kristal.v5:recognition-policy:scoped-authority-channel",
+"policy_version": "1",
+"scope": {
+"domain": "general",
+"subdomain": "authority-channel-recognition",
+"environment": "example",
+"language": "en"
+},
+"target_levels": [
+"authority_channel"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized",
+"under_review",
+"rejected",
+"revoked"
+],
+"allowed_validated_as": [
+"institutional_reference",
+"publisher_declaration",
+"technical_specification"
+],
+"allowed_certainty_levels": [
+"medium",
+"high",
+"established",
+"not_applicable"
+],
+"required_authority_channels": [
+"authority:curator"
+],
+"allow_delegated_authority": true
+},
+{
+"policy_id": "kristal.v5:recognition-policy:heritage-reference",
+"policy_version": "1",
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"environment": "example",
+"language": "en"
+},
+"target_levels": [
+"artifact",
+"shard",
+"assertion",
+"dataset"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized",
+"under_review",
+"disputed"
+],
+"allowed_validated_as": [
+"institutional_reference",
+"reviewed_claim",
+"disputed_position"
+],
+"allowed_certainty_levels": [
+"medium",
+"high",
+"established"
+],
+"required_authority_channels": [
+"authority:unesco"
+],
+"allow_delegated_authority": true
+},
+{
+"policy_id": "kristal.v5:recognition-policy:local-notes",
+"policy_version": "1",
+"scope": {
+"domain": "local_notes",
+"subdomain": "personal-notes",
+"environment": "example",
+"language": "en"
+},
+"target_levels": [
+"artifact",
+"assertion",
+"dataset"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized",
+"under_review",
+"disputed"
+],
+"allowed_validated_as": [
+"claim",
+"sourced_claim",
+"publisher_declaration",
+"disputed_position"
+],
+"allowed_certainty_levels": [
+"unknown",
+"speculative",
+"low",
+"medium"
+],
+"required_authority_channels": [
+"authority:local-notes"
+],
+"allow_delegated_authority": false
+}
+],
+"revocation_list": {
+"artifact_path": "revocations.json",
+"content_hash": {
+"alg": "sha256",
+"value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+},
+"signatures": [
+{
+"key_id": "curator-ed25519-2026-01",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+},
+"signature": "ZHVtbXktcmV2b2NhdGlvbi1saXN0LXNpZ25hdHVyZQ",
+"created_at": "2026-06-12T16:40:00Z"
+}
+]
+},
+"rules": [
+{
+"rule_id": "rule:heritage-reference-scope",
+"scope": {
+"domain": "heritage",
+"subdomain": "unesco",
+"environment": "example",
+"language": "en"
+},
+"target_levels": [
+"artifact",
+"shard",
+"assertion",
+"dataset"
+],
+"allowed_authority_channel_ids": [
+"authority:unesco"
+],
+"allowed_authority_types": [
+"intergovernmental_organization"
+],
+"allowed_root_categories": [
+"intergovernmental_organization",
+"recognized"
+],
+"allowed_root_ids": [
+"root:unesco-example-ed25519-2026-01"
+],
+"required_validation_policies": [
+"kristal.v5:validation-policy:heritage-reference"
+],
+"required_recognition_policies": [
+"kristal.v5:recognition-policy:heritage-reference"
+],
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated",
+"disputed"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized",
+"under_review",
+"disputed"
+],
+"allowed_validated_as": [
+"institutional_reference",
+"reviewed_claim",
+"disputed_position"
+],
+"allowed_certainty_levels": [
+"medium",
+"high",
+"established"
+],
+"min_signatures": 1,
+"revocation_policy": "require_if_present",
+"delegation_policy": "explicit_only",
+"disagreement_policy": "preserve_disagreement"
+},
+{
+"rule_id": "rule:local-notes-scope",
+"scope": {
+"domain": "local_notes",
+"subdomain": "personal-notes",
+"environment": "example",
+"language": "en"
+},
+"target_levels": [
+"artifact",
+"assertion",
+"dataset"
+],
+"allowed_authority_channel_ids": [
+"authority:local-notes"
+],
+"allowed_authority_types": [
+"individual"
+],
+"allowed_root_categories": [
+"personal"
+],
+"allowed_root_ids": [
+"root:local-notes-ed25519-2026-01"
+],
+"required_validation_policies": [
+"kristal.v5:validation-policy:local-notes-declaration"
+],
+"required_recognition_policies": [
+"kristal.v5:recognition-policy:local-notes"
+],
+"allowed_validation_statuses": [
+"not_evaluated",
+"in_review",
+"validated",
+"disputed"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized",
+"under_review",
+"disputed"
+],
+"allowed_validated_as": [
+"claim",
+"sourced_claim",
+"publisher_declaration",
+"disputed_position"
+],
+"allowed_certainty_levels": [
+"unknown",
+"speculative",
+"low",
+"medium"
+],
+"min_signatures": 1,
+"revocation_policy": "require_if_present",
+"delegation_policy": "none",
+"disagreement_policy": "mark_disputed"
+},
+{
+"rule_id": "rule:registry-publication",
+"scope": {
+"domain": "general",
+"subdomain": "registry-publication",
+"environment": "example",
+"language": "en"
+},
+"target_levels": [
+"authority_channel",
+"artifact"
+],
+"allowed_authority_channel_ids": [
+"authority:curator"
+],
+"allowed_authority_types": [
+"individual"
+],
+"allowed_root_categories": [
+"personal"
+],
+"allowed_root_ids": [
+"root:curator-ed25519-2026-01"
+],
+"required_validation_policies": [
+"kristal.v5:validation-policy:registry-publication"
+],
+"required_recognition_policies": [
+"kristal.v5:recognition-policy:scoped-authority-channel"
+],
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized",
+"under_review"
+],
+"allowed_validated_as": [
+"technical_specification",
+"publisher_declaration"
+],
+"allowed_certainty_levels": [
+"high",
+"established",
+"not_applicable"
+],
+"min_signatures": 1,
+"revocation_policy": "require_strict",
+"delegation_policy": "explicit_only",
+"disagreement_policy": "preserve_disagreement"
+}
+],
+"signatures": [
+{
+"sig_id": "sig:authority-registry-example-0001",
+"key_id": "curator-ed25519-2026-01",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
+},
+"signature": "ZHVtbXktYXV0aG9yaXR5LXJlZ2lzdHJ5LXNpZ25hdHVyZQ",
+"created_at": "2026-06-12T16:40:00Z"
+}
+],
+"extensions": {
+"example_purpose": "Demonstrates a Kristal v5 authority registry with scoped authority channels, trust roots, validation policies, recognition policies, revocation linkage, and rule-based acceptance."
+}
 }

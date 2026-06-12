@@ -1,0 +1,381 @@
+{
+"schema_version": "5.0",
+"artifact_type": "reader_policy",
+"reader_policy_id": "reader_policy:validated-only",
+"name": "Validated Only",
+"description": "A reader policy that exposes only assertions accepted under selected validation policies and authority channels. Validated-only does not mean maximum certainty, universal truth, or universal agreement. It means every visible assertion satisfies this policy's validation, authority, certainty, and scope filters.",
+"mode": "validated_only",
+"created_at": "2026-06-12T16:22:19Z",
+"updated_at": "2026-06-12T16:22:19Z",
+"created_by": {
+"agent_id": "agent:example-reader-policy-author",
+"name": "Example Reader Policy Author",
+"agent_type": "system"
+},
+"issuer_authority_channel": {
+"authority_channel_id": "authority:reader-policy-examples",
+"name": "Reader Policy Examples"
+},
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"content_hash": {
+"alg": "sha256",
+"value": "6262626262626262626262626262626262626262626262626262626262626262"
+},
+"hash_target_policy": {
+"exclude_fields": [
+"content_hash",
+"signatures"
+],
+"notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned reader policy, excluding content_hash and signatures."
+},
+"scope": {
+"domain": "general",
+"subdomain": "validated-reader-view",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"policy": {
+"allowed_artifact_statuses": [
+"recognized",
+"reference"
+],
+"blocked_artifact_statuses": [
+"revoked",
+"deprecated",
+"superseded"
+],
+"allowed_assertion_statuses": [
+"validated"
+],
+"blocked_assertion_statuses": [
+"claimed",
+"rejected",
+"retracted",
+"superseded"
+],
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated"
+],
+"blocked_validation_statuses": [
+"not_evaluated",
+"in_review",
+"rejected",
+"revoked"
+],
+"allowed_recognition_statuses": [
+"recognized",
+"conditionally_recognized"
+],
+"blocked_recognition_statuses": [
+"rejected",
+"deprecated",
+"revoked"
+],
+"allowed_certainty_levels": [
+"low",
+"medium",
+"high",
+"established",
+"not_applicable"
+],
+"blocked_certainty_levels": [
+"unknown",
+"speculative"
+],
+"allowed_validated_as": [
+"hypothesis",
+"sourced_claim",
+"reviewed_claim",
+"high_confidence_fact",
+"institutional_reference",
+"publisher_declaration",
+"technical_specification",
+"legal_or_policy_position",
+"mythological_corpus",
+"fictional_corpus",
+"symbolic_model",
+"disputed_position"
+],
+"blocked_validated_as": [
+"claim",
+"rejected_claim"
+],
+"authority_filter": {
+"allowed_authority_channels": [
+{
+"authority_channel_id": "authority:unesco-science-education",
+"name": "UNESCO Science Education Example"
+},
+{
+"authority_channel_id": "authority:wikidata-seed",
+"name": "Wikidata Seed Example"
+},
+{
+"authority_channel_id": "authority:who",
+"name": "WHO Example"
+},
+{
+"authority_channel_id": "authority:local-community-archive",
+"name": "Local Community Archive Example"
+},
+{
+"authority_channel_id": "authority:cultural-heritage-archive",
+"name": "Cultural Heritage Archive Example"
+},
+{
+"authority_channel_id": "authority:publisher-declared-systems",
+"name": "Publisher Declared Systems Example"
+},
+{
+"authority_channel_id": "authority:independent-research-collective",
+"name": "Independent Research Collective Example"
+}
+],
+"blocked_authority_channels": [],
+"allow_unrecognized_authority_channels": false,
+"allow_conditionally_recognized_authorities": true,
+"allow_revoked_authorities": false
+},
+"scope_filter": {
+"allowed_domains": [
+"general",
+"wikidata",
+"science",
+"health",
+"education",
+"heritage",
+"law",
+"policy",
+"technology",
+"environment",
+"culture",
+"mythology",
+"fiction",
+"research",
+"operations",
+"civic"
+],
+"blocked_domains": [
+"local_notes"
+],
+"allowed_scopes": [
+{
+"domain": "general",
+"subdomain": "validated-reader-view",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+}
+],
+"blocked_scopes": [],
+"language_priority": [
+"en",
+"fr-CA"
+],
+"jurisdiction_priority": []
+},
+"include_disputed": true,
+"include_rejected": false,
+"include_revoked": false,
+"include_deprecated": false,
+"include_fictional": true,
+"include_mythological": true,
+"include_symbolic": true,
+"include_speculative": false,
+"include_unknown_certainty": false,
+"require_labels_for_uncertainty": true,
+"require_labels_for_dispute": true,
+"require_labels_for_scoped_validation": true,
+"require_labels_for_authority": true,
+"require_traceability": true,
+"require_evidence": false,
+"require_validation_policy_ref": true,
+"require_authority_channel": true,
+"custom_rules": [
+{
+"rule_id": "rule:validated-only-preserve-scope-labels",
+"description": "Material with scoped validation must keep authority, scope, certainty, and validated-as labels available to readers.",
+"target": "assertion",
+"condition": {
+"validation_status": [
+"validated",
+"conditionally_validated"
+]
+},
+"effect": "label",
+"label": "validated_with_scope"
+},
+{
+"rule_id": "rule:exclude-rejected-and-revoked",
+"description": "Rejected or revoked material is not visible under this policy.",
+"target": "assertion",
+"condition": {
+"validation_status": [
+"rejected",
+"revoked"
+]
+},
+"effect": "block",
+"label": "excluded_rejected_or_revoked"
+}
+]
+},
+"fallback_behavior": "show_unavailable",
+"rendering": {
+"show_labels": true,
+"show_authority_channel": true,
+"show_certainty_level": true,
+"show_validation_status": true,
+"show_recognition_status": true,
+"show_scope": true,
+"show_dispute_status": true,
+"show_fictional_or_mythological_mode": true,
+"show_trace_summary": true,
+"max_summary_length": 800
+},
+"query": {
+"default_limit": 50,
+"max_limit": 500,
+"default_ordering": "authority_then_certainty",
+"allow_cross_scope_queries": false,
+"allow_cross_authority_queries": false,
+"conflict_behavior": "preserve_disagreement"
+},
+"federation": {
+"allow_federated_sources": true,
+"allowed_federations": [],
+"blocked_federations": [],
+"allow_disagreement": true,
+"composition_strategy": "reader_policy_selected"
+},
+"offline": {
+"allow_offline_use": true,
+"require_local_integrity_check": true,
+"require_signature_check": true,
+"allow_stale_packs": false,
+"max_staleness_seconds": 86400,
+"unavailable_behavior": "show_unavailable"
+},
+"revocation": {
+"exclude_revoked_artifacts": true,
+"exclude_revoked_assertions": true,
+"exclude_revoked_authority_channels": true,
+"exclude_revoked_keys": true,
+"show_revocation_labels": true,
+"allow_historical_revoked_material": false
+},
+"lineage": {
+"require_lineage": true,
+"preserve_source_identity": true,
+"show_lineage": true,
+"allow_forks": true,
+"allow_unrecognized_forks": false
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:reader-policy:validated-only",
+"policy_version": "1"
+}
+],
+"derived_from": [],
+"supersedes": [],
+"warnings": [
+{
+"code": "POLICY_HAS_CUSTOM_RULES",
+"message": "This example includes custom rules to preserve scoped validation labels and block rejected or revoked material.",
+"path": "$.policy.custom_rules"
+}
+],
+"extensions": {
+"example_purpose": "Demonstrates a Kristal v5 validated-only reader policy. The policy allows only validated or conditionally validated material, while preserving certainty, authority, scope, fiction, mythology, and disputed-position labels.",
+"selection_notes": [
+"This policy includes only material with validation_status validated or conditionally_validated.",
+"The policy may include low or not_applicable certainty when the assertion is explicitly validated as a hypothesis, fictional corpus, mythological corpus, symbolic model, publisher declaration, technical specification, or disputed position.",
+"This policy does not present scoped validation as universal truth.",
+"This policy requires labels to remain visible or recoverable so readers know validated as what, by whom, for which scope, and at which certainty level."
+],
+"examples": {
+"allowed": [
+{
+"assertion_status": "validated",
+"validation_status": "validated",
+"certainty_level": "established",
+"validated_as": "high_confidence_fact",
+"authority_channel": "authority:unesco-science-education",
+"scope": {
+"domain": "science",
+"subdomain": "education",
+"language": "en"
+}
+},
+{
+"assertion_status": "validated",
+"validation_status": "validated",
+"certainty_level": "not_applicable",
+"validated_as": "mythological_corpus",
+"authority_channel": "authority:cultural-heritage-archive",
+"scope": {
+"domain": "mythology",
+"subdomain": "cultural-corpus",
+"language": "en"
+}
+},
+{
+"assertion_status": "validated",
+"validation_status": "conditionally_validated",
+"certainty_level": "low",
+"validated_as": "hypothesis",
+"authority_channel": "authority:independent-research-collective",
+"scope": {
+"domain": "research",
+"subdomain": "early-stage-hypothesis",
+"language": "en"
+}
+}
+],
+"excluded": [
+{
+"assertion_status": "claimed",
+"validation_status": "not_evaluated",
+"certainty_level": "medium",
+"validated_as": "claim",
+"reason": "Not validated under the active policy."
+},
+{
+"assertion_status": "rejected",
+"validation_status": "rejected",
+"certainty_level": "low",
+"validated_as": "rejected_claim",
+"reason": "Rejected material is excluded by this policy."
+},
+{
+"assertion_status": "validated",
+"validation_status": "validated",
+"certainty_level": "high",
+"validated_as": "high_confidence_fact",
+"authority_channel": "authority:unselected-authority",
+"reason": "The validating authority channel is not allowed by this policy."
+}
+]
+}
+},
+"signatures": [
+{
+"key_id": "example_reader_policy_ed25519_v1",
+"alg": "ed25519",
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-06-12T16:22:29Z",
+"authority_channel": {
+"authority_channel_id": "authority:reader-policy-examples",
+"name": "Reader Policy Examples"
+}
+}
+]
+}

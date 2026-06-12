@@ -1,39 +1,940 @@
 {
 "schema_version": "5.0",
-"artifact_type": "reference_exchange",
-"exchange_version": "5.0",
-"created_at": "2026-01-07T16:10:00Z",
-
+"artifact_type": "structured_epistemic_state",
+"state_id": "sha256:0101010101010101010101010101010101010101010101010101010101010101",
+"artifact_status": "reference",
+"created_at": "2026-06-12T17:00:00Z",
+"created_by": {
+"agent_id": "agent:wikidata-seed-importer-example",
+"name": "Wikidata Seed Importer Example",
+"agent_type": "system",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+}
+},
 "canonicalization_profile": "kristal.v5:jcs-rfc8785",
 "canonicalization_version": "1",
-
-"kristal_id": "sha256:6e8a2f9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e",
 "content_hash": {
 "alg": "sha256",
-"value": "6e8a2f9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e"
+"value": "0202020202020202020202020202020202020202020202020202020202020202"
 },
-
-"artifact_status": "reference",
-
+"hash_target_policy": {
+"exclude_fields": [
+"state_id",
+"content_hash",
+"signatures"
+],
+"notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned Structured Epistemic State, excluding state_id, content_hash, and signatures."
+},
 "scope": {
 "domain": "wikidata",
-"subdomain": "seed",
+"subdomain": "seed-corpus",
 "jurisdiction": null,
-"time_window": "2026-01",
+"time_window": "2026-06-12",
 "tenant_id": null,
-"environment": "global-reference",
-"language": "multilingual"
+"environment": "example",
+"language": "en"
 },
-
-"seed_profile": {
-"seed_name": "Wikidata Seed Kristal",
-"source_corpus": "Wikidata",
-"source_mode": "full_statements",
-"source_license": "CC0",
-"packaging_mode": "kristal-compatible-alignment",
-"semantic_transformation": false,
-"preserves_source_structure": true,
-"preserved_structures": [
+"source_refs": [
+{
+"source_id": "source:wikidata-dump-example-20260612",
+"source_type": "wikidata_dump",
+"source_url": "https://dumps.wikimedia.org/wikidatawiki/entities/",
+"title": "Wikidata JSON dump example snapshot",
+"publisher": "Wikidata",
+"retrieved_at": "2026-06-12T16:45:00Z",
+"license": "CC0-1.0",
+"content_hash": {
+"alg": "sha256",
+"value": "0303030303030303030303030303030303030303030303030303030303030303"
+},
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+}
+],
+"derived_from": [],
+"merged_from": [],
+"supersedes": [],
+"assertions": [
+{
+"assertion_id": "sha256:0404040404040404040404040404040404040404040404040404040404040404",
+"source_assertion_id": "wikidata:Q42:P31:statement-example-0001",
+"statement": {
+"subject": {
+"qid": "Q42",
+"label": "Douglas Adams",
+"description": "English writer and humorist",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"predicate": {
+"pid": "P31",
+"label": "instance of",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"object": {
+"kind": "item",
+"value": {
+"qid": "Q5",
+"label": "human",
+"description": "common name of Homo sapiens, unique extant species of the genus Homo",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+}
+},
+"qualifiers": [],
+"rank": "normal",
+"statement_hash": {
+"alg": "sha256",
+"value": "0505050505050505050505050505050505050505050505050505050505050505"
+}
+},
+"natural_language_statement": {
+"text": "Douglas Adams is an instance of human.",
+"lang": "en"
+},
+"assertion_status": "validated",
+"certainty_level": "medium",
+"validated_as": "institutional_reference",
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:wikidata:Q42:P31:statement-example-0001",
+"source_ref": {
+"source_id": "source:wikidata-dump-example-20260612",
+"source_type": "wikidata_dump",
+"source_url": "https://dumps.wikimedia.org/wikidatawiki/entities/",
+"title": "Wikidata JSON dump example snapshot",
+"publisher": "Wikidata",
+"retrieved_at": "2026-06-12T16:45:00Z",
+"license": "CC0-1.0",
+"content_hash": {
+"alg": "sha256",
+"value": "0303030303030303030303030303030303030303030303030303030303030303"
+},
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"section": "Q42 claims P31",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "0606060606060606060606060606060606060606060606060606060606060606"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+},
+"created_at": "2026-06-12T16:50:00Z"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:0909090909090909090909090909090909090909090909090909090909090909",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+}
+],
+"validation": {
+"validation_status": "validated",
+"validated_as": "institutional_reference",
+"certainty_level": "medium",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"authority_recognized",
+"policy_satisfied"
+],
+"validation_refs": [],
+"notes": "Validated as a faithful Kristal-compatible packaging of a Wikidata statement, not as a universal physical-world truth claim."
+},
+"uncertainty": {
+"confidence": 0.8,
+"method": "source-preserving seed import example",
+"notes": "Certainty reflects source packaging status and Wikidata reference scope, not independent external verification."
+},
+"lineage": {
+"source_assertions": [],
+"source_artifacts": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:wikidata-seed-import-0001",
+"transform_type": "import",
+"tool": "wikidata-seed-importer-example",
+"policy_ref": {
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-statements",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:50:00Z",
+"notes": "Imported while preserving Wikidata entity IDs, property IDs, statement rank, references, qualifiers, labels, aliases, and descriptions where available."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion is part of a seed corpus. It is usable under reader policies that allow Wikidata-scoped institutional references."
+},
+{
+"assertion_id": "sha256:0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a",
+"source_assertion_id": "wikidata:Q42:P569:statement-example-0002",
+"statement": {
+"subject": {
+"qid": "Q42",
+"label": "Douglas Adams",
+"description": "English writer and humorist",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"predicate": {
+"pid": "P569",
+"label": "date of birth",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"object": {
+"kind": "time",
+"value": {
+"iso8601": "1952-03-11",
+"precision": "day",
+"calendar": "Gregorian",
+"timezone": "UTC"
+},
+"normalized": {
+"value": "1952-03-11",
+"precision": "day",
+"normalization_policy_ref": {
+"policy_id": "kristal.v5:normalization-policy:wikidata-time-values",
+"policy_version": "1"
+}
+}
+},
+"qualifiers": [
+{
+"predicate": {
+"pid": "P1480",
+"label": "sourcing circumstances",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "imported from Wikidata statement metadata"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"notes": "Example qualifier showing that Wikidata qualifiers may be preserved during seed packaging."
+}
+],
+"rank": "normal",
+"statement_hash": {
+"alg": "sha256",
+"value": "0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b"
+}
+},
+"natural_language_statement": {
+"text": "Douglas Adams has date of birth 1952-03-11.",
+"lang": "en"
+},
+"assertion_status": "validated",
+"certainty_level": "medium",
+"validated_as": "institutional_reference",
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:wikidata:Q42:P569:statement-example-0002",
+"source_ref": {
+"source_id": "source:wikidata-dump-example-20260612",
+"source_type": "wikidata_dump",
+"source_url": "https://dumps.wikimedia.org/wikidatawiki/entities/",
+"title": "Wikidata JSON dump example snapshot",
+"publisher": "Wikidata",
+"retrieved_at": "2026-06-12T16:45:00Z",
+"license": "CC0-1.0",
+"content_hash": {
+"alg": "sha256",
+"value": "0303030303030303030303030303030303030303030303030303030303030303"
+},
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"section": "Q42 claims P569",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+},
+"created_at": "2026-06-12T16:50:00Z"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+}
+],
+"validation": {
+"validation_status": "validated",
+"validated_as": "institutional_reference",
+"certainty_level": "medium",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"authority_recognized",
+"policy_satisfied"
+],
+"validation_refs": [],
+"notes": "Validated as a faithful source-preserving Wikidata seed assertion under the declared import policy."
+},
+"uncertainty": {
+"confidence": 0.8,
+"method": "source-preserving seed import example",
+"notes": "Certainty reflects source packaging status and Wikidata reference scope, not independent external verification."
+},
+"lineage": {
+"source_assertions": [],
+"source_artifacts": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:wikidata-seed-import-0002",
+"transform_type": "normalization",
+"tool": "wikidata-seed-importer-example",
+"policy_ref": {
+"policy_id": "kristal.v5:normalization-policy:wikidata-time-values",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:51:00Z",
+"notes": "Normalized Wikidata time value while preserving original statement provenance."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This example demonstrates preservation of Wikidata time values, rank, qualifiers, and source identity."
+},
+{
+"assertion_id": "sha256:0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e",
+"source_assertion_id": "wikidata:Q42:label:en",
+"statement": {
+"subject": {
+"qid": "Q42",
+"label": "Douglas Adams",
+"description": "English writer and humorist",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"predicate": {
+"external_id": "wikibase:label",
+"label": "label",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"object": {
+"kind": "monolingual_text",
+"value": {
+"text": "Douglas Adams",
+"lang": "en"
+}
+},
+"qualifiers": [
+{
+"predicate": {
+"external_id": "wikibase:description",
+"label": "description",
+"language": "en"
+},
+"object": {
+"kind": "monolingual_text",
+"value": {
+"text": "English writer and humorist",
+"lang": "en"
+}
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "entity-labels",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+}
+}
+],
+"rank": "not_applicable",
+"statement_hash": {
+"alg": "sha256",
+"value": "0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"
+}
+},
+"natural_language_statement": {
+"text": "The English Wikidata label for Q42 is Douglas Adams.",
+"lang": "en"
+},
+"assertion_status": "validated",
+"certainty_level": "not_applicable",
+"validated_as": "publisher_declaration",
+"scope": {
+"domain": "wikidata",
+"subdomain": "entity-labels",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:wikidata:Q42:label:en",
+"source_ref": {
+"source_id": "source:wikidata-dump-example-20260612",
+"source_type": "wikidata_dump",
+"source_url": "https://dumps.wikimedia.org/wikidatawiki/entities/",
+"title": "Wikidata JSON dump example snapshot",
+"publisher": "Wikidata",
+"retrieved_at": "2026-06-12T16:45:00Z",
+"license": "CC0-1.0",
+"content_hash": {
+"alg": "sha256",
+"value": "0303030303030303030303030303030303030303030303030303030303030303"
+},
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"section": "Q42 labels.en and descriptions.en",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "1010101010101010101010101010101010101010101010101010101010101010"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+},
+"created_at": "2026-06-12T16:50:00Z"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"recognition_status": "recognized",
+"recognized_as": "publisher_declaration",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "entity-labels",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+}
+],
+"validation": {
+"validation_status": "validated",
+"validated_as": "publisher_declaration",
+"certainty_level": "not_applicable",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "entity-labels",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"policy_satisfied"
+],
+"validation_refs": [],
+"notes": "Validated as a source-preserved publisher declaration of label and description data from the Wikidata snapshot."
+},
+"uncertainty": {
+"method": "not applicable to label declaration",
+"notes": "Certainty is not applicable because this assertion records a label declaration in the source corpus, not an external factual claim."
+},
+"lineage": {
+"source_assertions": [],
+"source_artifacts": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:wikidata-label-import-0001",
+"transform_type": "import",
+"tool": "wikidata-seed-importer-example",
+"policy_ref": {
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-labels-aliases-descriptions",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:52:00Z",
+"notes": "Imported labels and descriptions as source declarations rather than physical-world claims."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This example demonstrates that labels and descriptions can be preserved as publisher declarations."
+}
+],
+"provenance": [
+{
+"provenance_id": "prov:wikidata-seed-import-created-0001",
+"event_type": "created",
+"created_at": "2026-06-12T16:50:00Z",
+"agent": {
+"agent_id": "agent:wikidata-seed-importer-example",
+"name": "Wikidata Seed Importer Example",
+"agent_type": "system",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+}
+},
+"source_ref": {
+"source_id": "source:wikidata-dump-example-20260612",
+"source_type": "wikidata_dump",
+"source_url": "https://dumps.wikimedia.org/wikidatawiki/entities/",
+"title": "Wikidata JSON dump example snapshot",
+"publisher": "Wikidata",
+"retrieved_at": "2026-06-12T16:45:00Z",
+"license": "CC0-1.0",
+"content_hash": {
+"alg": "sha256",
+"value": "0303030303030303030303030303030303030303030303030303030303030303"
+},
+"authority_channel": {
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-statements",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+],
+"notes": "Created as a Kristal-compatible packaging and alignment of Wikidata source content. This does not transform Wikidata declarations into universal truth."
+},
+{
+"provenance_id": "prov:wikidata-seed-validated-0001",
+"event_type": "validated",
+"created_at": "2026-06-12T16:55:00Z",
+"agent": {
+"agent_id": "agent:wikidata-seed-validator-example",
+"name": "Wikidata Seed Validator Example",
+"agent_type": "system",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+}
+},
+"artifact_ref": {
+"artifact_id": "sha256:0101010101010101010101010101010101010101010101010101010101010101",
+"artifact_type": "structured_epistemic_state",
+"content_hash": {
+"alg": "sha256",
+"value": "0202020202020202020202020202020202020202020202020202020202020202"
+},
+"created_at": "2026-06-12T17:00:00Z"
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+],
+"notes": "Validated as source-preserving seed packaging under the declared policy."
+}
+],
+"review_refs": [],
+"policy_refs": [
+{
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-statements",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-labels-aliases-descriptions",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:normalization-policy:wikidata-time-values",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+}
+],
+"reader_policy_refs": [
+{
+"reader_policy_id": "reader_policy:wikidata-seed-reference",
+"mode": "validated_only"
+},
+{
+"reader_policy_id": "reader_policy:research-all-with-labels",
+"mode": "all_with_labels"
+}
+],
+"certainty_summary": {
+"counts_by_certainty_level": {
+"medium": 2,
+"not_applicable": 1
+},
+"counts_by_assertion_status": {
+"validated": 3
+},
+"counts_by_validated_as": {
+"institutional_reference": 2,
+"publisher_declaration": 1
+},
+"notes": "This seed example distinguishes source-preserved Wikidata statements from independent external truth validation."
+},
+"validation_summary": {
+"validation_status": "validated",
+"recognition_status": "recognized",
+"authority_channels": [
+{
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+{
+"authority_channel_id": "authority:wikidata",
+"name": "Wikidata"
+}
+],
+"validation_refs": [],
+"recognition_refs": [
+{
+"recognition_id": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+},
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-corpus",
+"jurisdiction": null,
+"time_window": "2026-06-12",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+}
+],
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"authority_recognized",
+"policy_satisfied"
+],
+"notes": "The state is validated as a Kristal-compatible Wikidata seed corpus, preserving source identity, references, qualifiers, ranks, labels, aliases, and descriptions where available."
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "sha256:0707070707070707070707070707070707070707070707070707070707070707",
+"artifact_type": "wikidata_dump_import",
+"content_hash": {
+"alg": "sha256",
+"value": "0808080808080808080808080808080808080808080808080808080808080808"
+},
+"created_at": "2026-06-12T16:50:00Z"
+}
+],
+"source_states": [],
+"transforms": [
+{
+"transform_id": "transform:wikidata-seed-packaging-0001",
+"transform_type": "import",
+"tool": "wikidata-seed-importer-example",
+"policy_ref": {
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-statements",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:50:00Z",
+"notes": "Packaged Wikidata source content into Kristal-compatible Structured Epistemic State form without treating every statement as universal truth."
+}
+],
+"compiler": {
+"agent_id": "agent:wikidata-seed-compiler-example",
+"name": "Wikidata Seed Compiler Example",
+"agent_type": "system",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
+}
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:import-policy:preserve-wikidata-statements",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:validation-policy:wikidata-seed-packaging",
+"policy_version": "1"
+}
+]
+},
+"build": {
+"build_id": "build:20260612T170000Z:wikidata-seed-kristal-example",
+"schema_version": "5.0",
+"compile_status": "succeeded",
+"validation_status": "validated",
+"review_status": "completed",
+"recognition_status": "recognized",
+"publication_status": "not_published",
+"activation_status": "not_applicable",
+"working_outputs": [],
+"reference_outputs": [
+{
+"artifact_id": "sha256:0101010101010101010101010101010101010101010101010101010101010101",
+"artifact_type": "structured_epistemic_state",
+"content_hash": {
+"alg": "sha256",
+"value": "0202020202020202020202020202020202020202020202020202020202020202"
+},
+"created_at": "2026-06-12T17:00:00Z"
+}
+],
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"policy_satisfied"
+],
+"created_at": "2026-06-12T17:00:00Z"
+},
+"warnings": [
+{
+"code": "AUTHORITY_CHANNEL_MISSING",
+"message": "Some upstream Wikidata references may not map one-to-one to a Kristal authority channel in a complete import. This example keeps authority explicit at the seed and source level.",
+"path": "/source_refs/0",
+"reason_code": "authority_recognized"
+}
+],
+"extensions": {
+"example_purpose": "Demonstrates a Wikidata seed Kristal as source-preserving packaging and alignment, not as a transformation of all statements into universal truth.",
+"wikidata_preservation_targets": [
 "entities",
 "properties",
 "statements",
@@ -42,522 +943,20 @@
 "ranks",
 "labels",
 "aliases",
-"descriptions",
-"source_statement_ids"
-]
-},
-
-"build": {
-"build_id": "build-2026-01-07T161000Z-wikidata-seed-0001",
-"schema_version": "5.0",
-"compiler_name": "kristal-compiler",
-"compiler_version": "5.0.0",
-"compile_status": "succeeded",
-"validation_status": "validated",
-"review_status": "completed",
-"recognition_status": "recognized",
-"publication_status": "published",
-"activation_status": "not_applicable",
-"config_hash": {
-"alg": "sha256",
-"value": "b8a1d63f4c2e5a709183b6c5d4e3f2019a8b7c6d5e4f3012a9b8c7d6e5f40312"
-},
-"working_outputs": [],
-"reference_outputs": [
-{
-"ref": "exchange/wikidata-seed-reference.exchange.json",
-"content_hash": {
-"alg": "sha256",
-"value": "6e8a2f9b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e"
-}
-}
+"descriptions"
 ],
-"reason_codes": [
-"schema_valid",
-"hash_valid",
-"signature_valid",
-"provenance_sufficient",
-"policy_satisfied",
-"authority_recognized"
-],
-"created_at": "2026-01-07T16:10:00Z"
+"reabsorption_note": "A future Wikidata-facing exporter may emit changes or additions from Kristal back into Wikidata-compatible formats, subject to Wikidata contribution rules and external review."
 },
-
-"inputs": {
-"source_snapshot_id": "wikidata-json-dump-2026-01-06",
-"recipe_id": "recipe-wikidata-seed-full-statements-v1",
-"source_state_refs": [
-{
-"ref": "states/wikidata-seed-2026-01.state.json",
-"content_hash": {
-"alg": "sha256",
-"value": "2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2"
-}
-}
-],
-"dataset_refs": [
-{
-"ref": "datasets/wikidata-json-dump-2026-01-06.json.bz2",
-"uri": "https://dumps.wikimedia.org/wikidatawiki/entities/20260106/wikidata-20260106-all.json.bz2",
-"media_type": "application/x-bzip2",
-"content_hash": {
-"alg": "sha256",
-"value": "91a4b7c0d3e6f90215384b6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2"
-}
-}
-],
-"previous_exchange_refs": []
-},
-
-"profiles_enabled": [
-"kristal.v5:jsonld-1.1@1",
-"kristal.v5:rdf-wdqs-export@1",
-"kristal.v5:provenance-nanopub-provo@1"
-],
-
-"authority_registry_ref": {
-"ref": "authority/authority-registry.json",
-"content_hash": {
-"alg": "sha256",
-"value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
-}
-},
-
-"validation_refs": [
-{
-"ref": "validation/wikidata-seed.validation-report.json",
-"content_hash": {
-"alg": "sha256",
-"value": "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff"
-}
-}
-],
-
-"authority_recognition_refs": [
-{
-"ref": "recognition/wikidata-seed.global-reference.authority-recognition.json",
-"content_hash": {
-"alg": "sha256",
-"value": "11223344556677889900aabbccddeeff00112233445566778899aabbccddeeff"
-}
-}
-],
-
-"certainty_summary": {
-"overall": "mixed",
-"counts": {
-"unknown": 0,
-"speculative": 0,
-"low": 0,
-"medium": 1,
-"high": 2,
-"established": 0,
-"not_applicable": 0,
-"mixed": 0
-}
-},
-
-"validation_summary": {
-"overall": "validated",
-"validated_as": "institutional_reference",
-"authority_channel": "authority:wikidata-seed",
-"scope": {
-"domain": "wikidata",
-"subdomain": "seed",
-"jurisdiction": null,
-"time_window": "2026-01",
-"tenant_id": null,
-"environment": "global-reference",
-"language": "multilingual"
-},
-"counts": {
-"validated": 3,
-"conditionally_validated": 0,
-"in_review": 0,
-"disputed": 0,
-"rejected": 0,
-"not_evaluated": 0
-}
-},
-
-"reader_policy_refs": [
-{
-"ref": "reader-policies/wikidata-seed-full-with-labels.json",
-"content_hash": {
-"alg": "sha256",
-"value": "7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f"
-}
-},
-{
-"ref": "reader-policies/wikidata-seed-reference-only.json",
-"content_hash": {
-"alg": "sha256",
-"value": "8f7e6d5c4b3a29180716253445566778899aabbccddeeff0011223344556677"
-}
-}
-],
-
-"policies": {
-"ordering_policies": [
-"entity_id_asc",
-"property_id_asc",
-"assertion_id_asc"
-],
-"statement_projection_policy": {
-"default_projection": "full",
-"available_projections": [
-"full",
-"best_rank"
-],
-"preserve_omitted_statement_metadata": true
-},
-"row_group_policy": {
-"type": "FIXED_ROWS",
-"rows": 100000
-},
-"membership_filter_policy": {
-"family": "binary_fuse",
-"variant": "3wise",
-"key_space": "spo_hash",
-"target_fpr": 0.001,
-"bits_per_key": 9.5,
-"seed": 42
-},
-"bitmap_policy": {
-"format": "roaring",
-"run_opt": true
-},
-"join1_cap_policy": {
-"cap": 5000,
-"strict_mode": true,
-"on_exceed": "error"
-}
-},
-
-"evidence_index": [
-{
-"evidence_id": "ev-wd-dump-2026-01-06",
-"source_uri": "https://dumps.wikimedia.org/wikidatawiki/entities/20260106/wikidata-20260106-all.json.bz2",
-"retrieved_at": "2026-01-06T09:12:43Z",
-"locator": {
-"type": "dataset_snapshot",
-"value": "wikidata-json-dump-2026-01-06"
-},
-"excerpt_hash": {
-"alg": "sha256",
-"value": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
-}
-},
-{
-"evidence_id": "ev-wd-q42-statement",
-"source_uri": "https://www.wikidata.org/wiki/Q42",
-"retrieved_at": "2026-01-06T09:30:00Z",
-"locator": {
-"type": "wikidata_entity",
-"value": "Q42"
-},
-"excerpt_hash": {
-"alg": "sha256",
-"value": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
-}
-},
-{
-"evidence_id": "ev-wd-q90-statement",
-"source_uri": "https://www.wikidata.org/wiki/Q90",
-"retrieved_at": "2026-01-06T09:31:00Z",
-"locator": {
-"type": "wikidata_entity",
-"value": "Q90"
-},
-"excerpt_hash": {
-"alg": "sha256",
-"value": "f3e2d1c0b9a8f7e6c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a"
-}
-}
-],
-
-"exchange": {
-"items": [
-{
-"entity_id": "Q42",
-"type": "item",
-"labels": {
-"en": "Douglas Adams",
-"fr": "Douglas Adams"
-},
-"descriptions": {
-"en": "English writer and humorist",
-"fr": "écrivain et humoriste anglais"
-},
-"aliases": {
-"en": [
-"Douglas Noel Adams"
-],
-"fr": []
-},
-
-```
-    "assertions": [
-      {
-        "assertion_id": "sha256:4200000000000000000000000000000000000000000000000000000000000569",
-        "statement_id": "Q42$D8404CDA-25E4-4334-AF13-A3290BCD9C0F",
-        "source_statement_id": "Q42$D8404CDA-25E4-4334-AF13-A3290BCD9C0F",
-        "claim_id": null,
-
-        "property_id": "P569",
-        "snaktype": "value",
-        "datatype": "time",
-        "datavalue": {
-          "type": "time",
-          "value": {
-            "time": "+1952-03-11T00:00:00Z",
-            "timezone": 0,
-            "before": 0,
-            "after": 0,
-            "precision": 11,
-            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
-          }
-        },
-
-        "rank": "normal",
-
-        "assertion_status": "validated",
-        "certainty_level": "high",
-        "validated_as": "sourced_claim",
-
-        "scope": {
-          "domain": "wikidata",
-          "subdomain": "biographical-data",
-          "jurisdiction": null,
-          "time_window": "2026-01",
-          "tenant_id": null,
-          "environment": "global-reference",
-          "language": "multilingual"
-        },
-
-        "authority_channel": "authority:wikidata-seed",
-
-        "validation_refs": [
-          {
-            "ref": "validation/assertions/Q42-P569.validation-report.json"
-          }
-        ],
-
-        "authority_recognition_refs": [
-          {
-            "ref": "recognition/assertions/Q42-P569.authority-recognition.json"
-          }
-        ],
-
-        "qualifiers": [],
-
-        "references": [
-          {
-            "reference_id": "ref-wd-Q42-P569-0001",
-            "evidence_ids": [
-              "ev-wd-q42-statement"
-            ],
-            "snaks": [
-              {
-                "property_id": "P248",
-                "snaktype": "value",
-                "datatype": "wikibase-item",
-                "datavalue": {
-                  "type": "wikibase-entityid",
-                  "value": {
-                    "entity-type": "item",
-                    "numeric-id": 2013,
-                    "id": "Q2013"
-                  }
-                }
-              },
-              {
-                "property_id": "P813",
-                "snaktype": "value",
-                "datatype": "time",
-                "datavalue": {
-                  "type": "time",
-                  "value": {
-                    "time": "+2026-01-06T00:00:00Z",
-                    "timezone": 0,
-                    "before": 0,
-                    "after": 0,
-                    "precision": 11,
-                    "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      },
-
-      {
-        "assertion_id": "sha256:4200000000000000000000000000000000000000000000000000000000000031",
-        "statement_id": "Q42$A1B2C3D4-0000-0000-0000-000000000031",
-        "source_statement_id": "Q42$A1B2C3D4-0000-0000-0000-000000000031",
-        "claim_id": null,
-
-        "property_id": "P31",
-        "snaktype": "value",
-        "datatype": "wikibase-item",
-        "datavalue": {
-          "type": "wikibase-entityid",
-          "value": {
-            "entity-type": "item",
-            "numeric-id": 5,
-            "id": "Q5"
-          }
-        },
-
-        "rank": "normal",
-
-        "assertion_status": "validated",
-        "certainty_level": "high",
-        "validated_as": "sourced_claim",
-
-        "scope": {
-          "domain": "wikidata",
-          "subdomain": "entity-type",
-          "jurisdiction": null,
-          "time_window": "2026-01",
-          "tenant_id": null,
-          "environment": "global-reference",
-          "language": "multilingual"
-        },
-
-        "authority_channel": "authority:wikidata-seed",
-
-        "validation_refs": [
-          {
-            "ref": "validation/assertions/Q42-P31.validation-report.json"
-          }
-        ],
-
-        "authority_recognition_refs": [
-          {
-            "ref": "recognition/assertions/Q42-P31.authority-recognition.json"
-          }
-        ],
-
-        "qualifiers": [],
-
-        "references": [
-          {
-            "reference_id": "ref-wd-Q42-P31-0001",
-            "evidence_ids": [
-              "ev-wd-q42-statement"
-            ],
-            "snaks": []
-          }
-        ]
-      }
-    ]
-  },
-
-  {
-    "entity_id": "Q90",
-    "type": "item",
-    "labels": {
-      "en": "Paris",
-      "fr": "Paris"
-    },
-    "descriptions": {
-      "en": "capital and most populous city of France",
-      "fr": "capitale de la France"
-    },
-    "aliases": {
-      "en": [],
-      "fr": []
-    },
-
-    "assertions": [
-      {
-        "assertion_id": "sha256:9000000000000000000000000000000000000000000000000000000000000017",
-        "statement_id": "Q90$B1C2D3E4-0000-0000-0000-000000000017",
-        "source_statement_id": "Q90$B1C2D3E4-0000-0000-0000-000000000017",
-        "claim_id": null,
-
-        "property_id": "P17",
-        "snaktype": "value",
-        "datatype": "wikibase-item",
-        "datavalue": {
-          "type": "wikibase-entityid",
-          "value": {
-            "entity-type": "item",
-            "numeric-id": 142,
-            "id": "Q142"
-          }
-        },
-
-        "rank": "normal",
-
-        "assertion_status": "validated",
-        "certainty_level": "medium",
-        "validated_as": "sourced_claim",
-
-        "scope": {
-          "domain": "wikidata",
-          "subdomain": "geographic-data",
-          "jurisdiction": null,
-          "time_window": "2026-01",
-          "tenant_id": null,
-          "environment": "global-reference",
-          "language": "multilingual"
-        },
-
-        "authority_channel": "authority:wikidata-seed",
-
-        "validation_refs": [
-          {
-            "ref": "validation/assertions/Q90-P17.validation-report.json"
-          }
-        ],
-
-        "authority_recognition_refs": [
-          {
-            "ref": "recognition/assertions/Q90-P17.authority-recognition.json"
-          }
-        ],
-
-        "qualifiers": [],
-
-        "references": [
-          {
-            "reference_id": "ref-wd-Q90-P17-0001",
-            "evidence_ids": [
-              "ev-wd-q90-statement"
-            ],
-            "snaks": []
-          }
-        ],
-
-        "notes": [
-          {
-            "code": "seed_statement_imported",
-            "message": "Statement is imported from the Wikidata seed corpus and validated as a sourced claim within the seed authority channel. This does not imply maximum certainty or independent expert review."
-          }
-        ]
-      }
-    ]
-  }
-]
-```
-
-},
-
 "signatures": [
 {
-"key_id": "wikidata-seed-ed25519-2026-01",
+"key_id": "kristal_wikidata_seed_example_ed25519_v1",
 "alg": "ed25519",
-"signature": "U0lHTkFUVVJFX1dJS0lEQVRBX1NFRURfRVhBTVBMRV9OT1RfUkVBTA",
-"created_at": "2026-01-07T16:10:05Z",
-"signer": {
-"name": "Kristal Seed Build Service",
-"org": "kristal-framework"
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-06-12T17:00:10Z",
+"authority_channel": {
+"authority_channel_id": "authority:kristal-wikidata-seed-example",
+"name": "Kristal Wikidata Seed Example"
 }
 }
-],
-
-"extensions": {}
+]
 }

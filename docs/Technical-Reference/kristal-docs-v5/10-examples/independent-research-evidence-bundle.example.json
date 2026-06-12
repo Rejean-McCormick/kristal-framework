@@ -1,438 +1,959 @@
 {
-  "schema_version": "5.0",
-  "artifact_type": "structured_epistemic_state",
-  "example_id": "kristal.v5:example:independent-research-evidence-bundle",
-  "example_name": "Independent Research Evidence Bundle",
-  "state_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-  "created_at": "2026-06-12T00:00:00Z",
-  "created_by": {
-    "creator_type": "individual",
-    "name": "Independent Researcher",
-    "authority_channel": "authority:independent-researcher-example"
-  },
-  "artifact_status": "working",
-  "scope": {
-    "domain": "research",
-    "subdomain": "environmental-technology",
-    "jurisdiction": null,
-    "time_window": "2026",
-    "tenant_id": null,
-    "environment": "research-review",
-    "language": "en"
-  },
-  "source_refs": [
-    {
-      "source_ref_id": "source:prototype-report",
-      "source_type": "research_report",
-      "title": "Prototype Test Report for Low-Energy Atmospheric Particulate Capture",
-      "publisher": "Independent Researcher",
-      "published_at": "2026-05-20T00:00:00Z",
-      "uri": "https://example.org/research/prototype-test-report",
-      "content_hash": {
-        "alg": "sha256",
-        "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-      }
-    },
-    {
-      "source_ref_id": "source:lab-measurements",
-      "source_type": "measurement_dataset",
-      "title": "Prototype Measurement Dataset",
-      "publisher": "Independent Researcher",
-      "published_at": "2026-05-21T00:00:00Z",
-      "uri": "https://example.org/research/prototype-measurements",
-      "content_hash": {
-        "alg": "sha256",
-        "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
-      }
-    }
-  ],
-  "derived_from": [],
-  "merged_from": [],
-  "supersedes": [],
-  "assertions": [
-    {
-      "assertion_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
-      "statement": {
-        "subject": "prototype:low-energy-particulate-capture-device",
-        "predicate": "has_claimed_function",
-        "object": "captures airborne particulate matter using a low-energy electrostatic process"
-      },
-      "assertion_status": "claimed",
-      "certainty_level": "medium",
-      "validated_as": "claim",
-      "scope": {
-        "domain": "research",
-        "subdomain": "environmental-technology",
-        "jurisdiction": null,
-        "time_window": "2026",
-        "tenant_id": null,
-        "environment": "research-review",
-        "language": "en"
-      },
-      "provenance_refs": [
-        "source:prototype-report"
-      ],
-      "evidence_refs": [
-        "evidence:prototype-video",
-        "evidence:lab-measurements"
-      ],
-      "authority_recognition_refs": [],
-      "validation_decision_refs": [],
-      "lineage": {
-        "source_artifacts": [
-          "source:prototype-report"
-        ],
-        "transforms": [
-          {
-            "transform_id": "transform:manual-research-structuring",
-            "name": "Manual research structuring",
-            "version": "1"
-          }
-        ],
-        "policy_refs": [
-          {
-            "policy_id": "kristal.v5:research-submission-policy",
-            "policy_version": "1"
-          }
-        ]
-      }
-    },
-    {
-      "assertion_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
-      "statement": {
-        "subject": "prototype:low-energy-particulate-capture-device",
-        "predicate": "measured_particulate_reduction_percent",
-        "object": {
-          "value": 37.4,
-          "unit": "percent",
-          "conditions": "sealed-room test chamber, 45-minute run, initial PM2.5 concentration above local baseline"
-        }
-      },
-      "assertion_status": "sourced",
-      "certainty_level": "medium",
-      "validated_as": "sourced_claim",
-      "scope": {
-        "domain": "research",
-        "subdomain": "environmental-technology",
-        "jurisdiction": null,
-        "time_window": "2026",
-        "tenant_id": null,
-        "environment": "research-review",
-        "language": "en"
-      },
-      "provenance_refs": [
-        "source:lab-measurements"
-      ],
-      "evidence_refs": [
-        "evidence:lab-measurements",
-        "evidence:instrument-calibration"
-      ],
-      "authority_recognition_refs": [],
-      "validation_decision_refs": [],
-      "lineage": {
-        "source_artifacts": [
-          "source:lab-measurements"
-        ],
-        "transforms": [
-          {
-            "transform_id": "transform:measurement-summary",
-            "name": "Measurement summary extraction",
-            "version": "1"
-          }
-        ],
-        "policy_refs": [
-          {
-            "policy_id": "kristal.v5:research-evidence-policy",
-            "policy_version": "1"
-          }
-        ]
-      }
-    },
-    {
-      "assertion_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
-      "statement": {
-        "subject": "prototype:low-energy-particulate-capture-device",
-        "predicate": "requires_independent_replication",
-        "object": true
-      },
-      "assertion_status": "reviewed",
-      "certainty_level": "high",
-      "validated_as": "reviewed_claim",
-      "scope": {
-        "domain": "research",
-        "subdomain": "environmental-technology",
-        "jurisdiction": null,
-        "time_window": "2026",
-        "tenant_id": null,
-        "environment": "research-review",
-        "language": "en"
-      },
-      "provenance_refs": [
-        "source:prototype-report"
-      ],
-      "evidence_refs": [
-        "evidence:review-notes"
-      ],
-      "authority_recognition_refs": [],
-      "validation_decision_refs": [
-        "validation:independent-review-precheck"
-      ],
-      "lineage": {
-        "source_artifacts": [
-          "source:prototype-report"
-        ],
-        "transforms": [
-          {
-            "transform_id": "transform:review-summary",
-            "name": "Review summary",
-            "version": "1"
-          }
-        ],
-        "policy_refs": [
-          {
-            "policy_id": "kristal.v5:research-review-policy",
-            "policy_version": "1"
-          }
-        ]
-      }
-    }
-  ],
-  "evidence_refs": [
-    {
-      "evidence_id": "evidence:prototype-video",
-      "evidence_type": "video_recording",
-      "title": "Prototype Demonstration Video",
-      "uri": "https://example.org/research/prototype-demo",
-      "content_hash": {
-        "alg": "sha256",
-        "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
-      },
-      "captured_at": "2026-05-18T14:30:00Z",
-      "notes": "Demonstration evidence. Supports existence and operation of the prototype, not independent validation of performance claims."
-    },
-    {
-      "evidence_id": "evidence:lab-measurements",
-      "evidence_type": "measurement_dataset",
-      "title": "PM2.5 Test Chamber Measurements",
-      "uri": "https://example.org/research/prototype-measurements.csv",
-      "content_hash": {
-        "alg": "sha256",
-        "value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-      },
-      "captured_at": "2026-05-19T10:00:00Z",
-      "notes": "Measurements produced by the submitter. Requires independent replication before high-confidence factual recognition."
-    },
-    {
-      "evidence_id": "evidence:instrument-calibration",
-      "evidence_type": "calibration_record",
-      "title": "Sensor Calibration Record",
-      "uri": "https://example.org/research/sensor-calibration",
-      "content_hash": {
-        "alg": "sha256",
-        "value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-      },
-      "captured_at": "2026-05-17T09:00:00Z",
-      "notes": "Calibration record for the measurement instrument used in the test."
-    },
-    {
-      "evidence_id": "evidence:review-notes",
-      "evidence_type": "review_note",
-      "title": "Initial Research Review Notes",
-      "uri": "https://example.org/research/initial-review-notes",
-      "content_hash": {
-        "alg": "sha256",
-        "value": "abababababababababababababababababababababababababababababababab"
-      },
-      "captured_at": "2026-05-25T00:00:00Z",
-      "notes": "Initial review states that the bundle is suitable for structured review but not yet authority-recognized as a reference artifact."
-    }
-  ],
-  "provenance": [
-    {
-      "provenance_id": "provenance:submission",
-      "actor": {
-        "actor_type": "individual",
-        "name": "Independent Researcher",
-        "authority_channel": "authority:independent-researcher-example"
-      },
-      "activity": "submitted_research_bundle",
-      "started_at": "2026-05-22T00:00:00Z",
-      "ended_at": "2026-05-22T00:05:00Z",
-      "used": [
-        "source:prototype-report",
-        "source:lab-measurements"
-      ],
-      "generated": [
-        "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      ]
-    }
-  ],
-  "review_refs": [
-    {
-      "review_id": "review:initial-methodology-precheck",
-      "review_type": "methodology_precheck",
-      "reviewer": {
-        "reviewer_type": "research_collective",
-        "authority_channel": "authority:example-environmental-review-group"
-      },
-      "review_status": "completed",
-      "created_at": "2026-05-25T00:00:00Z",
-      "summary": "The bundle is structurally reviewable. Performance claims require independent replication and domain authority review."
-    }
-  ],
-  "validation_refs": [
-    {
-      "validation_decision_id": "validation:independent-review-precheck",
-      "target_ref": {
-        "artifact_type": "structured_epistemic_state",
-        "artifact_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      },
-      "target_level": "artifact",
-      "validation_status": "in_review",
-      "validated_as": "reviewed_claim",
-      "certainty_level": "medium",
-      "authority_channel": "authority:example-environmental-review-group",
-      "validation_policy_ref": {
-        "policy_id": "kristal.v5:research-review-policy",
-        "policy_version": "1"
-      },
-      "scope": {
-        "domain": "research",
-        "subdomain": "environmental-technology",
-        "jurisdiction": null,
-        "time_window": "2026",
-        "tenant_id": null,
-        "environment": "research-review",
-        "language": "en"
-      },
-      "findings": [
-        {
-          "finding_id": "finding:replication-required",
-          "severity": "info",
-          "message": "Independent replication is required before the performance claim can be recognized as a high-confidence fact."
-        }
-      ],
-      "reason_codes": [
-        "provenance_sufficient",
-        "evidence_sufficient",
-        "certainty_too_low_for_policy"
-      ]
-    }
-  ],
-  "authority_recognition_refs": [
-    {
-      "recognition_id": "recognition:submission-accepted-for-review",
-      "issuer_authority_channel": "authority:example-environmental-review-group",
-      "target_ref": {
-        "artifact_type": "structured_epistemic_state",
-        "artifact_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-      },
-      "target_level": "artifact",
-      "recognition_status": "under_review",
-      "recognized_as": "reviewed_claim",
-      "certainty_level": "medium",
-      "scope": {
-        "domain": "research",
-        "subdomain": "environmental-technology",
-        "jurisdiction": null,
-        "time_window": "2026",
-        "tenant_id": null,
-        "environment": "research-review",
-        "language": "en"
-      },
-      "validation_policy_ref": {
-        "policy_id": "kristal.v5:research-review-policy",
-        "policy_version": "1"
-      },
-      "reason_codes": [
-        "policy_satisfied",
-        "disagreement_preserved"
-      ]
-    }
-  ],
-  "policy_refs": [
-    {
-      "policy_id": "kristal.v5:research-submission-policy",
-      "policy_version": "1"
-    },
-    {
-      "policy_id": "kristal.v5:research-evidence-policy",
-      "policy_version": "1"
-    },
-    {
-      "policy_id": "kristal.v5:research-review-policy",
-      "policy_version": "1"
-    }
-  ],
-  "reader_policy_refs": [
-    {
-      "reader_policy_id": "reader_policy:research",
-      "mode": "research"
-    },
-    {
-      "reader_policy_id": "reader_policy:all_with_labels",
-      "mode": "all_with_labels"
-    }
-  ],
-  "certainty_summary": {
-    "counts": {
-      "unknown": 0,
-      "speculative": 0,
-      "low": 0,
-      "medium": 2,
-      "high": 1,
-      "established": 0,
-      "not_applicable": 0
-    },
-    "lowest_certainty_level": "medium",
-    "highest_certainty_level": "high",
-    "mixed_certainty": true
-  },
-  "validation_summary": {
-    "status": "in_review",
-    "contains_validated_assertions": false,
-    "contains_rejected_assertions": false,
-    "contains_disputed_assertions": false,
-    "recognized_as_reference": false,
-    "notes": "This bundle is structured for review. It is not a reference artifact and has not been recognized as a high-confidence factual corpus."
-  },
-  "lineage": {
-    "source_artifacts": [
-      "source:prototype-report",
-      "source:lab-measurements"
-    ],
-    "transforms": [
-      {
-        "transform_id": "transform:manual-research-structuring",
-        "name": "Manual research structuring",
-        "version": "1"
-      },
-      {
-        "transform_id": "transform:measurement-summary",
-        "name": "Measurement summary extraction",
-        "version": "1"
-      }
-    ],
-    "compiler": {
-      "name": "kristal-example-compiler",
-      "version": "5.0.0"
-    },
-    "policy_refs": [
-      {
-        "policy_id": "kristal.v5:research-submission-policy",
-        "policy_version": "1"
-      }
-    ]
-  },
-  "content_hash": {
-    "alg": "sha256",
-    "value": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
-  },
-  "signatures": [],
-  "extensions": {
-    "example.kristal.org/display": {
-      "recommended_label": "Independent research evidence bundle",
-      "recommended_warning": "Research material under review. Not authority-recognized as reference knowledge."
-    }
-  }
+"schema_version": "5.0",
+"artifact_type": "structured_epistemic_state",
+"state_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+"artifact_status": "working",
+"created_at": "2026-06-12T00:00:00Z",
+"created_by": {
+"agent_id": "agent:independent-researcher-example",
+"name": "Independent Researcher",
+"agent_type": "individual",
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"content_hash": {
+"alg": "sha256",
+"value": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+},
+"hash_target_policy": {
+"exclude_fields": [
+"state_id",
+"content_hash",
+"signatures"
+],
+"notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned Structured Epistemic State, excluding state_id, content_hash, and signatures."
+},
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"source_refs": [
+{
+"source_id": "source:prototype-report",
+"source_type": "document",
+"source_url": "https://example.org/research/prototype-test-report",
+"title": "Prototype Test Report for Low-Energy Atmospheric Particulate Capture",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-20T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+{
+"source_id": "source:lab-measurements",
+"source_type": "dataset",
+"source_url": "https://example.org/research/prototype-measurements",
+"title": "Prototype Measurement Dataset",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-21T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+{
+"source_id": "source:initial-review-notes",
+"source_type": "document",
+"source_url": "https://example.org/research/initial-review-notes",
+"title": "Initial Research Review Notes",
+"publisher": "Example Environmental Review Group",
+"retrieved_at": "2026-05-25T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+}
+}
+],
+"derived_from": [],
+"merged_from": [],
+"supersedes": [],
+"assertions": [
+{
+"assertion_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"source_assertion_id": "research-claim-0001",
+"statement": {
+"subject": {
+"external_id": "prototype:low-energy-particulate-capture-device",
+"label": "Low-energy atmospheric particulate capture prototype",
+"description": "Research prototype submitted by an independent researcher",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"predicate": {
+"external_id": "predicate:has_claimed_function",
+"label": "has claimed function",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "captures airborne particulate matter using a low-energy electrostatic process"
+},
+"qualifiers": [
+{
+"predicate": {
+"external_id": "predicate:claim_mode",
+"label": "claim mode",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "research submission"
+},
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+}
+}
+],
+"rank": "normal",
+"statement_hash": {
+"alg": "sha256",
+"value": "0101010101010101010101010101010101010101010101010101010101010101"
+}
+},
+"natural_language_statement": {
+"text": "The prototype is claimed to capture airborne particulate matter using a low-energy electrostatic process.",
+"lang": "en"
+},
+"assertion_status": "claimed",
+"certainty_level": "medium",
+"validated_as": "claim",
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:prototype-video",
+"source_ref": {
+"source_id": "source:prototype-report",
+"source_type": "document",
+"source_url": "https://example.org/research/prototype-test-report",
+"title": "Prototype Test Report for Low-Energy Atmospheric Particulate Capture",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-20T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"quote": "Demonstration evidence shows the prototype operating during a controlled example run.",
+"section": "Prototype demonstration",
+"evidence_status": "provided",
+"content_hash": {
+"alg": "sha256",
+"value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}
+},
+{
+"evidence_id": "evidence:lab-measurements",
+"source_ref": {
+"source_id": "source:lab-measurements",
+"source_type": "dataset",
+"source_url": "https://example.org/research/prototype-measurements",
+"title": "Prototype Measurement Dataset",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-21T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"quote": "Measurements were produced by the submitter and require independent replication.",
+"section": "Measurement summary",
+"evidence_status": "provided",
+"content_hash": {
+"alg": "sha256",
+"value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "source:prototype-report",
+"artifact_type": "document",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+},
+"created_at": "2026-05-20T00:00:00Z"
+}
+],
+"authority_recognition_refs": [],
+"validation": {
+"validation_status": "not_evaluated",
+"validated_as": "claim",
+"certainty_level": "medium",
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"reason_codes": [
+"provenance_sufficient"
+],
+"notes": "Claim is structured and supported by submitter-provided materials, but has not been independently validated."
+},
+"uncertainty": {
+"confidence": 0.55,
+"method": "research_submission_precheck",
+"notes": "Medium confidence as a research claim; not recognized as a reference fact."
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "source:prototype-report",
+"artifact_type": "document",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:manual-research-structuring",
+"transform_type": "manual_edit",
+"tool": "kristal-example-editor",
+"policy_ref": {
+"policy_id": "kristal.v5:research-submission-policy",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T00:00:00Z",
+"notes": "Manual structuring of a submitter-provided research claim."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion may be rendered in research mode with labels."
+},
+{
+"assertion_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+"source_assertion_id": "research-claim-0002",
+"statement": {
+"subject": {
+"external_id": "prototype:low-energy-particulate-capture-device",
+"label": "Low-energy atmospheric particulate capture prototype",
+"description": "Research prototype submitted by an independent researcher",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"predicate": {
+"external_id": "predicate:measured_particulate_reduction_percent",
+"label": "measured particulate reduction percent",
+"language": "en"
+},
+"object": {
+"kind": "quantity",
+"value": {
+"amount": 37.4,
+"unit_label": "percent"
+},
+"normalized": {
+"value": 37.4,
+"unit_label": "percent",
+"precision": "one decimal place",
+"notes": "Reported by the submitter from a sealed-room test chamber run."
+}
+},
+"qualifiers": [
+{
+"predicate": {
+"external_id": "predicate:test_condition",
+"label": "test condition",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "sealed-room test chamber, 45-minute run, initial PM2.5 concentration above local baseline"
+},
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+}
+}
+],
+"rank": "normal",
+"statement_hash": {
+"alg": "sha256",
+"value": "0202020202020202020202020202020202020202020202020202020202020202"
+}
+},
+"natural_language_statement": {
+"text": "The submitter reports a 37.4 percent particulate reduction in a sealed-room test chamber run.",
+"lang": "en"
+},
+"assertion_status": "sourced",
+"certainty_level": "medium",
+"validated_as": "sourced_claim",
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:lab-measurements",
+"source_ref": {
+"source_id": "source:lab-measurements",
+"source_type": "dataset",
+"source_url": "https://example.org/research/prototype-measurements",
+"title": "Prototype Measurement Dataset",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-21T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"quote": "The submitted measurement summary reports a 37.4 percent reduction during the test run.",
+"section": "Measurement summary",
+"evidence_status": "provided",
+"content_hash": {
+"alg": "sha256",
+"value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+}
+},
+{
+"evidence_id": "evidence:instrument-calibration",
+"source_ref": {
+"source_id": "source:instrument-calibration",
+"source_type": "document",
+"source_url": "https://example.org/research/sensor-calibration",
+"title": "Sensor Calibration Record",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-17T09:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"quote": "Calibration record for the measurement instrument used in the test.",
+"section": "Calibration summary",
+"evidence_status": "provided",
+"content_hash": {
+"alg": "sha256",
+"value": "f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "source:lab-measurements",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+},
+"created_at": "2026-05-21T00:00:00Z"
+}
+],
+"authority_recognition_refs": [],
+"validation": {
+"validation_status": "not_evaluated",
+"validated_as": "sourced_claim",
+"certainty_level": "medium",
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"reason_codes": [
+"provenance_sufficient",
+"evidence_sufficient",
+"certainty_too_low_for_policy"
+],
+"notes": "Submitter-provided measurement evidence is present, but independent replication is required before high-confidence recognition."
+},
+"uncertainty": {
+"confidence": 0.62,
+"method": "research_submission_precheck",
+"notes": "Medium confidence as a sourced research claim; not authority-recognized as a high-confidence fact."
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "source:lab-measurements",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:measurement-summary",
+"transform_type": "extraction",
+"tool": "kristal-example-editor",
+"policy_ref": {
+"policy_id": "kristal.v5:research-evidence-policy",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T00:00:00Z",
+"notes": "Structured measurement summary from the submitted dataset."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion should not be rendered as established fact until independent replication is recorded."
+},
+{
+"assertion_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+"source_assertion_id": "research-claim-0003",
+"statement": {
+"subject": {
+"external_id": "prototype:low-energy-particulate-capture-device",
+"label": "Low-energy atmospheric particulate capture prototype",
+"description": "Research prototype submitted by an independent researcher",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"predicate": {
+"external_id": "predicate:requires_independent_replication",
+"label": "requires independent replication",
+"language": "en"
+},
+"object": {
+"kind": "boolean",
+"value": true
+},
+"qualifiers": [],
+"rank": "preferred",
+"statement_hash": {
+"alg": "sha256",
+"value": "0303030303030303030303030303030303030303030303030303030303030303"
+}
+},
+"natural_language_statement": {
+"text": "Independent replication is required before the performance claim can be recognized as a high-confidence fact.",
+"lang": "en"
+},
+"assertion_status": "reviewed",
+"certainty_level": "high",
+"validated_as": "reviewed_claim",
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:review-notes",
+"source_ref": {
+"source_id": "source:initial-review-notes",
+"source_type": "document",
+"source_url": "https://example.org/research/initial-review-notes",
+"title": "Initial Research Review Notes",
+"publisher": "Example Environmental Review Group",
+"retrieved_at": "2026-05-25T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+}
+},
+"quote": "The bundle is structurally reviewable. Performance claims require independent replication and domain authority review.",
+"section": "Initial review summary",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "source:initial-review-notes",
+"artifact_type": "document",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+},
+"created_at": "2026-05-25T00:00:00Z"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+"recognition_status": "under_review",
+"recognized_as": "reviewed_claim",
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+},
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:research-review-policy",
+"policy_version": "1"
+}
+}
+],
+"validation": {
+"validation_status": "in_review",
+"validated_as": "reviewed_claim",
+"certainty_level": "high",
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"reason_codes": [
+"provenance_sufficient",
+"evidence_sufficient",
+"certainty_too_low_for_policy"
+],
+"validation_refs": [
+{
+"artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+"artifact_type": "validation_report",
+"content_hash": {
+"alg": "sha256",
+"value": "5656565656565656565656565656565656565656565656565656565656565656"
+}
+}
+],
+"notes": "Initial methodology precheck is complete; independent replication is still required."
+},
+"uncertainty": {
+"confidence": 0.85,
+"method": "review_precheck",
+"notes": "High confidence that independent replication is required before reference recognition."
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "source:initial-review-notes",
+"artifact_type": "document",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:review-summary",
+"transform_type": "review",
+"tool": "kristal-example-review-tool",
+"policy_ref": {
+"policy_id": "kristal.v5:research-review-policy",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T00:00:00Z",
+"notes": "Review summary converted into an explicit reviewed assertion."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion is a review-status assertion, not a validation of the prototype's performance claim."
+}
+],
+"provenance": [
+{
+"provenance_id": "provenance:submission",
+"event_type": "created",
+"created_at": "2026-05-22T00:05:00Z",
+"agent": {
+"agent_id": "agent:independent-researcher-example",
+"name": "Independent Researcher",
+"agent_type": "individual",
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"source_ref": {
+"source_id": "source:prototype-report",
+"source_type": "document",
+"source_url": "https://example.org/research/prototype-test-report",
+"title": "Prototype Test Report for Low-Energy Atmospheric Particulate Capture",
+"publisher": "Independent Researcher",
+"retrieved_at": "2026-05-20T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+},
+"authority_channel": {
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+}
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:research-submission-policy",
+"policy_version": "1"
+}
+],
+"notes": "Independent researcher submitted the initial research bundle for structured review."
+},
+{
+"provenance_id": "provenance:review-precheck",
+"event_type": "reviewed",
+"created_at": "2026-05-25T00:00:00Z",
+"agent": {
+"agent_id": "agent:example-environmental-review-group",
+"name": "Example Environmental Review Group",
+"agent_type": "research_collective",
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+}
+},
+"source_ref": {
+"source_id": "source:initial-review-notes",
+"source_type": "document",
+"source_url": "https://example.org/research/initial-review-notes",
+"title": "Initial Research Review Notes",
+"publisher": "Example Environmental Review Group",
+"retrieved_at": "2026-05-25T00:00:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+}
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:research-review-policy",
+"policy_version": "1"
+}
+],
+"notes": "Initial methodology precheck recorded that the bundle is structurally reviewable but not reference-recognized."
+}
+],
+"review_refs": [
+{
+"artifact_id": "review:initial-methodology-precheck",
+"artifact_type": "review_bundle",
+"content_hash": {
+"alg": "sha256",
+"value": "4545454545454545454545454545454545454545454545454545454545454545"
+},
+"created_at": "2026-05-25T00:00:00Z"
+}
+],
+"policy_refs": [
+{
+"policy_id": "kristal.v5:research-submission-policy",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:research-evidence-policy",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:research-review-policy",
+"policy_version": "1"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+"recognition_status": "under_review",
+"recognized_as": "reviewed_claim",
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+},
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:research-review-policy",
+"policy_version": "1"
+}
+}
+],
+"reader_policy_refs": [
+{
+"reader_policy_id": "reader_policy:research",
+"mode": "research"
+},
+{
+"reader_policy_id": "reader_policy:all-with-labels",
+"mode": "all_with_labels"
+}
+],
+"certainty_summary": {
+"counts_by_certainty_level": {
+"medium": 2,
+"high": 1
+},
+"counts_by_assertion_status": {
+"claimed": 1,
+"sourced": 1,
+"reviewed": 1
+},
+"counts_by_validated_as": {
+"claim": 1,
+"sourced_claim": 1,
+"reviewed_claim": 1
+},
+"notes": "The bundle contains research material under review. It is not recognized as reference knowledge."
+},
+"validation_summary": {
+"validation_status": "in_review",
+"recognition_status": "under_review",
+"authority_channels": [
+{
+"authority_channel_id": "authority:independent-researcher-example",
+"name": "Independent Researcher Example Channel"
+},
+{
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+}
+],
+"validation_refs": [
+{
+"artifact_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+"artifact_type": "validation_report",
+"content_hash": {
+"alg": "sha256",
+"value": "5656565656565656565656565656565656565656565656565656565656565656"
+}
+}
+],
+"recognition_refs": [
+{
+"recognition_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+"recognition_status": "under_review",
+"recognized_as": "reviewed_claim",
+"authority_channel": {
+"authority_channel_id": "authority:example-environmental-review-group",
+"name": "Example Environmental Review Group"
+},
+"scope": {
+"domain": "research",
+"subdomain": "environmental-technology",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "research-review",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:research-review-policy",
+"policy_version": "1"
+}
+}
+],
+"reason_codes": [
+"provenance_sufficient",
+"evidence_sufficient",
+"certainty_too_low_for_policy"
+],
+"notes": "This bundle is structured for review. It is not a reference artifact and has not been recognized as a high-confidence factual corpus."
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "source:prototype-report",
+"artifact_type": "document",
+"content_hash": {
+"alg": "sha256",
+"value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}
+},
+{
+"artifact_id": "source:lab-measurements",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:manual-research-structuring",
+"transform_type": "manual_edit",
+"tool": "kristal-example-editor",
+"policy_ref": {
+"policy_id": "kristal.v5:research-submission-policy",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T00:00:00Z",
+"notes": "Manual research structuring."
+},
+{
+"transform_id": "transform:measurement-summary",
+"transform_type": "extraction",
+"tool": "kristal-example-editor",
+"policy_ref": {
+"policy_id": "kristal.v5:research-evidence-policy",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T00:00:00Z",
+"notes": "Measurement summary extraction."
+}
+],
+"compiler": {
+"agent_id": "agent:kristal-example-compiler",
+"name": "kristal-example-compiler",
+"agent_type": "system"
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:research-submission-policy",
+"policy_version": "1"
+}
+]
+},
+"build": {
+"build_id": "build:20260612T000000Z:independent-research-evidence-bundle",
+"schema_version": "5.0",
+"compile_status": "succeeded",
+"validation_status": "in_review",
+"review_status": "pending",
+"recognition_status": "none",
+"publication_status": "not_published",
+"activation_status": "not_applicable",
+"working_outputs": [],
+"reference_outputs": [],
+"reason_codes": [
+"provenance_sufficient",
+"evidence_sufficient",
+"certainty_too_low_for_policy"
+],
+"created_at": "2026-06-12T00:00:00Z"
+},
+"warnings": [
+{
+"code": "LOW_CERTAINTY",
+"message": "Performance claims are medium-certainty research claims until independent replication is recorded.",
+"path": "/assertions/1",
+"reason_code": "certainty_too_low_for_policy"
+},
+{
+"code": "UNRECOGNIZED_AUTHORITY",
+"message": "The independent researcher channel is the source authority, but the bundle is not yet recognized as reference knowledge by a domain authority.",
+"path": "/authority_recognition_refs",
+"reason_code": "authority_not_recognized"
+}
+],
+"extensions": {
+"example_purpose": "Demonstrates an independent research evidence bundle that is structured, sourced, and under review without being represented as validated reference knowledge.",
+"display": {
+"recommended_label": "Independent research evidence bundle",
+"recommended_warning": "Research material under review. Not authority-recognized as reference knowledge."
+}
+},
+"signatures": []
 }

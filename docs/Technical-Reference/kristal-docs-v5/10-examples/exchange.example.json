@@ -2,19 +2,16 @@
 "schema_version": "5.0",
 "artifact_type": "reference_exchange",
 "exchange_version": "5.0",
+"manifest_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 "created_at": "2026-01-07T16:10:00Z",
-
+"kristal_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+"artifact_status": "reference",
 "canonicalization_profile": "kristal.v5:jcs-rfc8785",
 "canonicalization_version": "1",
-
-"kristal_id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
 "content_hash": {
 "alg": "sha256",
 "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
 },
-
-"artifact_status": "reference",
-
 "scope": {
 "domain": "wikidata",
 "subdomain": "seed-example",
@@ -24,27 +21,25 @@
 "environment": "demo",
 "language": "en"
 },
-
 "build": {
 "build_id": "build-2026-01-07T161000Z-0007",
-"schema_version": "5.0",
 "compiler_name": "kristal-compiler",
 "compiler_version": "5.0.0",
+"config_hash": {
+"alg": "sha256",
+"value": "3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1"
+},
 "compile_status": "succeeded",
 "validation_status": "validated",
 "review_status": "completed",
 "recognition_status": "recognized",
 "publication_status": "published",
 "activation_status": "not_applicable",
-"config_hash": {
-"alg": "sha256",
-"value": "3c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f1"
-},
-"git_commit": "a1b2c3d4e5f6g7h8i9j0",
 "working_outputs": [],
 "reference_outputs": [
 {
-"ref": "exchange/demo-wikidata-seed-reference.exchange.json",
+"id": "sha256:9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c",
+"artifact_type": "reference_exchange",
 "content_hash": {
 "alg": "sha256",
 "value": "9f3a0d6c7b0a1f2e3d4c5b6a7980a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c"
@@ -59,39 +54,165 @@
 "policy_satisfied",
 "authority_recognized"
 ],
+"git_commit": "a1b2c3d4e5f6a7b8c9d0",
+"environment": {
 "created_at": "2026-01-07T16:10:00Z"
+}
 },
-
 "inputs": {
+"source_refs": [
+{
+"id": "sha256:2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2",
+"artifact_type": "structured_epistemic_state",
+"content_hash": {
+"alg": "sha256",
+"value": "2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2"
+}
+},
+{
+"id": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+"artifact_type": "external_dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+}
+},
+{
+"id": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+"artifact_type": "external_dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}
+}
+],
 "source_snapshot_id": "snap-2026-01-06-wikidata-seed-demo",
 "recipe_id": "recipe-demo-encyclopedia-core",
+"structured_epistemic_state_ids": [
+"sha256:2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2"
+],
+"claim_ir_ids": [
+"sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+],
+"resolved_claim_ir_ids": [
+"sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+],
+"previous_exchange_ids": []
+},
 "source_state_refs": [
 {
-"ref": "states/demo-wikidata-seed.state.json",
+"id": "sha256:2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2",
+"artifact_type": "structured_epistemic_state",
 "content_hash": {
 "alg": "sha256",
 "value": "2c8a8fe8f10f4c4a44b8f4d4b6b1f8b7f1a9e9c5a2b1c0d9e8f7a6b5c4d3e2f2"
 }
 }
 ],
-"claim_ir_refs": [
-{
-"ref": "claim-ir/ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4.json"
+"authority_registry_ref": {
+"id": "sha256:0d8c7b6a5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
+"artifact_type": "authority_registry",
+"content_hash": {
+"alg": "sha256",
+"value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
 }
-],
-"resolved_claim_ir_refs": [
-{
-"ref": "resolved-claim-ir/rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c.json"
-}
-],
-"previous_exchange_refs": []
 },
-
+"authority_recognition_refs": [
+{
+"id": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+"artifact_type": "authority_recognition",
+"content_hash": {
+"alg": "sha256",
+"value": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+}
+}
+],
+"validation_refs": [
+{
+"id": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+"artifact_type": "validation_report",
+"content_hash": {
+"alg": "sha256",
+"value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+}
+}
+],
+"review_refs": [],
+"reader_policy_refs": [
+{
+"id": "reader_policy:validated-only-wikidata-reference",
+"artifact_type": "reader_policy"
+},
+{
+"id": "reader_policy:research-all-with-labels",
+"artifact_type": "reader_policy"
+}
+],
 "profiles_enabled": [
 "kristal.v5:jsonld-1.1@1",
-"kristal.v5:rdf-wdqs-export@1"
+"kristal.v5:rdf-wdqs-export@1",
+"kristal.v5:profile-query-tpf-pagination@1"
 ],
-
+"certainty_summary": {
+"default_certainty_level": "high",
+"contains_mixed_certainty": true,
+"counts_by_certainty_level": {
+"established": 2,
+"high": 1,
+"medium": 1,
+"low": 0,
+"speculative": 0,
+"unknown": 0,
+"not_applicable": 0
+},
+"contains_hypotheses": false,
+"contains_disputed_assertions": false,
+"contains_fictional_or_mythological_material": false,
+"notes": "Example summary for a small Wikidata seed reference exchange. Counts are illustrative."
+},
+"validation_summary": {
+"default_validation_status": "validated",
+"validated_as": [
+"institutional_reference",
+"sourced_claim"
+],
+"authority_channels": [
+"authority:wikidata-seed-demo"
+],
+"recognition_statuses": [
+"recognized"
+],
+"counts_by_validation_status": {
+"validated": 3,
+"not_evaluated": 1,
+"disputed": 0,
+"rejected": 0,
+"revoked": 0
+},
+"notes": "This Exchange is recognized as a reference artifact for the declared Wikidata seed demo scope. Recognition does not imply that every assertion is universally true."
+},
+"exports": {
+"jsonld": {
+"enabled": true,
+"profile": "kristal.v5:jsonld-1.1@1",
+"uri": "file:exports/demo-wikidata-seed.jsonld",
+"media_type": "application/ld+json",
+"content_hash": {
+"alg": "sha256",
+"value": "1111111111111111111111111111111111111111111111111111111111111111"
+}
+},
+"wdqs": {
+"enabled": true,
+"profile": "kristal.v5:rdf-wdqs-export@1",
+"uri": "file:exports/demo-wikidata-seed-full.nt",
+"media_type": "application/n-triples",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+}
+}
+},
 "policies": {
 "ordering_policies": [
 "SPO",
@@ -101,6 +222,43 @@
 "type": "FIXED_ROWS",
 "rows": 100000
 },
+"reader_policy_refs": [
+{
+"id": "reader_policy:validated-only-wikidata-reference",
+"artifact_type": "reader_policy"
+},
+{
+"id": "reader_policy:research-all-with-labels",
+"artifact_type": "reader_policy"
+}
+],
+"validation_policy_refs": [
+{
+"id": "kristal.v5:validation-policy:wikidata-seed-demo",
+"artifact_type": "validation_decision"
+}
+],
+"recognition_policy_refs": [
+{
+"id": "kristal.v5:recognition-policy:wikidata-seed-demo",
+"artifact_type": "authority_recognition"
+}
+],
+"composition_policy": {
+"policy_id": "kristal.v5:composition-policy:wikidata-seed-demo",
+"policy_version": "1",
+"overlap_strategy": "preserve_all",
+"conflict_strategy": "preserve_disagreement",
+"default_visibility": "reader_policy",
+"ordering": "stable",
+"parameters": {
+"default_reader_policy_id": "reader_policy:validated-only-wikidata-reference",
+"supported_reader_modes": [
+"reference_only",
+"validated_only",
+"research",
+"all_with_labels"
+],
 "membership_filter_policy": {
 "family": "binary_fuse",
 "variant": "3wise",
@@ -118,296 +276,98 @@
 "strict_mode": true,
 "on_exceed": "error"
 }
-},
-
-"validation_refs": [
-{
-"ref": "validation/demo-wikidata-seed.validation-report.json",
-"content_hash": {
-"alg": "sha256",
-"value": "0f1e2d3c4b5a69788796a5b4c3d2e1f00112233445566778899aabbccddeeff"
-}
-}
-],
-
-"authority_recognition_refs": [
-{
-"ref": "recognition/demo-wikidata-seed.authority-recognition.json",
-"content_hash": {
-"alg": "sha256",
-"value": "11223344556677889900aabbccddeeff00112233445566778899aabbccddeeff"
-}
-}
-],
-
-"certainty_summary": {
-"overall": "mixed",
-"counts": {
-"unknown": 0,
-"speculative": 0,
-"low": 0,
-"medium": 1,
-"high": 1,
-"established": 0,
-"not_applicable": 0
 }
 },
-
-"validation_summary": {
-"overall": "validated",
-"validated_as": "institutional_reference",
-"authority_channel": "authority:wikidata-seed-demo",
-"scope": {
-"domain": "wikidata",
-"subdomain": "seed-example",
-"jurisdiction": null,
-"time_window": "2026-01",
-"tenant_id": "tenant_demo",
-"environment": "demo",
-"language": "en"
-},
-"counts": {
-"validated": 2,
-"conditionally_validated": 0,
-"in_review": 0,
-"disputed": 0,
-"rejected": 0,
-"not_evaluated": 0
-}
-},
-
-"evidence_index": [
-{
-"evidence_id": "ev-0001",
-"source_uri": "https://en.wikipedia.org/wiki/Douglas_Adams",
-"retrieved_at": "2026-01-06T09:12:43Z",
-"locator": {
-"type": "html_xpath",
-"value": "//*[@id='mw-content-text']"
-},
-"excerpt_hash": {
-"alg": "sha256",
-"value": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
-}
-},
-{
-"evidence_id": "ev-0002",
-"source_uri": "https://example.org/notes/travel-briefing.txt",
-"retrieved_at": "2026-01-06T10:00:00Z",
-"locator": {
-"type": "line_range",
-"value": "L10-L25"
-},
-"excerpt_hash": {
-"alg": "sha256",
-"value": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
-}
-}
-],
-
-"exchange": {
-"items": [
-{
-"entity_id": "Q42",
-"type": "item",
-"labels": {
-"en": "Douglas Adams"
-},
-"descriptions": {
-"en": "English writer and humorist"
-},
-"aliases": {
-"en": [
-"Douglas Noel Adams"
+"allowed_runtime_pack_policies": [
+"kristal.v5:runtime-pack-policy:offline-reference"
 ]
 },
-
-```
-    "assertions": [
-      {
-        "assertion_id": "sha256:4200000000000000000000000000000000000000000000000000000000000569",
-        "statement_id": "st-Q42-P569-0001",
-        "claim_id": "clm-0001",
-
-        "property_id": "P569",
-        "snaktype": "value",
-        "datatype": "time",
-        "datavalue": {
-          "type": "time",
-          "value": {
-            "time": "+1952-03-11T00:00:00Z",
-            "timezone": 0,
-            "before": 0,
-            "after": 0,
-            "precision": 11,
-            "calendarmodel": "http://www.wikidata.org/entity/Q1985727"
-          }
-        },
-
-        "rank": "normal",
-
-        "assertion_status": "validated",
-        "certainty_level": "high",
-        "validated_as": "high_confidence_fact",
-
-        "scope": {
-          "domain": "wikidata",
-          "subdomain": "biographical-data",
-          "jurisdiction": null,
-          "time_window": null,
-          "tenant_id": "tenant_demo",
-          "environment": "demo",
-          "language": "en"
-        },
-
-        "authority_channel": "authority:wikidata-seed-demo",
-
-        "validation_refs": [
-          {
-            "ref": "validation/assertions/Q42-P569.validation-report.json"
-          }
-        ],
-
-        "authority_recognition_refs": [
-          {
-            "ref": "recognition/assertions/Q42-P569.authority-recognition.json"
-          }
-        ],
-
-        "qualifiers": [],
-
-        "references": [
-          {
-            "reference_id": "ref-0001",
-            "evidence_ids": [
-              "ev-0001"
-            ],
-            "snaks": [
-              {
-                "property_id": "P854",
-                "snaktype": "value",
-                "datatype": "url",
-                "datavalue": {
-                  "type": "string",
-                  "value": "https://en.wikipedia.org/wiki/Douglas_Adams"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-
-  {
-    "entity_id": "Q90",
-    "type": "item",
-    "labels": {
-      "en": "Paris"
-    },
-    "descriptions": {
-      "en": "capital and most populous city of France"
-    },
-    "aliases": {
-      "en": []
-    },
-
-    "assertions": [
-      {
-        "assertion_id": "sha256:9000000000000000000000000000000000000000000000000000000000000017",
-        "statement_id": "st-Q90-P17-0001",
-        "claim_id": "clm-0002",
-
-        "property_id": "P17",
-        "snaktype": "value",
-        "datatype": "wikibase-item",
-        "datavalue": {
-          "type": "wikibase-entityid",
-          "value": {
-            "entity-type": "item",
-            "numeric-id": 142,
-            "id": "Q142"
-          }
-        },
-
-        "rank": "normal",
-
-        "assertion_status": "validated",
-        "certainty_level": "medium",
-        "validated_as": "sourced_claim",
-
-        "scope": {
-          "domain": "wikidata",
-          "subdomain": "geographic-data",
-          "jurisdiction": null,
-          "time_window": null,
-          "tenant_id": "tenant_demo",
-          "environment": "demo",
-          "language": "en"
-        },
-
-        "authority_channel": "authority:wikidata-seed-demo",
-
-        "validation_refs": [
-          {
-            "ref": "validation/assertions/Q90-P17.validation-report.json"
-          }
-        ],
-
-        "authority_recognition_refs": [
-          {
-            "ref": "recognition/assertions/Q90-P17.authority-recognition.json"
-          }
-        ],
-
-        "qualifiers": [],
-
-        "references": [
-          {
-            "reference_id": "ref-0002",
-            "evidence_ids": [
-              "ev-0002"
-            ],
-            "snaks": [
-              {
-                "property_id": "P854",
-                "snaktype": "value",
-                "datatype": "url",
-                "datavalue": {
-                  "type": "string",
-                  "value": "https://example.org/notes/travel-briefing.txt"
-                }
-              }
-            ]
-          }
-        ],
-
-        "notes": [
-          {
-            "code": "source_low_authority",
-            "message": "Source has limited authority; assertion is accepted under the active validation policy as a sourced claim with medium certainty."
-          }
-        ]
-      }
-    ]
-  }
-]
-```
-
+"references": [
+{
+"label": "Demo Wikidata seed Structured Epistemic State",
+"uri": "file:states/demo-wikidata-seed.state.json",
+"description": "Source state used to compile this reference Exchange."
 },
-
+{
+"label": "Demo Wikidata seed validation report",
+"uri": "file:validation/demo-wikidata-seed-validation-report.json",
+"description": "Validation report used to recognize this Exchange for the declared scope."
+}
+],
 "signatures": [
 {
-"key_id": "kid-tenant_demo-2026-01",
+"key_id": "wikidata-seed-demo-ed25519-2026-01",
 "alg": "ed25519",
-"signature": "U0lHTkFUVVJFX0VYQU1QTEVfTk9UX1JFQUw",
-"created_at": "2026-01-07T16:10:05Z",
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-01-07T16:10:10Z",
 "signer": {
-"name": "Orgo Build Service",
-"org": "tenant_demo"
+"name": "Wikidata Seed Demo Publisher",
+"authority_channel": "authority:wikidata-seed-demo"
 }
 }
 ],
-
-"extensions": {}
+"extensions": {
+"example_purpose": "Demonstrates a Kristal v5 reference Exchange compiled from a Wikidata seed Structured Epistemic State.",
+"source_namespace": "wikidata",
+"source_mode": "full_statements",
+"assertion_status_summary": {
+"counts_by_assertion_status": {
+"validated": 3,
+"sourced": 1,
+"disputed": 0,
+"rejected": 0,
+"revoked": 0
+}
+},
+"query_contract": {
+"contract_id": "kristal-query-core@1",
+"supports_pagination": true,
+"supports_cardinality_estimates": false,
+"supported_filters": [
+"artifact_status",
+"assertion_status",
+"validation_status",
+"certainty_level",
+"validated_as",
+"authority_channel",
+"recognition_status",
+"scope.domain",
+"scope.subdomain",
+"reader_policy"
+],
+"supported_reader_modes": [
+"reference_only",
+"validated_only",
+"research",
+"all_with_labels"
+],
+"supported_ordering": [
+"SPO",
+"POS"
+]
+},
+"publisher": {
+"authority_channel_id": "authority:wikidata-seed-demo",
+"key_id": "wikidata-seed-demo-ed25519-2026-01",
+"name": "Wikidata Seed Demo Publisher"
+},
+"integrity": {
+"hash_alg": "sha256",
+"manifest_hash": {
+"alg": "sha256",
+"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+},
+"hash_target_policy": {
+"exclude_fields": [
+"manifest_id",
+"kristal_id",
+"content_hash",
+"extensions.integrity",
+"signatures"
+],
+"notes": "IDs, content hashes, integrity envelopes, and signatures are excluded from their own hash targets. This integrity envelope is stored under extensions because it is not a top-level field in exchange-manifest.schema.json."
+}
+},
+"notes": "This example preserves scoped validation, authority recognition, certainty summaries, reader policy references, deterministic build metadata, and implementation-specific query/runtime policy details under extensions."
+}
 }

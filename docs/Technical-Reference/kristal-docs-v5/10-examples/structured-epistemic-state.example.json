@@ -1,436 +1,1005 @@
-```json
 {
-  "schema_version": "5.0",
-  "artifact_type": "structured_epistemic_state",
-  "artifact_status": "working",
-  "state_id": "sha256:7a2f3df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
-  "created_at": "2026-01-07T15:20:00Z",
-
-  "tenant_id": "tenant_demo",
-  "build_id": "build-2026-01-07T152000Z-0001",
-
-  "scope": {
-    "domain": "wikidata",
-    "subdomain": "encyclopedia-core",
-    "jurisdiction": null,
-    "time_window": "2026-01-06/2026-01-07",
-    "tenant_id": "tenant_demo",
-    "environment": "demo",
-    "language": "en"
-  },
-
-  "created_by": {
-    "name": "SenTient",
-    "role": "resolver",
-    "version": "0.9.0"
-  },
-
-  "source_refs": [
-    {
-      "source_ref_id": "source:wikipedia-dump-en:2026-01-06",
-      "source_snapshot_id": "snap-2026-01-06-wikipedia-dump-en",
-      "source_type": "web_snapshot",
-      "label": "Wikipedia English dump snapshot",
-      "retrieved_at": "2026-01-06T09:12:43Z"
-    },
-    {
-      "source_ref_id": "source:travel-briefing:example",
-      "source_uri": "https://example.org/notes/travel-briefing.txt",
-      "source_type": "text_note",
-      "retrieved_at": "2026-01-06T10:00:00Z"
-    }
-  ],
-
-  "derived_from": [
-    {
-      "artifact_type": "claim_ir",
-      "role": "extractor_proposal_profile",
-      "claim_ir_id": "ci-2f5c2a9b-6c6d-4f9f-8caa-31c6a0b1b7d4",
-      "recipe_id": "recipe-demo-encyclopedia-core"
-    }
-  ],
-
-  "resolver": {
-    "name": "SenTient",
-    "version": "0.9.0",
-    "config_hash": {
-      "alg": "sha256",
-      "value": "7d3d5b7a2b6f4d6d2c3fbb65d36d7b6c3a2f8f7f8c9a0b1c2d3e4f5a6b7c8d9e"
-    },
-    "scoring_model": "funnel-v1",
-    "max_candidates": 5,
-    "preserve_ambiguity": true,
-    "min_confidence_accept": 0.92
-  },
-
-  "evidence": [
-    {
-      "evidence_id": "ev-0001",
-      "source_ref_id": "source:wikipedia-dump-en:2026-01-06",
-      "source_uri": "https://en.wikipedia.org/wiki/Douglas_Adams",
-      "retrieved_at": "2026-01-06T09:12:43Z",
-      "locator": {
-        "type": "html_xpath",
-        "value": "//*[@id='mw-content-text']"
-      },
-      "excerpt": "Douglas Noel Adams (11 March 1952 – 11 May 2001) was an English author...",
-      "excerpt_hash": {
-        "alg": "sha256",
-        "value": "0b6d7cf44a2e2a8f8356a0a40c6b2d9b4e9d0f7d4c1b2a3f9e8d7c6b5a4f3e2d"
-      }
-    },
-    {
-      "evidence_id": "ev-0002",
-      "source_ref_id": "source:travel-briefing:example",
-      "source_uri": "https://example.org/notes/travel-briefing.txt",
-      "retrieved_at": "2026-01-06T10:00:00Z",
-      "locator": {
-        "type": "line_range",
-        "value": "L10-L25"
-      },
-      "excerpt": "Paris is the capital of France. Paris has many museums.",
-      "excerpt_hash": {
-        "alg": "sha256",
-        "value": "c9f5a2a9f3b2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6"
-      }
-    }
-  ],
-
-  "assertions": [
-    {
-      "assertion_id": "sha256:0001df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
-      "legacy_claim_id": "clm-0001",
-
-      "assertion_status": "sourced",
-      "validation_status": "not_evaluated",
-      "validated_as": "sourced_claim",
-      "certainty_level": "high",
-      "needs_human_review": false,
-
-      "scope": {
-        "domain": "wikidata",
-        "subdomain": "biographical-data",
-        "jurisdiction": null,
-        "time_window": "2026-01-06/2026-01-07",
-        "tenant_id": "tenant_demo",
-        "environment": "demo",
-        "language": "en"
-      },
-
-      "statement": {
-        "subject": {
-          "kind": "entity",
-          "entity_id": "Q42",
-          "label": "Douglas Adams",
-          "surface": "Douglas Adams",
-          "language": "en"
-        },
-        "predicate": {
-          "kind": "property",
-          "property_id": "P569",
-          "label": "date of birth",
-          "surface": "date of birth",
-          "language": "en"
-        },
-        "object": {
-          "kind": "literal",
-          "datatype": "xsd:date",
-          "value": "1952-03-11",
-          "surface": "11 March 1952",
-          "language": "en"
-        }
-      },
-
-      "original_statement": {
-        "subject": {
-          "surface": "Douglas Adams",
-          "language": "en"
-        },
-        "predicate": {
-          "surface": "date of birth",
-          "language": "en"
-        },
-        "object": {
-          "surface": "11 March 1952",
-          "language": "en"
-        },
-        "extractor_confidence": 0.74
-      },
-
-      "resolution": {
-        "resolution_status": "resolved",
-        "subject": {
-          "chosen": {
-            "entity_id": "Q42",
-            "label": "Douglas Adams",
-            "match_type": "exact_alias",
-            "confidence": 0.997
-          },
-          "candidates": [
-            {
-              "entity_id": "Q42",
-              "label": "Douglas Adams",
-              "confidence": 0.997
-            },
-            {
-              "entity_id": "Q214338",
-              "label": "Douglas Adams (disambiguation)",
-              "confidence": 0.031
-            }
-          ]
-        },
-        "predicate": {
-          "chosen": {
-            "property_id": "P569",
-            "label": "date of birth",
-            "match_type": "label_match",
-            "confidence": 0.995
-          },
-          "candidates": [
-            {
-              "property_id": "P569",
-              "label": "date of birth",
-              "confidence": 0.995
-            },
-            {
-              "property_id": "P570",
-              "label": "date of death",
-              "confidence": 0.072
-            }
-          ]
-        },
-        "object": {
-          "kind": "literal",
-          "datatype": "xsd:date",
-          "normalized": "1952-03-11",
-          "confidence": 0.98,
-          "normalization": {
-            "steps": [
-              {
-                "op": "parse_date",
-                "input": "11 March 1952",
-                "output": "1952-03-11"
-              },
-              {
-                "op": "type_assign",
-                "datatype": "xsd:date"
-              }
-            ]
-          }
-        }
-      },
-
-      "provenance_refs": [
-        {
-          "evidence_id": "ev-0001",
-          "relation": "prov:wasDerivedFrom"
-        }
-      ],
-
-      "evidence_refs": [
-        "ev-0001"
-      ],
-
-      "authority_recognition_refs": [],
-      "validation_decision_refs": [],
-
-      "notes": [
-        {
-          "code": "RESOLUTION_USED_CONTEXT",
-          "message": "Used local context and evidence excerpt to disambiguate subject and property."
-        }
-      ]
-    },
-
-    {
-      "assertion_id": "sha256:0002df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
-      "legacy_claim_id": "clm-0002",
-
-      "assertion_status": "disputed",
-      "validation_status": "not_evaluated",
-      "validated_as": "claim",
-      "certainty_level": "low",
-      "needs_human_review": true,
-
-      "scope": {
-        "domain": "wikidata",
-        "subdomain": "geographic-or-cultural-entity-resolution",
-        "jurisdiction": null,
-        "time_window": "2026-01-06/2026-01-07",
-        "tenant_id": "tenant_demo",
-        "environment": "demo",
-        "language": "en"
-      },
-
-      "statement": {
-        "subject": {
-          "kind": "unresolved_entity",
-          "surface": "Paris",
-          "language": "en"
-        },
-        "predicate": {
-          "kind": "property",
-          "property_id": "P17",
-          "label": "country",
-          "surface": "country",
-          "language": "en"
-        },
-        "object": {
-          "kind": "entity",
-          "entity_id": "Q142",
-          "label": "France",
-          "surface": "France",
-          "language": "en"
-        }
-      },
-
-      "original_statement": {
-        "subject": {
-          "surface": "Paris",
-          "language": "en"
-        },
-        "predicate": {
-          "surface": "country",
-          "language": "en"
-        },
-        "object": {
-          "surface": "France",
-          "language": "en"
-        },
-        "extractor_confidence": 0.62
-      },
-
-      "resolution": {
-        "resolution_status": "ambiguous",
-        "subject": {
-          "chosen": null,
-          "candidates": [
-            {
-              "entity_id": "Q90",
-              "label": "Paris",
-              "confidence": 0.881
-            },
-            {
-              "entity_id": "Q207511",
-              "label": "Paris (mythology)",
-              "confidence": 0.211
-            },
-            {
-              "entity_id": "Q191",
-              "label": "Paris, Texas",
-              "confidence": 0.144
-            }
-          ],
-          "unresolved": {
-            "reason": "SUBJECT_AMBIGUOUS",
-            "message": "Multiple plausible entity matches for 'Paris' given limited context; preserving ambiguity."
-          }
-        },
-        "predicate": {
-          "chosen": {
-            "property_id": "P17",
-            "label": "country",
-            "match_type": "label_match",
-            "confidence": 0.991
-          },
-          "candidates": [
-            {
-              "property_id": "P17",
-              "label": "country",
-              "confidence": 0.991
-            }
-          ]
-        },
-        "object": {
-          "kind": "entity",
-          "chosen": {
-            "entity_id": "Q142",
-            "label": "France",
-            "match_type": "exact_alias",
-            "confidence": 0.996
-          },
-          "candidates": [
-            {
-              "entity_id": "Q142",
-              "label": "France",
-              "confidence": 0.996
-            }
-          ]
-        }
-      },
-
-      "provenance_refs": [
-        {
-          "evidence_id": "ev-0002",
-          "relation": "prov:wasDerivedFrom"
-        }
-      ],
-
-      "evidence_refs": [
-        "ev-0002"
-      ],
-
-      "authority_recognition_refs": [],
-      "validation_decision_refs": [],
-
-      "issues": [
-        {
-          "severity": "warning",
-          "code": "SUBJECT_AMBIGUOUS",
-          "message": "Subject entity could not be uniquely resolved; compilation may proceed if policy allows unresolved subjects.",
-          "location": {
-            "assertion_id": "sha256:0002df03e9b4e639fd32f8b9a7d5d5c5f6a7b8c9d0e1f2031425364758697a8",
-            "legacy_claim_id": "clm-0002",
-            "evidence_id": "ev-0002"
-          }
-        }
-      ]
-    }
-  ],
-
-  "certainty_summary": {
-    "unknown": 0,
-    "speculative": 0,
-    "low": 1,
-    "medium": 0,
-    "high": 1,
-    "established": 0,
-    "not_applicable": 0
-  },
-
-  "validation_summary": {
-    "not_evaluated": 2,
-    "in_review": 0,
-    "validated": 0,
-    "conditionally_validated": 0,
-    "disputed": 0,
-    "rejected": 0,
-    "revoked": 0
-  },
-
-  "resolution_summary": {
-    "resolved_count": 1,
-    "ambiguous_count": 1,
-    "unresolved_count": 0,
-    "error_count": 0,
-    "warning_count": 1
-  },
-
-  "review_refs": [],
-  "policy_refs": [
-    {
-      "policy_id": "kristal.v5:resolution-policy:preserve-ambiguity",
-      "policy_version": "1",
-      "description": "Ambiguous entity resolution is preserved as structured state rather than being discarded."
-    }
-  ],
-
-  "extensions": {
-    "legacy_resolved_claim_ir": {
-      "artifact_type": "resolved-claim-ir",
-      "artifact_id": "rci-7a2f3df0-3e9b-4e63-9fd3-2f8b9a7d5d5c",
-      "schema_version": "3.0"
-    }
-  }
+"schema_version": "5.0",
+"artifact_type": "structured_epistemic_state",
+"state_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"artifact_status": "working",
+"created_at": "2026-06-12T16:40:00Z",
+"updated_at": "2026-06-12T16:40:00Z",
+"created_by": {
+"agent_id": "agent:kristal-example-compiler",
+"name": "Kristal Example Compiler",
+"agent_type": "system"
+},
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"content_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+},
+"hash_target_policy": {
+"exclude_fields": [
+"state_id",
+"content_hash",
+"signatures"
+],
+"notes": "The content_hash is computed over the deterministic canonical serialization of the unsigned Structured Epistemic State, excluding state_id, content_hash, and signatures."
+},
+"scope": {
+"domain": "research",
+"subdomain": "example-knowledge-state",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"source_refs": [
+{
+"source_id": "source:example-research-note-001",
+"source_type": "human_submission",
+"title": "Example research note on urban tree canopy",
+"publisher": "Example Research Collective",
+"retrieved_at": "2026-06-12T16:20:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "3333333333333333333333333333333333333333333333333333333333333333"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
 }
-```
+},
+{
+"source_id": "source:example-city-open-data-2026",
+"source_type": "dataset",
+"title": "Example City Open Data — Tree Canopy Survey 2026",
+"publisher": "Example City Open Data Office",
+"retrieved_at": "2026-06-12T16:22:00Z",
+"license": "example-only",
+"content_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+}
+],
+"derived_from": [],
+"merged_from": [],
+"supersedes": [],
+"assertions": [
+{
+"assertion_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+"source_assertion_id": "research-note-hypothesis-001",
+"statement": {
+"subject": {
+"label": "Increasing urban tree canopy",
+"description": "A proposed intervention to increase tree cover in urban neighborhoods",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+},
+"predicate": {
+"label": "may reduce",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+},
+"object": {
+"kind": "string",
+"value": "summer surface temperature in selected neighborhoods"
+},
+"qualifiers": [
+{
+"predicate": {
+"label": "epistemic mode",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "research hypothesis"
+},
+"scope": {
+"domain": "research",
+"subdomain": "urban-climate",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"notes": "This assertion is explicitly represented as a hypothesis, not as an established fact."
+}
+],
+"rank": "normal",
+"statement_hash": {
+"alg": "sha256",
+"value": "5555555555555555555555555555555555555555555555555555555555555555"
+}
+},
+"natural_language_statement": {
+"text": "Increasing urban tree canopy may reduce summer surface temperature in selected neighborhoods.",
+"lang": "en"
+},
+"assertion_status": "hypothesis",
+"certainty_level": "speculative",
+"validated_as": "hypothesis",
+"scope": {
+"domain": "research",
+"subdomain": "urban-climate",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:research-note-hypothesis-001",
+"source_ref": {
+"source_id": "source:example-research-note-001",
+"source_type": "human_submission",
+"title": "Example research note on urban tree canopy",
+"publisher": "Example Research Collective",
+"content_hash": {
+"alg": "sha256",
+"value": "3333333333333333333333333333333333333333333333333333333333333333"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+},
+"quote": "The collective proposes that canopy expansion may reduce measured surface temperature during summer heat events.",
+"section": "Hypothesis",
+"evidence_status": "provided",
+"content_hash": {
+"alg": "sha256",
+"value": "6666666666666666666666666666666666666666666666666666666666666666"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+"artifact_type": "human_submission",
+"content_hash": {
+"alg": "sha256",
+"value": "8888888888888888888888888888888888888888888888888888888888888888"
+},
+"created_at": "2026-06-12T16:10:00Z"
+}
+],
+"authority_recognition_refs": [],
+"validation": {
+"validation_status": "validated",
+"validated_as": "hypothesis",
+"certainty_level": "speculative",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:research-hypothesis-registration",
+"policy_version": "1"
+},
+"scope": {
+"domain": "research",
+"subdomain": "urban-climate",
+"jurisdiction": null,
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"reason_codes": [
+"policy_satisfied",
+"provenance_sufficient"
+],
+"validation_refs": [],
+"notes": "Validated only as a registered research hypothesis. This does not imply the claim is established."
+},
+"uncertainty": {
+"confidence": 0.35,
+"method": "example confidence assigned by research collective",
+"notes": "Speculative claim requiring further evidence."
+},
+"lineage": {
+"source_assertions": [],
+"source_artifacts": [
+{
+"artifact_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+"artifact_type": "human_submission",
+"content_hash": {
+"alg": "sha256",
+"value": "8888888888888888888888888888888888888888888888888888888888888888"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:example-hypothesis-registration-001",
+"transform_type": "manual_edit",
+"tool": "example-editor",
+"policy_ref": {
+"policy_id": "kristal.v5:validation-policy:research-hypothesis-registration",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:30:00Z",
+"notes": "Human-authored hypothesis represented as a Structured Epistemic State assertion."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion is valid as a hypothesis and should not be rendered as an established factual claim."
+},
+{
+"assertion_id": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+"source_assertion_id": "city-open-data-claim-001",
+"statement": {
+"subject": {
+"label": "Example City central district",
+"description": "A district in the example city dataset",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+"predicate": {
+"label": "has measured tree canopy coverage",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+"object": {
+"kind": "quantity",
+"value": {
+"amount": 18.4,
+"unit_label": "percent"
+},
+"normalized": {
+"value": 0.184,
+"precision": "0.001",
+"notes": "Percent converted to decimal fraction for normalized query use."
+}
+},
+"qualifiers": [
+{
+"predicate": {
+"label": "survey year",
+"language": "en"
+},
+"object": {
+"kind": "time",
+"value": {
+"iso8601": "2026",
+"precision": "year",
+"calendar": "gregorian"
+}
+},
+"scope": {
+"domain": "environment",
+"subdomain": "urban-tree-canopy",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+}
+}
+],
+"rank": "preferred",
+"statement_hash": {
+"alg": "sha256",
+"value": "9999999999999999999999999999999999999999999999999999999999999999"
+}
+},
+"natural_language_statement": {
+"text": "Example City central district has measured tree canopy coverage of 18.4% in the 2026 survey.",
+"lang": "en"
+},
+"assertion_status": "sourced",
+"certainty_level": "medium",
+"validated_as": "sourced_claim",
+"scope": {
+"domain": "environment",
+"subdomain": "urban-tree-canopy",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:city-open-data-tree-canopy-001",
+"source_ref": {
+"source_id": "source:example-city-open-data-2026",
+"source_type": "dataset",
+"title": "Example City Open Data — Tree Canopy Survey 2026",
+"publisher": "Example City Open Data Office",
+"content_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+"section": "district_canopy_coverage.csv row district=central",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "abababababababababababababababababababababababababababababababab"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "dededededededededededededededededededededededededededededededede"
+},
+"created_at": "2026-06-12T16:22:00Z"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+},
+"scope": {
+"domain": "environment",
+"subdomain": "urban-tree-canopy",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:publisher-declared-dataset",
+"policy_version": "1"
+}
+}
+],
+"validation": {
+"validation_status": "validated",
+"validated_as": "publisher_declaration",
+"certainty_level": "medium",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:publisher-declared-dataset",
+"policy_version": "1"
+},
+"scope": {
+"domain": "environment",
+"subdomain": "urban-tree-canopy",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"reason_codes": [
+"authority_recognized",
+"evidence_sufficient",
+"policy_satisfied"
+],
+"validation_refs": [],
+"notes": "Validated as the publisher's declared dataset value, not as an independently audited scientific result."
+},
+"uncertainty": {
+"confidence": 0.8,
+"method": "publisher dataset confidence example",
+"notes": "Medium confidence due to reliance on publisher-declared dataset without independent audit."
+},
+"lineage": {
+"source_assertions": [],
+"source_artifacts": [
+{
+"artifact_id": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "dededededededededededededededededededededededededededededededede"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:city-open-data-import-001",
+"transform_type": "import",
+"tool": "example-dataset-importer",
+"policy_ref": {
+"policy_id": "kristal.v5:validation-policy:publisher-declared-dataset",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:31:00Z",
+"notes": "Dataset row imported into Structured Epistemic State."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion is validated as a publisher declaration and can be used by reader policies that allow this authority channel."
+},
+{
+"assertion_id": "sha256:fafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafa",
+"source_assertion_id": "reviewed-claim-001",
+"statement": {
+"subject": {
+"label": "Example City tree canopy dataset",
+"description": "The 2026 example city tree canopy survey dataset",
+"language": "en",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+"predicate": {
+"label": "is usable for",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "preliminary neighborhood-level planning analysis"
+},
+"qualifiers": [
+{
+"predicate": {
+"label": "review status",
+"language": "en"
+},
+"object": {
+"kind": "string",
+"value": "reviewed by example research collective"
+},
+"scope": {
+"domain": "research",
+"subdomain": "urban-planning",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+}
+}
+],
+"rank": "normal",
+"statement_hash": {
+"alg": "sha256",
+"value": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc"
+}
+},
+"natural_language_statement": {
+"text": "The Example City tree canopy dataset is usable for preliminary neighborhood-level planning analysis.",
+"lang": "en"
+},
+"assertion_status": "validated",
+"certainty_level": "high",
+"validated_as": "reviewed_claim",
+"scope": {
+"domain": "research",
+"subdomain": "urban-planning",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"evidence_refs": [
+{
+"evidence_id": "evidence:reviewed-claim-001",
+"source_ref": {
+"source_id": "source:example-city-open-data-2026",
+"source_type": "dataset",
+"title": "Example City Open Data — Tree Canopy Survey 2026",
+"publisher": "Example City Open Data Office",
+"content_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+"section": "dataset documentation and review checklist",
+"evidence_status": "sufficient",
+"content_hash": {
+"alg": "sha256",
+"value": "cfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcfcf"
+}
+}
+],
+"provenance_refs": [
+{
+"artifact_id": "sha256:edededededededededededededededededededededededededededededededed",
+"artifact_type": "review_bundle",
+"content_hash": {
+"alg": "sha256",
+"value": "1212121212121212121212121212121212121212121212121212121212121212"
+},
+"created_at": "2026-06-12T16:35:00Z"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:3434343434343434343434343434343434343434343434343434343434343434",
+"recognition_status": "recognized",
+"recognized_as": "reviewed_claim",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+},
+"scope": {
+"domain": "research",
+"subdomain": "urban-planning",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:research-dataset-review",
+"policy_version": "1"
+}
+}
+],
+"validation": {
+"validation_status": "validated",
+"validated_as": "reviewed_claim",
+"certainty_level": "high",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:research-dataset-review",
+"policy_version": "1"
+},
+"scope": {
+"domain": "research",
+"subdomain": "urban-planning",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"reason_codes": [
+"authority_recognized",
+"evidence_sufficient",
+"policy_satisfied"
+],
+"validation_refs": [
+{
+"artifact_id": "sha256:edededededededededededededededededededededededededededededededed",
+"artifact_type": "review_bundle",
+"content_hash": {
+"alg": "sha256",
+"value": "1212121212121212121212121212121212121212121212121212121212121212"
+}
+}
+],
+"notes": "Validated as a reviewed claim for preliminary planning analysis."
+},
+"uncertainty": {
+"confidence": 0.9,
+"method": "example review process",
+"notes": "High confidence within the declared planning-analysis scope."
+},
+"lineage": {
+"source_assertions": [
+"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+],
+"source_artifacts": [
+{
+"artifact_id": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "dededededededededededededededededededededededededededededededede"
+}
+}
+],
+"transforms": [
+{
+"transform_id": "transform:research-review-001",
+"transform_type": "review",
+"tool": "example-review-workflow",
+"policy_ref": {
+"policy_id": "kristal.v5:validation-policy:research-dataset-review",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:35:00Z",
+"notes": "Review concluded that the dataset is usable for preliminary planning analysis."
+}
+]
+},
+"conflicts_with": [],
+"supersedes": [],
+"notes": "This assertion demonstrates a validated reviewed claim with a high certainty level within a narrow scope."
+}
+],
+"provenance": [
+{
+"provenance_id": "prov:example-state-created-001",
+"event_type": "created",
+"created_at": "2026-06-12T16:40:00Z",
+"agent": {
+"agent_id": "agent:kristal-example-compiler",
+"name": "Kristal Example Compiler",
+"agent_type": "system"
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:state-policy:example-structured-epistemic-state",
+"policy_version": "1"
+}
+],
+"notes": "Created as a compact example of the Structured Epistemic State schema."
+},
+{
+"provenance_id": "prov:research-note-imported-001",
+"event_type": "imported",
+"created_at": "2026-06-12T16:30:00Z",
+"agent": {
+"agent_id": "agent:example-research-importer",
+"name": "Example Research Importer",
+"agent_type": "system"
+},
+"source_ref": {
+"source_id": "source:example-research-note-001",
+"source_type": "human_submission",
+"title": "Example research note on urban tree canopy",
+"publisher": "Example Research Collective",
+"content_hash": {
+"alg": "sha256",
+"value": "3333333333333333333333333333333333333333333333333333333333333333"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:validation-policy:research-hypothesis-registration",
+"policy_version": "1"
+}
+],
+"notes": "Imported the example research hypothesis."
+},
+{
+"provenance_id": "prov:city-dataset-imported-001",
+"event_type": "imported",
+"created_at": "2026-06-12T16:31:00Z",
+"agent": {
+"agent_id": "agent:example-dataset-importer",
+"name": "Example Dataset Importer",
+"agent_type": "system"
+},
+"source_ref": {
+"source_id": "source:example-city-open-data-2026",
+"source_type": "dataset",
+"title": "Example City Open Data — Tree Canopy Survey 2026",
+"publisher": "Example City Open Data Office",
+"content_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:validation-policy:publisher-declared-dataset",
+"policy_version": "1"
+}
+],
+"notes": "Imported one publisher-declared dataset value."
+},
+{
+"provenance_id": "prov:research-review-completed-001",
+"event_type": "reviewed",
+"created_at": "2026-06-12T16:35:00Z",
+"agent": {
+"agent_id": "agent:example-research-collective-reviewer",
+"name": "Example Research Collective Reviewer",
+"agent_type": "research_collective",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+},
+"artifact_ref": {
+"artifact_id": "sha256:edededededededededededededededededededededededededededededededed",
+"artifact_type": "review_bundle",
+"content_hash": {
+"alg": "sha256",
+"value": "1212121212121212121212121212121212121212121212121212121212121212"
+},
+"created_at": "2026-06-12T16:35:00Z"
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:validation-policy:research-dataset-review",
+"policy_version": "1"
+}
+],
+"notes": "Recorded the example review event."
+}
+],
+"review_refs": [
+{
+"artifact_id": "sha256:edededededededededededededededededededededededededededededededed",
+"artifact_type": "review_bundle",
+"content_hash": {
+"alg": "sha256",
+"value": "1212121212121212121212121212121212121212121212121212121212121212"
+},
+"created_at": "2026-06-12T16:35:00Z"
+}
+],
+"policy_refs": [
+{
+"policy_id": "kristal.v5:state-policy:example-structured-epistemic-state",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:validation-policy:research-hypothesis-registration",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:validation-policy:publisher-declared-dataset",
+"policy_version": "1"
+},
+{
+"policy_id": "kristal.v5:validation-policy:research-dataset-review",
+"policy_version": "1"
+}
+],
+"authority_recognition_refs": [
+{
+"recognition_id": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+},
+"scope": {
+"domain": "environment",
+"subdomain": "urban-tree-canopy",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:publisher-declared-dataset",
+"policy_version": "1"
+}
+},
+{
+"recognition_id": "sha256:3434343434343434343434343434343434343434343434343434343434343434",
+"recognition_status": "recognized",
+"recognized_as": "reviewed_claim",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+},
+"scope": {
+"domain": "research",
+"subdomain": "urban-planning",
+"jurisdiction": "Example City",
+"time_window": "2026",
+"tenant_id": null,
+"environment": "example",
+"language": "en"
+},
+"validation_policy_ref": {
+"policy_id": "kristal.v5:validation-policy:research-dataset-review",
+"policy_version": "1"
+}
+}
+],
+"reader_policy_refs": [
+{
+"reader_policy_id": "reader_policy:research",
+"mode": "research"
+},
+{
+"reader_policy_id": "reader_policy:validated-only-selected-authorities",
+"mode": "validated_only"
+},
+{
+"reader_policy_id": "reader_policy:all-with-labels",
+"mode": "all_with_labels"
+}
+],
+"certainty_summary": {
+"counts_by_certainty_level": {
+"speculative": 1,
+"medium": 1,
+"high": 1
+},
+"counts_by_assertion_status": {
+"hypothesis": 1,
+"sourced": 1,
+"validated": 1
+},
+"counts_by_validated_as": {
+"hypothesis": 1,
+"publisher_declaration": 1,
+"reviewed_claim": 1
+},
+"notes": "This example intentionally includes multiple certainty levels to demonstrate that validation and certainty are separate concepts."
+},
+"validation_summary": {
+"validation_status": "validated",
+"recognition_status": "recognized",
+"authority_channels": [
+{
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+},
+{
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+],
+"validation_refs": [
+{
+"artifact_id": "sha256:edededededededededededededededededededededededededededededededed",
+"artifact_type": "review_bundle",
+"content_hash": {
+"alg": "sha256",
+"value": "1212121212121212121212121212121212121212121212121212121212121212"
+}
+}
+],
+"recognition_refs": [
+{
+"recognition_id": "sha256:efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+"recognition_status": "recognized",
+"recognized_as": "institutional_reference",
+"authority_channel": {
+"authority_channel_id": "authority:example-city-open-data-office",
+"name": "Example City Open Data Office"
+}
+},
+{
+"recognition_id": "sha256:3434343434343434343434343434343434343434343434343434343434343434",
+"recognition_status": "recognized",
+"recognized_as": "reviewed_claim",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+}
+],
+"reason_codes": [
+"policy_satisfied",
+"provenance_sufficient",
+"evidence_sufficient"
+],
+"notes": "The state contains a validated hypothesis, a validated publisher declaration, and a validated reviewed claim. They do not carry the same certainty level."
+},
+"lineage": {
+"source_artifacts": [
+{
+"artifact_id": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+"artifact_type": "human_submission",
+"content_hash": {
+"alg": "sha256",
+"value": "8888888888888888888888888888888888888888888888888888888888888888"
+},
+"created_at": "2026-06-12T16:10:00Z"
+},
+{
+"artifact_id": "sha256:cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+"artifact_type": "dataset",
+"content_hash": {
+"alg": "sha256",
+"value": "dededededededededededededededededededededededededededededededede"
+},
+"created_at": "2026-06-12T16:22:00Z"
+}
+],
+"source_states": [],
+"transforms": [
+{
+"transform_id": "transform:structured-state-assembly-001",
+"transform_type": "merge",
+"tool": "example-state-assembler",
+"policy_ref": {
+"policy_id": "kristal.v5:state-policy:example-structured-epistemic-state",
+"policy_version": "1"
+},
+"created_at": "2026-06-12T16:40:00Z",
+"notes": "Merged a research hypothesis, a publisher-declared dataset value, and a reviewed planning assertion into one Structured Epistemic State."
+}
+],
+"compiler": {
+"agent_id": "agent:kristal-example-compiler",
+"name": "Kristal Example Compiler",
+"agent_type": "system"
+},
+"policy_refs": [
+{
+"policy_id": "kristal.v5:state-policy:example-structured-epistemic-state",
+"policy_version": "1"
+}
+]
+},
+"build": {
+"build_id": "build:20260612T164000Z:structured-epistemic-state-example",
+"schema_version": "5.0",
+"compile_status": "succeeded",
+"validation_status": "validated",
+"review_status": "completed",
+"recognition_status": "recognized",
+"publication_status": "not_published",
+"activation_status": "not_applicable",
+"working_outputs": [],
+"reference_outputs": [],
+"reason_codes": [
+"schema_valid",
+"provenance_sufficient",
+"evidence_sufficient",
+"policy_satisfied"
+],
+"created_at": "2026-06-12T16:40:00Z"
+},
+"warnings": [
+{
+"code": "LOW_CERTAINTY",
+"message": "One assertion is validated only as a speculative research hypothesis.",
+"path": "/assertions/0",
+"reason_code": "certainty_too_low_for_policy"
+}
+],
+"extensions": {
+"example_purpose": "Demonstrates that Structured Epistemic State can contain assertions with different statuses, certainty levels, validation scopes, and authority channels."
+},
+"signatures": [
+{
+"key_id": "example_research_collective_ed25519_v1",
+"alg": "ed25519",
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-06-12T16:40:10Z",
+"authority_channel": {
+"authority_channel_id": "authority:example-research-collective",
+"name": "Example Research Collective"
+}
+}
+]
+}

@@ -1,143 +1,490 @@
 {
-  "schema_version": "5.0",
-  "artifact_type": "exchange_federation_manifest",
-  "created_at": "2026-02-26T17:55:07Z",
-  "federation_id": "sha256:9f3c0b9a6b2b0bb6d4ed5a7b0f8d0f9e2d8f1c3b4a5e6f7a8b9c0d1e2f3a4b5c",
-  "canonicalization_profile": "kristal.v5:jcs-rfc8785",
-  "canonicalization_version": "1",
-  "content_hash": {
-    "alg": "sha256",
-    "value": "3a7b1f0e9c2d4a6b8e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d"
-  },
-  "authority_registry_ref": {
-    "registry_id": "sha256:0d8c7b6a5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b",
-    "ref": "authority/authority-registry.json",
-    "content_hash": {
-      "alg": "sha256",
-      "value": "b10a8db164e0754105b7a99be72e3fe5a1b3c2d4e5f60718293a4b5c6d7e8f90"
-    }
-  },
-  "shards": [
-    {
-      "shard_id": "sha256:1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
-      "scope": {
-        "domain": "heritage",
-        "subdomain": "unesco",
-        "time_window": "2026-01",
-        "jurisdiction": null,
-        "tenant_id": null,
-        "environment": null,
-        "language": null
-      },
-      "shard_manifest_ref": "shards/heritage-unesco-2026-01/exchange-shard-manifest.json",
-      "shard_manifest_hash": {
-        "alg": "sha256",
-        "value": "6f1d7a3c2b9e0f4a5c6d7e8f9a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3"
-      },
-      "artifact_status": "reference",
-      "authority_channel_refs": [
-        {
-          "ref": "authority:unesco",
-          "kind": "authority_channel"
-        }
-      ],
-      "recognition_status": "recognized"
-    },
-    {
-      "shard_id": "sha256:abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
-      "scope": {
-        "domain": "local_notes",
-        "subdomain": "local",
-        "time_window": "2026-01",
-        "jurisdiction": null,
-        "tenant_id": null,
-        "environment": null,
-        "language": null
-      },
-      "shard_manifest_ref": "shards/notes-local-2026-01/exchange-shard-manifest.json",
-      "shard_manifest_hash": {
-        "alg": "sha256",
-        "value": "c3b2a1908f7e6d5c4b5a4938271605f4e3d2c1b0a9f8e7d6c5b4a3928171605f"
-      },
-      "artifact_status": "working",
-      "authority_channel_refs": [
-        {
-          "ref": "authority:curator",
-          "kind": "authority_channel"
-        }
-      ],
-      "recognition_status": "under_review"
-    }
-  ],
-  "composition_policy": {
-    "policy_id": "kristal.v5:composition-policy:default-federation",
-    "policy_version": "1",
-    "overlap_strategy": "authority_precedence",
-    "conflict_strategy": "preserve_disagreement",
-    "default_visibility": "reader_policy",
-    "ordering": {
-      "primary": "scope.domain_asc",
-      "secondary": "authority_precedence",
-      "tertiary": "shard_id_asc"
-    },
-    "authority_precedence": [
-      "recognized",
-      "conditionally_recognized",
-      "under_review"
-    ],
-    "parameters": {
-      "tie_breaker": "shard_id_asc",
-      "preserve_conflicting_claims": true,
-      "preserve_source_identities": true
-    }
-  },
-  "reader_policy_refs": [
-    {
-      "ref": "reader_policy:reference_only",
-      "kind": "policy"
-    },
-    {
-      "ref": "reader_policy:all_with_labels",
-      "kind": "policy"
-    }
-  ],
-  "trust_requirements": [
-    {
-      "scope": {
-        "domain": "heritage"
-      },
-      "required_recognition_status": [
-        "recognized"
-      ],
-      "required_authority_channels": [
-        "authority:unesco"
-      ]
-    },
-    {
-      "scope": {
-        "domain": "local_notes"
-      },
-      "required_recognition_status": [
-        "recognized",
-        "conditionally_recognized",
-        "under_review"
-      ],
-      "required_authority_channels": [
-        "authority:curator"
-      ]
-    }
-  ],
-  "publisher": {
-    "authority_channel": "authority:curator",
-    "key_id": "curator-ed25519-2026-01"
-  },
-  "signatures": [
-    {
-      "key_id": "curator-ed25519-2026-01",
-      "alg": "ed25519",
-      "signature": "mS7m9WmYvC8h3mZp3tG0Gf9G5a2lqkFf2m2cYw9qj3bR2cQkQq1y5w",
-      "created_at": "2026-02-26T17:55:07Z"
-    }
-  ],
-  "extensions": {}
+"schema_version": "5.0",
+"artifact_type": "exchange_federation_manifest",
+"manifest_id": "sha256:0f4a2c8e9b1d3f5a6c7e8d9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2de",
+"created_at": "2026-03-01T12:00:00Z",
+"federation_id": "sha256:0f4a2c8e9b1d3f5a6c7e8d9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2de",
+"canonicalization_profile": "kristal.v5:jcs-rfc8785",
+"canonicalization_version": "1",
+"content_hash": {
+"alg": "sha256",
+"value": "0f4a2c8e9b1d3f5a6c7e8d9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2de"
+},
+"authority_registry_ref": {
+"registry_id": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+"ref": "authority/authority-registry.json",
+"content_hash": {
+"alg": "sha256",
+"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+},
+"signatures": [
+{
+"sig_id": "sig:authority-registry-example-0001",
+"key_id": "kristal-reference-ops-ed25519-2026-03",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+},
+"signature": "ZHVtbXktYXV0aG9yaXR5LXJlZ2lzdHJ5LXNpZ25hdHVyZQ",
+"created_at": "2026-03-01T12:00:00Z",
+"purpose": "authority"
+}
+]
+},
+"shards": [
+{
+"shard_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"scope": {
+"domain": "education",
+"subdomain": "science-reference",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": "tenant_demo",
+"environment": "dev",
+"language": "en"
+},
+"artifact_status": "reference",
+"shard_manifest_ref": "shards/science-earth-shape-reference/exchange-shard-manifest.json",
+"shard_manifest_hash": {
+"alg": "sha256",
+"value": "1111111111111111111111111111111111111111111111111111111111111111"
+},
+"authority_channel_refs": [
+"authority:unesco-science-education"
+],
+"authority_recognition_refs": [
+{
+"artifact_type": "authority_recognition",
+"id": "sha256:1313131313131313131313131313131313131313131313131313131313131313",
+"ref": "authority-recognitions/unesco-science-earth-shape-reference.json",
+"content_hash": {
+"alg": "sha256",
+"value": "1313131313131313131313131313131313131313131313131313131313131313"
+}
+}
+],
+"validation_refs": [
+{
+"artifact_type": "validation_report",
+"id": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+"ref": "validation-reports/science-earth-shape-reference-validation.json",
+"content_hash": {
+"alg": "sha256",
+"value": "1212121212121212121212121212121212121212121212121212121212121212"
+}
+}
+],
+"extensions": {
+"validation_status": "validated",
+"recognition_status": "recognized",
+"certainty_level": "established",
+"validated_as": "high_confidence_fact"
+}
+},
+{
+"shard_id": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+"scope": {
+"domain": "wikidata",
+"subdomain": "seed-reference",
+"jurisdiction": null,
+"time_window": "2026-03-01",
+"tenant_id": "tenant_demo",
+"environment": "dev",
+"language": "en"
+},
+"artifact_status": "reference",
+"shard_manifest_ref": "shards/wikidata-seed-earth-shape/exchange-shard-manifest.json",
+"shard_manifest_hash": {
+"alg": "sha256",
+"value": "2222222222222222222222222222222222222222222222222222222222222222"
+},
+"authority_channel_refs": [
+"authority:wikidata-seed"
+],
+"authority_recognition_refs": [
+{
+"artifact_type": "authority_recognition",
+"id": "sha256:2424242424242424242424242424242424242424242424242424242424242424",
+"ref": "authority-recognitions/wikidata-seed-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "2424242424242424242424242424242424242424242424242424242424242424"
+}
+}
+],
+"validation_refs": [
+{
+"artifact_type": "validation_report",
+"id": "sha256:2323232323232323232323232323232323232323232323232323232323232323",
+"ref": "validation-reports/wikidata-seed-packaging-validation.json",
+"content_hash": {
+"alg": "sha256",
+"value": "2323232323232323232323232323232323232323232323232323232323232323"
+}
+}
+],
+"extensions": {
+"validation_status": "validated",
+"recognition_status": "recognized",
+"certainty_profile": "mixed",
+"validated_as": "institutional_reference"
+}
+},
+{
+"shard_id": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+"scope": {
+"domain": "research",
+"subdomain": "earth-observation-notes",
+"jurisdiction": null,
+"time_window": "2025-01-01/2026-03-01",
+"tenant_id": "tenant_demo",
+"environment": "dev",
+"language": "en"
+},
+"artifact_status": "under_review",
+"shard_manifest_ref": "shards/independent-research-earth-observation-notes/exchange-shard-manifest.json",
+"shard_manifest_hash": {
+"alg": "sha256",
+"value": "3333333333333333333333333333333333333333333333333333333333333333"
+},
+"authority_channel_refs": [
+"authority:independent-research-collective"
+],
+"authority_recognition_refs": [],
+"validation_refs": [],
+"extensions": {
+"validation_status": "in_review",
+"recognition_status": "under_review",
+"certainty_level": "medium",
+"validated_as": "reviewed_claim"
+}
+},
+{
+"shard_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+"scope": {
+"domain": "local_notes",
+"subdomain": "divergent-earth-shape-claims",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": "tenant_demo",
+"environment": "dev",
+"language": "en"
+},
+"artifact_status": "working",
+"shard_manifest_ref": "shards/local-community-divergent-earth-shape-claims/exchange-shard-manifest.json",
+"shard_manifest_hash": {
+"alg": "sha256",
+"value": "4444444444444444444444444444444444444444444444444444444444444444"
+},
+"authority_channel_refs": [
+"authority:local-community-archive"
+],
+"authority_recognition_refs": [
+{
+"artifact_type": "authority_recognition",
+"id": "sha256:4646464646464646464646464646464646464646464646464646464646464646",
+"ref": "authority-recognitions/local-community-divergent-position-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "4646464646464646464646464646464646464646464646464646464646464646"
+}
+}
+],
+"validation_refs": [
+{
+"artifact_type": "validation_report",
+"id": "sha256:4545454545454545454545454545454545454545454545454545454545454545",
+"ref": "validation-reports/local-community-divergent-position-validation.json",
+"content_hash": {
+"alg": "sha256",
+"value": "4545454545454545454545454545454545454545454545454545454545454545"
+}
+}
+],
+"extensions": {
+"validation_status": "validated",
+"recognition_status": "recognized",
+"certainty_level": "low",
+"validated_as": "disputed_position"
+}
+},
+{
+"shard_id": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+"scope": {
+"domain": "mythology",
+"subdomain": "cosmology-symbolic-systems",
+"jurisdiction": null,
+"time_window": null,
+"tenant_id": "tenant_demo",
+"environment": "dev",
+"language": "en"
+},
+"artifact_status": "reference",
+"shard_manifest_ref": "shards/mythological-cosmology-corpus/exchange-shard-manifest.json",
+"shard_manifest_hash": {
+"alg": "sha256",
+"value": "5555555555555555555555555555555555555555555555555555555555555555"
+},
+"authority_channel_refs": [
+"authority:cultural-heritage-archive"
+],
+"authority_recognition_refs": [
+{
+"artifact_type": "authority_recognition",
+"id": "sha256:5757575757575757575757575757575757575757575757575757575757575757",
+"ref": "authority-recognitions/cultural-heritage-mythology-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "5757575757575757575757575757575757575757575757575757575757575757"
+}
+}
+],
+"validation_refs": [
+{
+"artifact_type": "validation_report",
+"id": "sha256:5656565656565656565656565656565656565656565656565656565656565656",
+"ref": "validation-reports/mythological-cosmology-corpus-validation.json",
+"content_hash": {
+"alg": "sha256",
+"value": "5656565656565656565656565656565656565656565656565656565656565656"
+}
+}
+],
+"extensions": {
+"validation_status": "validated",
+"recognition_status": "recognized",
+"certainty_level": "not_applicable",
+"validated_as": "mythological_corpus"
+}
+}
+],
+"composition_policy": {
+"policy_id": "kristal.v5:composition-policy:preserve-disagreement-demo",
+"policy_version": "1",
+"overlap_strategy": "preserve_all",
+"conflict_strategy": "preserve_disagreement",
+"default_visibility": "reader_policy",
+"ordering": "stable",
+"authority_precedence": [
+"authority:unesco-science-education",
+"authority:wikidata-seed",
+"authority:independent-research-collective",
+"authority:local-community-archive",
+"authority:cultural-heritage-archive"
+],
+"parameters": {
+"conflict_labels_required": true,
+"preserve_source_shard_ids": true,
+"preserve_authority_channels": true
+}
+},
+"reader_policy_refs": [
+{
+"artifact_type": "reader_policy",
+"id": "reader_policy:reference-only-science-education",
+"ref": "reader-policies/reference-only-science-education.json",
+"content_hash": {
+"alg": "sha256",
+"value": "6161616161616161616161616161616161616161616161616161616161616161"
+}
+},
+{
+"artifact_type": "reader_policy",
+"id": "reader_policy:validated-only-with-labels",
+"ref": "reader-policies/validated-only-with-labels.json",
+"content_hash": {
+"alg": "sha256",
+"value": "6262626262626262626262626262626262626262626262626262626262626262"
+}
+},
+{
+"artifact_type": "reader_policy",
+"id": "reader_policy:research-all-with-labels",
+"ref": "reader-policies/research-all-with-labels.json",
+"content_hash": {
+"alg": "sha256",
+"value": "6363636363636363636363636363636363636363636363636363636363636363"
+}
+},
+{
+"artifact_type": "reader_policy",
+"id": "reader_policy:creative-and-mythology",
+"ref": "reader-policies/creative-and-mythology.json",
+"content_hash": {
+"alg": "sha256",
+"value": "6464646464646464646464646464646464646464646464646464646464646464"
+}
+}
+],
+"authority_recognition_refs": [
+{
+"artifact_type": "authority_recognition",
+"id": "sha256:8181818181818181818181818181818181818181818181818181818181818181",
+"ref": "authority-recognitions/kristal-reference-ops-federation-recognition.json",
+"content_hash": {
+"alg": "sha256",
+"value": "8181818181818181818181818181818181818181818181818181818181818181"
+}
+}
+],
+"validation_policy_refs": [
+{
+"artifact_type": "validation_policy",
+"id": "kristal.v5:validation-policy:federation-schema-validation",
+"ref": "validation-policies/federation-schema-validation.json",
+"content_hash": {
+"alg": "sha256",
+"value": "7171717171717171717171717171717171717171717171717171717171717171"
+}
+}
+],
+"trust_requirements": [
+{
+"scope": {
+"domain": "education",
+"subdomain": "science-reference"
+},
+"required_authority_channels": [
+"authority:unesco-science-education"
+],
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated"
+],
+"allowed_certainty_levels": [
+"high",
+"established"
+],
+"allowed_validated_as": [
+"high_confidence_fact"
+],
+"include_disputed": false,
+"include_fictional": false,
+"include_mythological": false
+},
+{
+"scope": {
+"domain": "local_notes",
+"subdomain": "divergent-earth-shape-claims"
+},
+"required_authority_channels": [
+"authority:local-community-archive"
+],
+"allowed_validation_statuses": [
+"validated",
+"disputed"
+],
+"allowed_certainty_levels": [
+"low",
+"medium"
+],
+"allowed_validated_as": [
+"disputed_position"
+],
+"include_disputed": true,
+"include_fictional": false,
+"include_mythological": false
+},
+{
+"scope": {
+"domain": "mythology"
+},
+"required_authority_channels": [
+"authority:cultural-heritage-archive"
+],
+"allowed_validation_statuses": [
+"validated",
+"conditionally_validated"
+],
+"allowed_certainty_levels": [
+"not_applicable"
+],
+"allowed_validated_as": [
+"mythological_corpus"
+],
+"include_disputed": true,
+"include_fictional": false,
+"include_mythological": true
+}
+],
+"publisher": {
+"authority_channel_id": "authority:kristal-reference-ops",
+"key_id": "kristal-reference-ops-ed25519-2026-03",
+"name": "Kristal Reference Operations"
+},
+"signatures": [
+{
+"sig_id": "sig:plural-authority-federation-0001",
+"key_id": "kristal-reference-ops-ed25519-2026-03",
+"alg": "ed25519",
+"payload_hash": {
+"alg": "sha256",
+"value": "0f4a2c8e9b1d3f5a6c7e8d9f0a1b2c3d4e5f60718293a4b5c6d7e8f9a0b1c2de"
+},
+"signature": "ZHVtbXktc2lnbmF0dXJlLWJ5dGVz",
+"created_at": "2026-03-01T12:00:10Z",
+"purpose": "publisher",
+"signer": {
+"name": "Kristal Reference Operations",
+"org": "Kristal Foundation",
+"authority_channel_id": "authority:kristal-reference-ops"
+}
+}
+],
+"references": {
+"spec_version": "5.0",
+"docs_uri": "https://kristal.org/docs/v5/exchange-federation-manifest"
+},
+"extensions": {
+"example_name": "plural-authority-federation",
+"example_purpose": "Demonstrates Kristal v5 federation across multiple authority channels, reader policies, certainty levels, and preserved disagreement.",
+"query_contract_ref": {
+"artifact_type": "query_contract",
+"id": "kristal.v5:query:triple-pattern@1",
+"ref": "query-contracts/kristal-v5-triple-pattern-v1.json",
+"content_hash": {
+"alg": "sha256",
+"value": "9191919191919191919191919191919191919191919191919191919191919191"
+}
+},
+"conflict_summary": {
+"conflict_strategy": "preserve_disagreement",
+"conflicts_detected": true,
+"conflict_count": 1,
+"conflicts": [
+{
+"conflict_id": "conflict:earth-shape-primary-claim",
+"target_statement_key": "earth_shape",
+"status": "preserved",
+"visible_in_reader_policies": [
+"reader_policy:validated-only-with-labels",
+"reader_policy:research-all-with-labels"
+],
+"hidden_in_reader_policies": [
+"reader_policy:reference-only-science-education"
+],
+"claims": [
+{
+"source_shard_id": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+"authority_channel": "authority:unesco-science-education",
+"validation_status": "validated",
+"recognition_status": "recognized",
+"certainty_level": "established",
+"validated_as": "high_confidence_fact"
+},
+{
+"source_shard_id": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+"authority_channel": "authority:local-community-archive",
+"validation_status": "validated",
+"recognition_status": "recognized",
+"certainty_level": "low",
+"validated_as": "disputed_position"
+}
+]
+}
+]
+},
+"notes": "This example includes a recognized science-education shard, a Wikidata seed shard, a research shard, a local divergent-position shard, and a mythological corpus shard. Federation preserves labels and does not silently merge or universalize authority recognition."
+}
 }
